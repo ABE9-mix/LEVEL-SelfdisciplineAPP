@@ -2,12 +2,8 @@
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 .obsidian/workspaces.json
-.obsidian/appearance.json
 .obsidian/cache
 .trash/
-
-# Obsidian Git 插件运行日志
-.obsidian/plugins/obsidian-git/data.json
 
 # 系统与编辑器垃圾
 .DS_Store
