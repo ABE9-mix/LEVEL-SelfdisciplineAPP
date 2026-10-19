@@ -3,747 +3,762 @@
     {
       "id": "fl001",
       "type": "text",
-      "text": "A · 首启：到第一次入轨（≤5 分钟）",
-      "x": -900.0,
-      "y": -520.0,
-      "width": 300.0,
-      "height": 55.0,
-      "color": "6"
+      "text": "A · 首启：到第一次入轨",
+      "x": -1500.0,
+      "y": -760.0,
+      "width": 260.0,
+      "height": 50.0,
+      "color": 6
     },
     {
       "id": "fl002",
       "type": "text",
-      "text": "B · 每日主循环",
-      "x": -900.0,
-      "y": -160.0,
-      "width": 300.0,
-      "height": 55.0,
-      "color": "6"
+      "text": "冷启动",
+      "x": -1500.0,
+      "y": -640.0,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl003",
       "type": "text",
-      "text": "C · 早起闭环（发射窗口）",
-      "x": -900.0,
-      "y": 340.0,
-      "width": 300.0,
-      "height": 55.0,
-      "color": "6"
+      "text": "序章 4 屏\n第1屏=真实三维",
+      "x": -1280.0,
+      "y": -640.0,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "fl004",
       "type": "text",
-      "text": "D · 计划节点与结算",
-      "x": -900.0,
-      "y": 700.0,
-      "width": 300.0,
-      "height": 55.0,
-      "color": "6"
+      "text": "成立机构\n选模板",
+      "x": -1060.0,
+      "y": -640.0,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 2
     },
     {
       "id": "fl005",
       "type": "text",
-      "text": "冷启动",
-      "x": -900.0,
-      "y": -440.0,
-      "width": 180.0,
-      "height": 55.0,
-      "color": "1"
+      "text": "拖动选址光标\n落到球面锚位",
+      "x": -1060.0,
+      "y": -720,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 2
     },
     {
       "id": "fl006",
       "type": "text",
-      "text": "序章 4 屏\n第1屏即真实三维",
-      "x": -680.0,
-      "y": -440.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "4"
+      "text": "起名·域色·徽记\n（可整屏跳过）",
+      "x": -1060.0,
+      "y": -540,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 2
     },
     {
       "id": "fl007",
       "type": "text",
-      "text": "成立机构\n选模板",
-      "x": -440.0,
-      "y": -440.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "2"
+      "text": "选一条推荐计划\n3 条已排好",
+      "x": -830.0,
+      "y": -640.0,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 2
     },
     {
       "id": "fl008",
       "type": "text",
-      "text": "拖动选址光标\n落到球面锚位",
-      "x": -440.0,
-      "y": -355.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "2"
+      "text": "设施落位\n营建态+吊臂",
+      "x": -610.0,
+      "y": -640.0,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 2
     },
     {
       "id": "fl009",
       "type": "text",
-      "text": "起名 · 域色 · 徽记\n（可整屏跳过）",
-      "x": -440.0,
-      "y": -270.0,
+      "text": "今日列表出现 1 条任务",
+      "x": -390.0,
+      "y": -640.0,
       "width": 200.0,
-      "height": 60.0,
-      "color": "2"
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "fl010",
       "type": "text",
-      "text": "选一条推荐计划\n（3 条已排好）",
+      "text": "[开始专注]\n25 分钟（演示 90 秒）",
       "x": -160.0,
-      "y": -440.0,
+      "y": -640.0,
       "width": 200.0,
-      "height": 60.0,
-      "color": "2"
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl011",
       "type": "text",
-      "text": "设施落位\n营建态 + 吊臂",
-      "x": -160.0,
-      "y": -355.0,
+      "text": "入轨动画\n设施脉冲+灯转绿",
+      "x": 70.0,
+      "y": -640.0,
       "width": 200.0,
-      "height": 60.0,
-      "color": "2"
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl012",
       "type": "text",
-      "text": "今日列表出现 1 条任务",
-      "x": -160.0,
-      "y": -270.0,
+      "text": "结算\nXP + 首张卡（T0 必出）",
+      "x": 300.0,
+      "y": -640.0,
       "width": 200.0,
       "height": 60.0,
-      "color": "4"
+      "color": 1
     },
     {
       "id": "fl013",
       "type": "text",
-      "text": "[开始专注]\n25 分钟（演示 90 秒）",
-      "x": 120.0,
-      "y": -440.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "1"
+      "text": "星图亮起第一颗",
+      "x": 560.0,
+      "y": -640.0,
+      "width": 180.0,
+      "height": 50.0,
+      "color": 5
     },
     {
       "id": "fl014",
       "type": "text",
-      "text": "入轨动画\n设施脉冲 + 灯转绿",
-      "x": 120.0,
-      "y": -355.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "1"
+      "text": "B · 每日主循环",
+      "x": -1500.0,
+      "y": -320,
+      "width": 260.0,
+      "height": 50.0,
+      "color": 6
     },
     {
       "id": "fl015",
       "type": "text",
-      "text": "结算\nXP + 首张卡（T0 必出）",
-      "x": 120.0,
-      "y": -270.0,
-      "width": 200.0,
-      "height": 65.0,
-      "color": "1"
+      "text": "打开 App\n默认星球地图",
+      "x": -1500.0,
+      "y": -200,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "fl016",
       "type": "text",
-      "text": "星图亮起第一颗",
-      "x": 120.0,
-      "y": -180.0,
-      "width": 200.0,
-      "height": 55.0,
-      "color": "5"
+      "text": "看哪座设施在闪\n琥珀慢闪=待办",
+      "x": -1280.0,
+      "y": -200,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "fl017",
       "type": "text",
-      "text": "打开 App\n默认星球地图",
-      "x": -900.0,
-      "y": -80.0,
-      "width": 180.0,
-      "height": 55.0,
-      "color": "4"
+      "text": "点设施\n舱窗面板弹出",
+      "x": -1060.0,
+      "y": -200,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 5
     },
     {
       "id": "fl018",
       "type": "text",
-      "text": "看哪座设施在闪\n（琥珀慢闪=待办）",
-      "x": -680.0,
-      "y": -80.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "4"
+      "text": "L1 里 [开始专注]",
+      "x": -830.0,
+      "y": -200,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl019",
       "type": "text",
-      "text": "点设施\n舱窗面板弹出",
-      "x": -440.0,
-      "y": -80.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "5"
+      "text": "计时中\n星球降亮度 25%",
+      "x": -610.0,
+      "y": -200,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl020",
       "type": "text",
-      "text": "L1 里 [开始专注]",
-      "x": -200.0,
-      "y": -80.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "1"
+      "text": "是否达标？",
+      "x": -390.0,
+      "y": -200,
+      "width": 170.0,
+      "height": 56.0,
+      "color": 6
     },
     {
       "id": "fl021",
       "type": "text",
-      "text": "计时中\n星球降亮度 25%",
-      "x": -40.0,
-      "y": -80.0,
+      "text": "达标/及格线\n入轨",
+      "x": -160.0,
+      "y": -300,
       "width": 200.0,
-      "height": 60.0,
-      "color": "1"
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl022",
       "type": "text",
-      "text": "是否达标？",
-      "x": 200.0,
-      "y": -80.0,
+      "text": "中止\n30% XP·不计入",
+      "x": -160.0,
+      "y": -100,
       "width": 200.0,
-      "height": 60.0,
-      "color": "6"
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl023",
       "type": "text",
-      "text": "达标/及格线\n入轨",
-      "x": 440.0,
-      "y": -170.0,
-      "width": 190.0,
-      "height": 60.0,
-      "color": "1"
+      "text": "设施亮一格\n信号灯转绿",
+      "x": 70.0,
+      "y": -300,
+      "width": 200.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "fl024",
       "type": "text",
-      "text": "中止\n30% XP 不计入",
-      "x": 440.0,
-      "y": -10.0,
-      "width": 190.0,
-      "height": 60.0,
-      "color": "1"
+      "text": "决策 AI 一句话\n今日航程走完",
+      "x": 300.0,
+      "y": -300,
+      "width": 200.0,
+      "height": 56.0,
+      "color": 5
     },
     {
       "id": "fl025",
       "type": "text",
-      "text": "设施亮一格\n信号灯转绿",
-      "x": 440.0,
-      "y": -260.0,
+      "text": "切列表形态\n底栏「今日」",
+      "x": -1280.0,
+      "y": -120,
       "width": 190.0,
-      "height": 60.0,
-      "color": "4"
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "fl026",
       "type": "text",
-      "text": "决策 AI 一句话\n今日航程走完",
-      "x": 660.0,
-      "y": -260.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "5"
+      "text": "列表直接勾选\n两次点击内完成",
+      "x": -1060.0,
+      "y": -120,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "fl027",
       "type": "text",
-      "text": "按底栏「今日」\n切列表形态",
-      "x": -680.0,
-      "y": 30.0,
-      "width": 200.0,
-      "height": 55.0,
-      "color": "4"
+      "text": "C · 早起闭环（发射窗口）",
+      "x": -1500.0,
+      "y": -10.0,
+      "width": 260.0,
+      "height": 50.0,
+      "color": 6
     },
     {
       "id": "fl028",
       "type": "text",
-      "text": "列表直接勾选\n两次点击内完成",
-      "x": -440.0,
-      "y": 30.0,
+      "text": "07:00 全屏闹钟窗",
+      "x": -1500.0,
+      "y": 110.0,
       "width": 200.0,
-      "height": 60.0,
-      "color": "4"
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl029",
       "type": "text",
-      "text": "07:00 全屏闹钟窗",
-      "x": -900.0,
-      "y": 400.0,
+      "text": "拖刻度 / 算术 解除",
+      "x": -1270.0,
+      "y": 110.0,
       "width": 200.0,
-      "height": 60.0,
-      "color": "1"
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl030",
       "type": "text",
-      "text": "拖刻度 / 算术 解除",
-      "x": -680.0,
-      "y": 400.0,
-      "width": 200.0,
-      "height": 60.0,
-      "color": "1"
+      "text": "30 分钟内确认？",
+      "x": -1030.0,
+      "y": 110.0,
+      "width": 190.0,
+      "height": 56.0,
+      "color": 6
     },
     {
       "id": "fl031",
       "type": "text",
-      "text": "30 分钟内确认？",
-      "x": -440.0,
-      "y": 400.0,
-      "width": 200.0,
+      "text": "已过 07:00 窗\n直接跳第一条任务",
+      "x": -800.0,
+      "y": 60,
+      "width": 210.0,
       "height": 60.0,
-      "color": "6"
+      "color": 1
     },
     {
       "id": "fl032",
       "type": "text",
-      "text": "已过 07:00 窗\n直接跳第一条任务",
-      "x": -180.0,
-      "y": 330.0,
+      "text": "迟确认 ≤120min\nXP 减半",
+      "x": -800.0,
+      "y": 200,
       "width": 210.0,
-      "height": 60.0,
-      "color": "1"
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl033",
       "type": "text",
-      "text": "迟确认（≤120 min）\nXP 减半",
-      "x": -180.0,
-      "y": 470.0,
+      "text": "未确认\n只标未确认·不倒扣",
+      "x": -800.0,
+      "y": 300,
       "width": 210.0,
-      "height": 60.0,
-      "color": "1"
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl034",
       "type": "text",
-      "text": "未确认\n只标未确认·不倒扣",
-      "x": -180.0,
-      "y": 570.0,
+      "text": "天文晨前 < −18°\n点亮晨星（永久）",
+      "x": -540.0,
+      "y": -40,
       "width": 210.0,
       "height": 60.0,
-      "color": "1"
+      "color": 4
     },
     {
       "id": "fl035",
       "type": "text",
-      "text": "天文晨前（< −18°）\n点亮晨星（永久）",
-      "x": 60.0,
-      "y": 260.0,
-      "width": 220.0,
-      "height": 60.0,
-      "color": "4"
+      "text": "回到地图\n光照已推进（真实）",
+      "x": -290.0,
+      "y": 90,
+      "width": 200.0,
+      "height": 56.0,
+      "color": 5
     },
     {
       "id": "fl036",
       "type": "text",
-      "text": "回到地图\n光照已推进（真实）",
-      "x": 60.0,
-      "y": 340.0,
-      "width": 220.0,
-      "height": 60.0,
-      "color": "5"
+      "text": "D · 计划节点与扩建",
+      "x": -1500.0,
+      "y": 320.0,
+      "width": 260.0,
+      "height": 50.0,
+      "color": 6
     },
     {
       "id": "fl037",
       "type": "text",
       "text": "最后一个 Session 成功",
-      "x": -900.0,
-      "y": 760.0,
-      "width": 220.0,
-      "height": 60.0,
-      "color": "1"
+      "x": -1500.0,
+      "y": 440.0,
+      "width": 210.0,
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "fl038",
       "type": "text",
       "text": "节点结算页\n次数/分钟/达标率/漏格",
-      "x": -660.0,
-      "y": 760.0,
-      "width": 240.0,
-      "height": 65.0,
-      "color": "5"
+      "x": -1240.0,
+      "y": 440.0,
+      "width": 220.0,
+      "height": 60.0,
+      "color": 5
     },
     {
       "id": "fl039",
       "type": "text",
       "text": "发放：成果卡（保底）\n+ 徽记 + 称号",
-      "x": -400.0,
-      "y": 760.0,
-      "width": 240.0,
-      "height": 65.0,
-      "color": "3"
+      "x": -970.0,
+      "y": 440.0,
+      "width": 220.0,
+      "height": 60.0,
+      "color": 3
     },
     {
       "id": "fl040",
       "type": "text",
-      "text": "地图联动\n拆脚手架 + 地块点亮",
-      "x": -140.0,
-      "y": 760.0,
-      "width": 240.0,
-      "height": 65.0,
-      "color": "3"
+      "text": "地图联动\n拆脚手架+地块点亮",
+      "x": -700.0,
+      "y": 440.0,
+      "width": 220.0,
+      "height": 60.0,
+      "color": 3
     },
     {
       "id": "fl041",
       "type": "text",
       "text": "下一段邀请\n可拒绝·无副作用",
-      "x": 130.0,
-      "y": 760.0,
-      "width": 230.0,
-      "height": 60.0,
-      "color": "5"
+      "x": -430.0,
+      "y": 440.0,
+      "width": 210.0,
+      "height": 56.0,
+      "color": 5
     },
     {
       "id": "fl042",
       "type": "text",
-      "text": "升级门槛达成？\n（累计 XP + 领域广度）",
-      "x": 130.0,
-      "y": 860.0,
-      "width": 230.0,
-      "height": 65.0,
-      "color": "6"
+      "text": "升级门槛达成？\n累计XP + 领域广度",
+      "x": -430.0,
+      "y": 560.0,
+      "width": 210.0,
+      "height": 60.0,
+      "color": 6
     },
     {
       "id": "fl043",
       "type": "text",
-      "text": "出现「可扩建」\n点击落成（不消耗任何东西）",
-      "x": 400.0,
-      "y": 860.0,
-      "width": 240.0,
-      "height": 65.0,
-      "color": "3"
+      "text": "出现「可扩建」\n点击落成·不消耗",
+      "x": -160.0,
+      "y": 560.0,
+      "width": 210.0,
+      "height": 60.0,
+      "color": 3
     }
   ],
   "edges": [
     {
       "id": "e001",
-      "fromNode": "fl005",
+      "fromNode": "fl002",
       "fromSide": "right",
-      "toNode": "fl006",
+      "toNode": "fl003",
       "toSide": "left"
     },
     {
       "id": "e002",
-      "fromNode": "fl006",
+      "fromNode": "fl003",
+      "fromSide": "right",
+      "toNode": "fl004",
+      "toSide": "left"
+    },
+    {
+      "id": "e003",
+      "fromNode": "fl004",
       "fromSide": "right",
       "toNode": "fl007",
       "toSide": "left"
     },
     {
-      "id": "e003",
+      "id": "e004",
       "fromNode": "fl007",
       "fromSide": "right",
       "toNode": "fl008",
-      "toSide": "left",
-      "label": "可选"
+      "toSide": "left"
     },
     {
-      "id": "e004",
+      "id": "e005",
       "fromNode": "fl008",
       "fromSide": "right",
       "toNode": "fl009",
       "toSide": "left"
     },
     {
-      "id": "e005",
+      "id": "e006",
       "fromNode": "fl009",
       "fromSide": "right",
       "toNode": "fl010",
-      "toSide": "left"
+      "toSide": "left",
+      "label": "关键路径"
     },
     {
-      "id": "e006",
+      "id": "e007",
       "fromNode": "fl010",
       "fromSide": "right",
       "toNode": "fl011",
       "toSide": "left"
     },
     {
-      "id": "e007",
+      "id": "e008",
       "fromNode": "fl011",
       "fromSide": "right",
       "toNode": "fl012",
       "toSide": "left"
     },
     {
-      "id": "e008",
+      "id": "e009",
       "fromNode": "fl012",
       "fromSide": "right",
       "toNode": "fl013",
-      "toSide": "left",
-      "label": "关键路径"
-    },
-    {
-      "id": "e009",
-      "fromNode": "fl013",
-      "fromSide": "right",
-      "toNode": "fl014",
       "toSide": "left"
     },
     {
       "id": "e010",
-      "fromNode": "fl014",
-      "fromSide": "right",
-      "toNode": "fl015",
-      "toSide": "left"
+      "fromNode": "fl004",
+      "fromSide": "top",
+      "toNode": "fl005",
+      "toSide": "bottom",
+      "label": "可选"
     },
     {
       "id": "e011",
+      "fromNode": "fl005",
+      "fromSide": "bottom",
+      "toNode": "fl006",
+      "toSide": "top",
+      "label": "继续"
+    },
+    {
+      "id": "e012",
+      "fromNode": "fl006",
+      "fromSide": "right",
+      "toNode": "fl007",
+      "toSide": "left",
+      "label": "回到主路径"
+    },
+    {
+      "id": "e013",
+      "fromNode": "fl013",
+      "fromSide": "left",
+      "toNode": "fl015",
+      "toSide": "right",
+      "label": "次日 ①→②"
+    },
+    {
+      "id": "e014",
       "fromNode": "fl015",
       "fromSide": "right",
       "toNode": "fl016",
       "toSide": "left"
     },
     {
-      "id": "e012",
+      "id": "e015",
       "fromNode": "fl016",
       "fromSide": "right",
       "toNode": "fl017",
-      "toSide": "left",
-      "label": "次日起"
+      "toSide": "left"
     },
     {
-      "id": "e013",
+      "id": "e016",
       "fromNode": "fl017",
       "fromSide": "right",
       "toNode": "fl018",
       "toSide": "left"
     },
     {
-      "id": "e014",
+      "id": "e017",
       "fromNode": "fl018",
       "fromSide": "right",
       "toNode": "fl019",
       "toSide": "left"
     },
     {
-      "id": "e015",
+      "id": "e018",
       "fromNode": "fl019",
       "fromSide": "right",
       "toNode": "fl020",
       "toSide": "left"
     },
     {
-      "id": "e016",
+      "id": "e019",
       "fromNode": "fl020",
       "fromSide": "right",
       "toNode": "fl021",
-      "toSide": "left"
-    },
-    {
-      "id": "e017",
-      "fromNode": "fl021",
-      "fromSide": "right",
-      "toNode": "fl022",
-      "toSide": "left"
-    },
-    {
-      "id": "e018",
-      "fromNode": "fl022",
-      "fromSide": "right",
-      "toNode": "fl023",
       "toSide": "left",
       "label": "是"
     },
     {
-      "id": "e019",
-      "fromNode": "fl022",
-      "fromSide": "right",
-      "toNode": "fl024",
-      "toSide": "left",
-      "label": "否/中止"
-    },
-    {
       "id": "e020",
-      "fromNode": "fl023",
+      "fromNode": "fl021",
       "fromSide": "right",
-      "toNode": "fl025",
+      "toNode": "fl023",
       "toSide": "left"
     },
     {
       "id": "e021",
+      "fromNode": "fl023",
+      "fromSide": "right",
+      "toNode": "fl024",
+      "toSide": "left"
+    },
+    {
+      "id": "e022",
+      "fromNode": "fl020",
+      "fromSide": "right",
+      "toNode": "fl022",
+      "toSide": "left",
+      "label": "否/中止"
+    },
+    {
+      "id": "e023",
+      "fromNode": "fl022",
+      "fromSide": "left",
+      "toNode": "fl016",
+      "toSide": "right",
+      "label": "回到 ②"
+    },
+    {
+      "id": "e024",
+      "fromNode": "fl016",
+      "fromSide": "bottom",
+      "toNode": "fl025",
+      "toSide": "top",
+      "label": "快捷"
+    },
+    {
+      "id": "e025",
       "fromNode": "fl025",
       "fromSide": "right",
       "toNode": "fl026",
       "toSide": "left"
     },
     {
-      "id": "e022",
-      "fromNode": "fl017",
+      "id": "e026",
+      "fromNode": "fl026",
       "fromSide": "right",
-      "toNode": "fl027",
+      "toNode": "fl020",
       "toSide": "left",
-      "label": "快捷"
+      "label": "合并结算"
     },
     {
-      "id": "e023",
-      "fromNode": "fl027",
+      "id": "e027",
+      "fromNode": "fl028",
       "fromSide": "right",
-      "toNode": "fl028",
+      "toNode": "fl029",
       "toSide": "left"
     },
     {
-      "id": "e024",
-      "fromNode": "fl028",
-      "fromSide": "right",
-      "toNode": "fl022",
-      "toSide": "left",
-      "label": "同样结算"
-    },
-    {
-      "id": "e025",
-      "fromNode": "fl024",
-      "fromSide": "right",
-      "toNode": "fl018",
-      "toSide": "left",
-      "label": "再来一次"
-    },
-    {
-      "id": "e026",
+      "id": "e028",
       "fromNode": "fl029",
       "fromSide": "right",
       "toNode": "fl030",
       "toSide": "left"
     },
     {
-      "id": "e027",
+      "id": "e029",
       "fromNode": "fl030",
       "fromSide": "right",
       "toNode": "fl031",
-      "toSide": "left"
+      "toSide": "left",
+      "label": "≤30min"
     },
     {
-      "id": "e028",
-      "fromNode": "fl031",
+      "id": "e030",
+      "fromNode": "fl030",
       "fromSide": "right",
       "toNode": "fl032",
-      "toSide": "left",
-      "label": "≤30 min"
-    },
-    {
-      "id": "e029",
-      "fromNode": "fl031",
-      "fromSide": "right",
-      "toNode": "fl033",
       "toSide": "left",
       "label": "30–120"
     },
     {
-      "id": "e030",
+      "id": "e031",
+      "fromNode": "fl030",
+      "fromSide": "right",
+      "toNode": "fl033",
+      "toSide": "left",
+      "label": "超时"
+    },
+    {
+      "id": "e032",
       "fromNode": "fl031",
       "fromSide": "right",
       "toNode": "fl034",
-      "toSide": "left",
-      "label": "未确认"
+      "toSide": "left"
     },
     {
-      "id": "e031",
-      "fromNode": "fl032",
+      "id": "e033",
+      "fromNode": "fl034",
       "fromSide": "right",
       "toNode": "fl035",
       "toSide": "left"
     },
     {
-      "id": "e032",
+      "id": "e034",
       "fromNode": "fl032",
       "fromSide": "right",
-      "toNode": "fl036",
-      "toSide": "left"
+      "toNode": "fl035",
+      "toSide": "left",
+      "label": "补做"
     },
     {
-      "id": "e033",
-      "fromNode": "fl035",
-      "fromSide": "right",
-      "toNode": "fl036",
-      "toSide": "left"
-    },
-    {
-      "id": "e034",
+      "id": "e035",
       "fromNode": "fl037",
       "fromSide": "right",
       "toNode": "fl038",
       "toSide": "left"
     },
     {
-      "id": "e035",
+      "id": "e036",
       "fromNode": "fl038",
       "fromSide": "right",
       "toNode": "fl039",
       "toSide": "left"
     },
     {
-      "id": "e036",
+      "id": "e037",
       "fromNode": "fl039",
       "fromSide": "right",
       "toNode": "fl040",
       "toSide": "left"
     },
     {
-      "id": "e037",
+      "id": "e038",
       "fromNode": "fl040",
       "fromSide": "right",
       "toNode": "fl041",
       "toSide": "left"
     },
     {
-      "id": "e038",
+      "id": "e039",
       "fromNode": "fl040",
       "fromSide": "right",
       "toNode": "fl042",
-      "toSide": "left"
-    },
-    {
-      "id": "e039",
-      "fromNode": "fl042",
-      "fromSide": "right",
-      "toNode": "fl043",
       "toSide": "left",
       "label": "达成"
     },
     {
       "id": "e040",
-      "fromNode": "fl001",
+      "fromNode": "fl042",
       "fromSide": "right",
-      "toNode": "fl005",
-      "toSide": "left"
+      "toNode": "fl043",
+      "toSide": "left",
+      "label": "是"
     },
     {
       "id": "e041",
-      "fromNode": "fl002",
-      "fromSide": "right",
-      "toNode": "fl017",
-      "toSide": "left"
+      "fromNode": "fl001",
+      "fromSide": "bottom",
+      "toNode": "fl002",
+      "toSide": "top",
+      "label": " "
     },
     {
       "id": "e042",
-      "fromNode": "fl003",
-      "fromSide": "right",
-      "toNode": "fl029",
-      "toSide": "left"
+      "fromNode": "fl014",
+      "fromSide": "bottom",
+      "toNode": "fl015",
+      "toSide": "top",
+      "label": " "
     },
     {
       "id": "e043",
-      "fromNode": "fl004",
-      "fromSide": "right",
+      "fromNode": "fl027",
+      "fromSide": "bottom",
+      "toNode": "fl028",
+      "toSide": "top",
+      "label": " "
+    },
+    {
+      "id": "e044",
+      "fromNode": "fl036",
+      "fromSide": "bottom",
       "toNode": "fl037",
-      "toSide": "left"
+      "toSide": "top",
+      "label": " "
     }
   ]
 }

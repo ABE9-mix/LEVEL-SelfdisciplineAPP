@@ -3,830 +3,788 @@
     {
       "id": "ia001",
       "type": "text",
-      "text": "星港计划 STARPORT\n星际探索主题任务计划 APP",
-      "x": -1460.0,
-      "y": -60.0,
-      "width": 300.0,
-      "height": 90.0,
-      "color": "6"
+      "text": "星港计划 STARPORT\n星际探索主题任务计划 APP\n（下方 7 列的上一级 = 一级导航 4+1）",
+      "x": -720,
+      "y": -700,
+      "width": 250,
+      "height": 76,
+      "color": 6
     },
     {
       "id": "ia002",
       "type": "text",
-      "text": "一级导航（4 + 1）",
-      "x": -1080.0,
-      "y": -60.0,
-      "width": 220.0,
-      "height": 60.0,
-      "color": "4"
+      "text": "一级导航 ①｜今日\n默认：星球地图 ⇄ 今日列表",
+      "x": -1620.0,
+      "y": -620.0,
+      "width": 250.0,
+      "height": 60,
+      "color": 4
     },
     {
       "id": "ia003",
       "type": "text",
-      "text": "今日\n（默认：星球地图 ⇄ 今日列表）",
-      "x": -760.0,
-      "y": -330.0,
-      "width": 240.0,
-      "height": 65.0,
-      "color": "4"
+      "text": "一级导航 ②｜设施面板\nL1 设施 → L2 计划 → L3 任务",
+      "x": -1320.0,
+      "y": -620.0,
+      "width": 250.0,
+      "height": 60,
+      "color": 4
     },
     {
       "id": "ia004",
       "type": "text",
-      "text": "星图 tab\n（深空层 · 知识卡 · 命名权）",
-      "x": -760.0,
-      "y": -190.0,
-      "width": 240.0,
-      "height": 65.0,
-      "color": "5"
+      "text": "一级导航 ③｜机构体系\n机构 → 计划 → 任务（数据实体）",
+      "x": -1020.0,
+      "y": -620.0,
+      "width": 250.0,
+      "height": 60,
+      "color": 4
     },
     {
       "id": "ia005",
       "type": "text",
-      "text": "复盘 tab\n（周报 · 趋势 · 前后对照）",
-      "x": -760.0,
-      "y": -50.0,
-      "width": 240.0,
-      "height": 65.0,
-      "color": "5"
+      "text": "一级导航 ④｜星图\n只增不减 · 知识卡 · 命名权",
+      "x": -720.0,
+      "y": -620.0,
+      "width": 250.0,
+      "height": 60,
+      "color": 4
     },
     {
       "id": "ia006",
       "type": "text",
-      "text": "我的 tab\n（指挥官 · 设置 · 导出）",
-      "x": -760.0,
-      "y": 90.0,
-      "width": 240.0,
-      "height": 65.0,
-      "color": "5"
+      "text": "一级导航 ⑤｜复盘\n周报 · 趋势 · 前后对照",
+      "x": -420.0,
+      "y": -620.0,
+      "width": 250.0,
+      "height": 60,
+      "color": 4
     },
     {
       "id": "ia007",
       "type": "text",
-      "text": "中央主按钮「开始专注」\n（悬浮，全局可达）",
-      "x": -760.0,
-      "y": 230.0,
-      "width": 240.0,
-      "height": 65.0,
-      "color": "1"
+      "text": "一级导航 ⑥｜我的\n档案 · 设置 · 概率公开 · 导出",
+      "x": -120.0,
+      "y": -620.0,
+      "width": 250.0,
+      "height": 60,
+      "color": 4
     },
     {
       "id": "ia008",
       "type": "text",
-      "text": "星球地图（三维主界面）\n相机固定 + 球体自转\n真实昼夜六相位",
-      "x": -440.0,
-      "y": -400.0,
-      "width": 260.0,
-      "height": 85.0,
-      "color": "4"
+      "text": "一级导航 ⑦｜全局层\n序章 · 闹钟窗 · 弹层（叠加）",
+      "x": 180.0,
+      "y": -620.0,
+      "width": 250.0,
+      "height": 60,
+      "color": 4
     },
     {
       "id": "ia009",
       "type": "text",
-      "text": "HUD 顶栏\n相位徽标 · Lv+推进值 · 今日 4/6",
-      "x": -440.0,
-      "y": -290.0,
-      "width": 260.0,
-      "height": 60.0
+      "text": "星球地图（三维主界面）\n相机固定 + 球体自转",
+      "x": -1620.0,
+      "y": -520.0,
+      "width": 250.0,
+      "height": 66.0,
+      "color": 4
     },
     {
       "id": "ia010",
       "type": "text",
-      "text": "HUD 一句话\n决策 AI 建议（≤18 字 · 可采纳）",
-      "x": -440.0,
-      "y": -215.0,
-      "width": 260.0,
-      "height": 60.0
+      "text": "HUD 顶栏\n相位·Lv+推进值·今日 4/6",
+      "x": -1620.0,
+      "y": -434.0,
+      "width": 250.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "ia011",
       "type": "text",
-      "text": "聚焦浮标\n机构 · 计划 · 第 N/M 格",
-      "x": -440.0,
-      "y": -140.0,
-      "width": 260.0,
-      "height": 60.0
+      "text": "HUD 一句话\n决策 AI 建议（≤18 字）",
+      "x": -1620.0,
+      "y": -358.0,
+      "width": 250.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "ia012",
       "type": "text",
-      "text": "HUD 底栏\n今日 / 星图 / 复盘 / 我的",
-      "x": -440.0,
-      "y": -65.0,
-      "width": 260.0,
-      "height": 60.0
+      "text": "聚焦浮标\n机构·计划·第 N/M 格",
+      "x": -1620.0,
+      "y": -282.0,
+      "width": 250.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "ia013",
       "type": "text",
-      "text": "视野开关\n地图 ⇄ 今日列表（320ms）",
-      "x": -440.0,
-      "y": 10.0,
-      "width": 260.0,
-      "height": 55.0
+      "text": "HUD 底栏\n今日/星图/复盘/我的",
+      "x": -1620.0,
+      "y": -206.0,
+      "width": 250.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "ia014",
       "type": "text",
-      "text": "舱窗面板\n点设施展开 · 地图保持可见",
-      "x": -100.0,
-      "y": -400.0,
-      "width": 280.0,
-      "height": 65.0,
-      "color": "2"
+      "text": "视野开关\n地图 ⇄ 今日列表",
+      "x": -1620.0,
+      "y": -130.0,
+      "width": 250.0,
+      "height": 52.0,
+      "color": 4
     },
     {
       "id": "ia015",
       "type": "text",
-      "text": "L1 设施面板 = 机构主页\n徽记/编制/域色 · 当前计划 · 今日状态\n[开始专注][编辑机构][看历史][新计划]",
-      "x": -100.0,
-      "y": -310.0,
-      "width": 320.0,
-      "height": 90.0,
-      "color": "2"
+      "text": "今日列表（副视图）\n任务行·进度·分组",
+      "x": -1620.0,
+      "y": -58.0,
+      "width": 250.0,
+      "height": 56.0,
+      "color": 4
     },
     {
       "id": "ia016",
       "type": "text",
-      "text": "L2 计划面板\n周期/频率/休息日/提醒/难度档\n远征节点 · [保存][暂停][结算]",
-      "x": -100.0,
-      "y": -195.0,
-      "width": 320.0,
-      "height": 90.0,
-      "color": "2"
+      "text": "执行页\n点火/闹钟窗/自由记录",
+      "x": -1620.0,
+      "y": 18.0,
+      "width": 250.0,
+      "height": 56.0,
+      "color": 1
     },
     {
       "id": "ia017",
       "type": "text",
-      "text": "L3 任务面板\n类型/目标量/排期/执行方式/最小完成线",
-      "x": -100.0,
-      "y": -80.0,
-      "width": 320.0,
-      "height": 75.0,
-      "color": "2"
+      "text": "结算抽屉\n①判定②归属③收益④扰动",
+      "x": -1620.0,
+      "y": 94.0,
+      "width": 250.0,
+      "height": 66.0,
+      "color": 1
     },
     {
       "id": "ia018",
       "type": "text",
-      "text": "L2' 机构编辑\n名称/代号/域色/徽记/口号/停机/归档",
-      "x": -100.0,
-      "y": 20.0,
-      "width": 320.0,
-      "height": 75.0,
-      "color": "2"
+      "text": "舱窗面板\n点设施展开·地图保持可见",
+      "x": -1320.0,
+      "y": -520.0,
+      "width": 250.0,
+      "height": 66.0,
+      "color": 2
     },
     {
       "id": "ia019",
       "type": "text",
-      "text": "今日列表（副视图）\n任务行 · 进度 4/6 · 机构分组",
-      "x": -440.0,
-      "y": 90.0,
-      "width": 260.0,
+      "text": "L1 设施面板 = 机构主页\n徽记/编制/域色·当前计划",
+      "x": -1320.0,
+      "y": -434.0,
+      "width": 250.0,
       "height": 70.0,
-      "color": "4"
+      "color": 2
     },
     {
       "id": "ia020",
       "type": "text",
-      "text": "执行页\n点火计时 / 闹钟窗 / 自由记录",
-      "x": -440.0,
-      "y": 190.0,
-      "width": 260.0,
-      "height": 65.0,
-      "color": "1"
+      "text": "L2 计划面板\n周期/频率/休整/提醒/难度",
+      "x": -1320.0,
+      "y": -344.0,
+      "width": 250.0,
+      "height": 70.0,
+      "color": 2
     },
     {
       "id": "ia021",
       "type": "text",
-      "text": "结算抽屉\n①判定 ②归属 ③确定收益 ④扰动 roll",
-      "x": -440.0,
-      "y": 285.0,
-      "width": 280.0,
-      "height": 75.0,
-      "color": "1"
+      "text": "L3 任务面板\n类型/目标量/排期/执行",
+      "x": -1320.0,
+      "y": -254.0,
+      "width": 250.0,
+      "height": 60.0,
+      "color": 2
     },
     {
       "id": "ia022",
       "type": "text",
-      "text": "机构 Agency（= 地图设施）\n9 模板 + 自定义 · 编制 I0–I4",
-      "x": 300.0,
-      "y": -400.0,
-      "width": 280.0,
-      "height": 70.0,
-      "color": "2"
+      "text": "L2' 机构编辑\n名称/代号/域色/徽记",
+      "x": -1320.0,
+      "y": -174.0,
+      "width": 250.0,
+      "height": 60.0,
+      "color": 2
     },
     {
       "id": "ia023",
       "type": "text",
-      "text": "计划 Program\n7/14/21/30 天 · 8 周 · 频率 · 休整",
-      "x": 300.0,
-      "y": -300.0,
-      "width": 280.0,
+      "text": "机构 Agency（= 地图设施）\n9 模板 + 自定义 · I0–I4",
+      "x": -1020.0,
+      "y": -520.0,
+      "width": 250.0,
       "height": 70.0,
-      "color": "2"
+      "color": 2
     },
     {
       "id": "ia024",
       "type": "text",
-      "text": "任务 Mission\n定时 / 计数 / 布尔\n点火 · 窗口 · 记录",
-      "x": 300.0,
-      "y": -205.0,
-      "width": 280.0,
+      "text": "计划 Program\n7/14/21/30 天 · 8 周 · 频率",
+      "x": -1020.0,
+      "y": -430.0,
+      "width": 250.0,
       "height": 70.0,
-      "color": "2"
+      "color": 2
     },
     {
       "id": "ia025",
       "type": "text",
-      "text": "星港扩建（半养成）\n8 设施 × 5 级 = 40 次 · 门槛制",
-      "x": 300.0,
-      "y": -95.0,
-      "width": 280.0,
+      "text": "任务 Mission\n定时/计数/布尔 · 三种执行",
+      "x": -1020.0,
+      "y": -340.0,
+      "width": 250.0,
       "height": 70.0,
-      "color": "3"
+      "color": 2
     },
     {
       "id": "ia026",
       "type": "text",
-      "text": "个性化自定义（16 项）\n星球名/涂装 · 域色/徽记 · HUD 主题 · 命名权",
-      "x": 300.0,
-      "y": -5.0,
-      "width": 280.0,
+      "text": "星港扩建（半养成）\n8 设施 × 5 级 · 门槛制",
+      "x": -1020.0,
+      "y": -250.0,
+      "width": 250.0,
       "height": 70.0,
-      "color": "3"
+      "color": 3
     },
     {
       "id": "ia027",
       "type": "text",
-      "text": "星图（只增不减）\n机构锚点 · 计划航迹 · 彗星轨迹",
-      "x": -440.0,
-      "y": 400.0,
-      "width": 280.0,
+      "text": "个性化自定义（16 项）\n涂装/域色/徽记/命名权",
+      "x": -1020.0,
+      "y": -160.0,
+      "width": 250.0,
       "height": 70.0,
-      "color": "5"
+      "color": 3
     },
     {
       "id": "ia028",
       "type": "text",
-      "text": "知识卡详情\n标题 · 大数字 · 正文 · 来源",
-      "x": -440.0,
-      "y": 500.0,
-      "width": 280.0,
-      "height": 60.0,
-      "color": "5"
+      "text": "星图（只增不减）\n锚点·航迹·彗星轨迹",
+      "x": -720.0,
+      "y": -520.0,
+      "width": 240.0,
+      "height": 66.0,
+      "color": 5
     },
     {
       "id": "ia029",
       "type": "text",
-      "text": "卡片集册：6 系列 × 进度",
-      "x": -440.0,
-      "y": 575.0,
-      "width": 280.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "知识卡详情\n标题·大数字·正文·来源",
+      "x": -720.0,
+      "y": -434.0,
+      "width": 240.0,
+      "height": 56.0,
+      "color": 5
     },
     {
       "id": "ia030",
       "type": "text",
-      "text": "真实亮星可点 → 开卡",
-      "x": -440.0,
-      "y": 640.0,
-      "width": 280.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "卡片集册：6 系列 × 进度",
+      "x": -720.0,
+      "y": -358.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia031",
       "type": "text",
-      "text": "命名权（本地 · 不欺瞒）",
-      "x": -440.0,
-      "y": 705.0,
-      "width": 280.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "真实亮星可点 → 开卡",
+      "x": -720.0,
+      "y": -290.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia032",
       "type": "text",
-      "text": "观测日历（只提示 · 不打卡）",
-      "x": -440.0,
-      "y": 770.0,
-      "width": 280.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "命名权（本地 · 不欺瞒）",
+      "x": -720.0,
+      "y": -222.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia033",
       "type": "text",
-      "text": "复盘（观测台语气 · 只报数）",
-      "x": -100.0,
-      "y": 110.0,
-      "width": 300.0,
-      "height": 60.0,
-      "color": "5"
+      "text": "观测日历（只提示 · 不打卡）",
+      "x": -720.0,
+      "y": -154.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia034",
       "type": "text",
-      "text": "周报：次数 · 分钟 · 达标率 · 计划休整",
-      "x": -100.0,
-      "y": 195.0,
-      "width": 300.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "复盘（观测台 · 只报数）",
+      "x": -420.0,
+      "y": -520.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia035",
       "type": "text",
-      "text": "月度趋势：4 周前后对照",
-      "x": -100.0,
-      "y": 260.0,
-      "width": 300.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "周报：次数·分钟·达标率",
+      "x": -420.0,
+      "y": -452.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia036",
       "type": "text",
-      "text": "机构对照（只报数 · 不排名）",
-      "x": -100.0,
-      "y": 325.0,
-      "width": 300.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "月度趋势：4 周前后对照",
+      "x": -420.0,
+      "y": -384.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia037",
       "type": "text",
-      "text": "我的（指挥官 · 设置 · 导出）",
-      "x": -100.0,
-      "y": 405.0,
-      "width": 300.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "机构对照（只报数·不排名）",
+      "x": -420.0,
+      "y": -316.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia038",
       "type": "text",
-      "text": "指挥官档案：代号/呼号/Lv/累计",
-      "x": -100.0,
-      "y": 480.0,
-      "width": 300.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "我的（指挥官·设置·导出）",
+      "x": -120.0,
+      "y": -520.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia039",
       "type": "text",
-      "text": "设置：通知 · 副手语气 · 扰动开关",
-      "x": -100.0,
-      "y": 545.0,
-      "width": 300.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "指挥官档案：代号/呼号/Lv",
+      "x": -120.0,
+      "y": -452.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia040",
       "type": "text",
-      "text": "概率公开页（概率表 · 保底计数）",
-      "x": -100.0,
-      "y": 610.0,
-      "width": 300.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "设置：通知·副手语气·扰动",
+      "x": -120.0,
+      "y": -384.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia041",
       "type": "text",
-      "text": "星港扩建清单（40 门槛 + 差值）",
-      "x": -100.0,
-      "y": 675.0,
-      "width": 300.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "概率公开页（概率表·保底）",
+      "x": -120.0,
+      "y": -316.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia042",
       "type": "text",
-      "text": "导出 JSON / CSV · 隐私",
-      "x": -100.0,
-      "y": 740.0,
-      "width": 300.0,
-      "height": 50.0,
-      "color": "5"
+      "text": "星港扩建清单（40 门槛+差值）",
+      "x": -120.0,
+      "y": -248.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia043",
       "type": "text",
-      "text": "全局层（不占导航）",
-      "x": -440.0,
-      "y": 860.0,
-      "width": 280.0,
-      "height": 50.0,
-      "color": "1"
+      "text": "导出 JSON / CSV · 隐私",
+      "x": -120.0,
+      "y": -180.0,
+      "width": 240.0,
+      "height": 48.0,
+      "color": 5
     },
     {
       "id": "ia044",
       "type": "text",
-      "text": "序章（4 屏 · 只播一次）",
-      "x": -440.0,
-      "y": 940.0,
-      "width": 280.0,
-      "height": 50.0,
-      "color": "1"
+      "text": "全局层（不占导航）",
+      "x": 180.0,
+      "y": -520.0,
+      "width": 220.0,
+      "height": 48.0,
+      "color": 1
     },
     {
       "id": "ia045",
       "type": "text",
-      "text": "闹钟窗（发射窗口 · 全屏模态）",
-      "x": -440.0,
-      "y": 1005.0,
-      "width": 280.0,
-      "height": 50.0,
-      "color": "1"
+      "text": "序章（4 屏 · 只播一次）",
+      "x": 180.0,
+      "y": -452.0,
+      "width": 220.0,
+      "height": 48.0,
+      "color": 1
     },
     {
       "id": "ia046",
       "type": "text",
-      "text": "弹层：确认 / 错误 / 空状态",
-      "x": -440.0,
-      "y": 1070.0,
-      "width": 280.0,
-      "height": 50.0,
-      "color": "1"
+      "text": "闹钟窗（发射窗口·全屏模态）",
+      "x": 180.0,
+      "y": -384.0,
+      "width": 220.0,
+      "height": 48.0,
+      "color": 1
     },
     {
       "id": "ia047",
       "type": "text",
-      "text": "降档提示 · 纯列表模式",
-      "x": -440.0,
-      "y": 1135.0,
-      "width": 280.0,
-      "height": 50.0,
-      "color": "1"
+      "text": "弹层：确认/错误/空状态",
+      "x": 180.0,
+      "y": -316.0,
+      "width": 220.0,
+      "height": 48.0,
+      "color": 1
+    },
+    {
+      "id": "ia048",
+      "type": "text",
+      "text": "降档提示·纯列表模式",
+      "x": 180.0,
+      "y": -248.0,
+      "width": 220.0,
+      "height": 48.0,
+      "color": 1
     }
   ],
   "edges": [
     {
-      "id": "e001",
-      "fromNode": "ia001",
-      "fromSide": "right",
-      "toNode": "ia002",
-      "toSide": "left",
-      "label": "主导航"
-    },
-    {
-      "id": "e002",
-      "fromNode": "ia002",
-      "fromSide": "right",
-      "toNode": "ia003",
-      "toSide": "left"
-    },
-    {
-      "id": "e003",
-      "fromNode": "ia002",
-      "fromSide": "right",
-      "toNode": "ia004",
-      "toSide": "left"
-    },
-    {
       "id": "e004",
-      "fromNode": "ia002",
-      "fromSide": "right",
+      "fromNode": "ia001",
+      "fromSide": "bottom",
       "toNode": "ia005",
-      "toSide": "left"
-    },
-    {
-      "id": "e005",
-      "fromNode": "ia002",
-      "fromSide": "right",
-      "toNode": "ia006",
-      "toSide": "left"
-    },
-    {
-      "id": "e006",
-      "fromNode": "ia002",
-      "fromSide": "right",
-      "toNode": "ia007",
-      "toSide": "left"
-    },
-    {
-      "id": "e007",
-      "fromNode": "ia003",
-      "fromSide": "right",
-      "toNode": "ia008",
-      "toSide": "left",
-      "label": "默认形态"
+      "toSide": "top"
     },
     {
       "id": "e008",
-      "fromNode": "ia008",
-      "fromSide": "right",
+      "fromNode": "ia002",
+      "fromSide": "bottom",
       "toNode": "ia009",
-      "toSide": "left"
+      "toSide": "top",
+      "label": "今日"
     },
     {
       "id": "e009",
-      "fromNode": "ia008",
-      "fromSide": "right",
+      "fromNode": "ia009",
+      "fromSide": "bottom",
       "toNode": "ia010",
-      "toSide": "left"
+      "toSide": "top"
     },
     {
       "id": "e010",
-      "fromNode": "ia008",
-      "fromSide": "right",
+      "fromNode": "ia010",
+      "fromSide": "bottom",
       "toNode": "ia011",
-      "toSide": "left"
+      "toSide": "top"
     },
     {
       "id": "e011",
-      "fromNode": "ia008",
-      "fromSide": "right",
+      "fromNode": "ia011",
+      "fromSide": "bottom",
       "toNode": "ia012",
-      "toSide": "left"
+      "toSide": "top"
     },
     {
       "id": "e012",
-      "fromNode": "ia008",
-      "fromSide": "right",
+      "fromNode": "ia012",
+      "fromSide": "bottom",
       "toNode": "ia013",
-      "toSide": "left"
+      "toSide": "top"
     },
     {
       "id": "e013",
       "fromNode": "ia013",
       "fromSide": "bottom",
-      "toNode": "ia019",
-      "toSide": "top",
-      "label": "切换视图"
+      "toNode": "ia014",
+      "toSide": "top"
     },
     {
       "id": "e014",
-      "fromNode": "ia008",
-      "fromSide": "right",
-      "toNode": "ia014",
-      "toSide": "left",
-      "label": "点设施"
+      "fromNode": "ia014",
+      "fromSide": "bottom",
+      "toNode": "ia015",
+      "toSide": "top",
+      "label": "切换"
     },
     {
       "id": "e015",
-      "fromNode": "ia008",
-      "fromSide": "right",
-      "toNode": "ia022",
-      "toSide": "left",
-      "label": "设施即机构"
+      "fromNode": "ia015",
+      "fromSide": "bottom",
+      "toNode": "ia016",
+      "toSide": "top",
+      "label": "开始"
     },
     {
       "id": "e016",
-      "fromNode": "ia014",
-      "fromSide": "right",
-      "toNode": "ia015",
-      "toSide": "left"
+      "fromNode": "ia016",
+      "fromSide": "bottom",
+      "toNode": "ia017",
+      "toSide": "top",
+      "label": "完成"
     },
     {
       "id": "e017",
-      "fromNode": "ia015",
-      "fromSide": "right",
-      "toNode": "ia016",
-      "toSide": "left",
-      "label": "推入"
+      "fromNode": "ia003",
+      "fromSide": "bottom",
+      "toNode": "ia018",
+      "toSide": "top",
+      "label": "点设施"
     },
     {
       "id": "e018",
-      "fromNode": "ia016",
-      "fromSide": "right",
-      "toNode": "ia017",
-      "toSide": "left",
-      "label": "推入"
+      "fromNode": "ia018",
+      "fromSide": "bottom",
+      "toNode": "ia019",
+      "toSide": "top"
     },
     {
       "id": "e019",
-      "fromNode": "ia015",
-      "fromSide": "right",
-      "toNode": "ia018",
-      "toSide": "left",
+      "fromNode": "ia019",
+      "fromSide": "bottom",
+      "toNode": "ia020",
+      "toSide": "top",
       "label": "推入"
     },
     {
       "id": "e020",
-      "fromNode": "ia016",
-      "fromSide": "right",
-      "toNode": "ia023",
-      "toSide": "left",
-      "label": "同源"
+      "fromNode": "ia020",
+      "fromSide": "bottom",
+      "toNode": "ia021",
+      "toSide": "top",
+      "label": "推入"
     },
     {
       "id": "e021",
-      "fromNode": "ia022",
-      "fromSide": "right",
-      "toNode": "ia023",
-      "toSide": "left",
-      "label": "设立"
+      "fromNode": "ia021",
+      "fromSide": "bottom",
+      "toNode": "ia022",
+      "toSide": "top",
+      "label": "推入"
     },
     {
       "id": "e022",
-      "fromNode": "ia023",
-      "fromSide": "right",
-      "toNode": "ia024",
-      "toSide": "left",
-      "label": "拆解"
+      "fromNode": "ia004",
+      "fromSide": "bottom",
+      "toNode": "ia023",
+      "toSide": "top",
+      "label": "设立"
     },
     {
       "id": "e023",
-      "fromNode": "ia019",
-      "fromSide": "right",
-      "toNode": "ia020",
-      "toSide": "left",
-      "label": "开始"
+      "fromNode": "ia023",
+      "fromSide": "bottom",
+      "toNode": "ia024",
+      "toSide": "top",
+      "label": "设立"
     },
     {
       "id": "e024",
-      "fromNode": "ia020",
-      "fromSide": "right",
-      "toNode": "ia021",
-      "toSide": "left",
-      "label": "完成"
+      "fromNode": "ia024",
+      "fromSide": "bottom",
+      "toNode": "ia025",
+      "toSide": "top",
+      "label": "拆解"
     },
     {
       "id": "e025",
-      "fromNode": "ia021",
-      "fromSide": "right",
-      "toNode": "ia025",
-      "toSide": "left",
-      "label": "累计推进值"
+      "fromNode": "ia025",
+      "fromSide": "bottom",
+      "toNode": "ia026",
+      "toSide": "top",
+      "label": "累计"
     },
     {
       "id": "e026",
-      "fromNode": "ia025",
-      "fromSide": "right",
-      "toNode": "ia026",
-      "toSide": "left",
+      "fromNode": "ia026",
+      "fromSide": "bottom",
+      "toNode": "ia027",
+      "toSide": "top",
       "label": "解锁"
     },
     {
       "id": "e027",
-      "fromNode": "ia004",
-      "fromSide": "right",
-      "toNode": "ia027",
-      "toSide": "left"
+      "fromNode": "ia005",
+      "fromSide": "bottom",
+      "toNode": "ia028",
+      "toSide": "top",
+      "label": "进入"
     },
     {
       "id": "e028",
-      "fromNode": "ia027",
-      "fromSide": "right",
-      "toNode": "ia028",
-      "toSide": "left"
+      "fromNode": "ia028",
+      "fromSide": "bottom",
+      "toNode": "ia029",
+      "toSide": "top"
     },
     {
       "id": "e029",
-      "fromNode": "ia027",
-      "fromSide": "right",
-      "toNode": "ia029",
-      "toSide": "left"
+      "fromNode": "ia029",
+      "fromSide": "bottom",
+      "toNode": "ia030",
+      "toSide": "top"
     },
     {
       "id": "e030",
-      "fromNode": "ia027",
-      "fromSide": "right",
-      "toNode": "ia030",
-      "toSide": "left"
+      "fromNode": "ia030",
+      "fromSide": "bottom",
+      "toNode": "ia031",
+      "toSide": "top"
     },
     {
       "id": "e031",
-      "fromNode": "ia027",
-      "fromSide": "right",
-      "toNode": "ia031",
-      "toSide": "left"
+      "fromNode": "ia031",
+      "fromSide": "bottom",
+      "toNode": "ia032",
+      "toSide": "top"
     },
     {
       "id": "e032",
-      "fromNode": "ia027",
-      "fromSide": "right",
-      "toNode": "ia032",
-      "toSide": "left"
+      "fromNode": "ia032",
+      "fromSide": "bottom",
+      "toNode": "ia033",
+      "toSide": "top"
     },
     {
       "id": "e033",
-      "fromNode": "ia005",
-      "fromSide": "right",
-      "toNode": "ia033",
-      "toSide": "left"
+      "fromNode": "ia006",
+      "fromSide": "bottom",
+      "toNode": "ia034",
+      "toSide": "top",
+      "label": "进入"
     },
     {
       "id": "e034",
-      "fromNode": "ia033",
-      "fromSide": "right",
-      "toNode": "ia034",
-      "toSide": "left"
+      "fromNode": "ia034",
+      "fromSide": "bottom",
+      "toNode": "ia035",
+      "toSide": "top"
     },
     {
       "id": "e035",
-      "fromNode": "ia033",
-      "fromSide": "right",
-      "toNode": "ia035",
-      "toSide": "left"
+      "fromNode": "ia035",
+      "fromSide": "bottom",
+      "toNode": "ia036",
+      "toSide": "top"
     },
     {
       "id": "e036",
-      "fromNode": "ia033",
-      "fromSide": "right",
-      "toNode": "ia036",
-      "toSide": "left"
+      "fromNode": "ia036",
+      "fromSide": "bottom",
+      "toNode": "ia037",
+      "toSide": "top"
     },
     {
       "id": "e037",
-      "fromNode": "ia006",
-      "fromSide": "right",
-      "toNode": "ia037",
-      "toSide": "left"
+      "fromNode": "ia007",
+      "fromSide": "bottom",
+      "toNode": "ia038",
+      "toSide": "top",
+      "label": "进入"
     },
     {
       "id": "e038",
-      "fromNode": "ia037",
-      "fromSide": "right",
-      "toNode": "ia038",
-      "toSide": "left"
+      "fromNode": "ia038",
+      "fromSide": "bottom",
+      "toNode": "ia039",
+      "toSide": "top"
     },
     {
       "id": "e039",
-      "fromNode": "ia037",
-      "fromSide": "right",
-      "toNode": "ia039",
-      "toSide": "left"
+      "fromNode": "ia039",
+      "fromSide": "bottom",
+      "toNode": "ia040",
+      "toSide": "top"
     },
     {
       "id": "e040",
-      "fromNode": "ia037",
-      "fromSide": "right",
-      "toNode": "ia040",
-      "toSide": "left"
+      "fromNode": "ia040",
+      "fromSide": "bottom",
+      "toNode": "ia041",
+      "toSide": "top"
     },
     {
       "id": "e041",
-      "fromNode": "ia037",
-      "fromSide": "right",
-      "toNode": "ia041",
-      "toSide": "left"
+      "fromNode": "ia041",
+      "fromSide": "bottom",
+      "toNode": "ia042",
+      "toSide": "top"
     },
     {
       "id": "e042",
-      "fromNode": "ia037",
-      "fromSide": "right",
-      "toNode": "ia042",
-      "toSide": "left"
+      "fromNode": "ia042",
+      "fromSide": "bottom",
+      "toNode": "ia043",
+      "toSide": "top"
     },
     {
       "id": "e043",
-      "fromNode": "ia001",
-      "fromSide": "right",
-      "toNode": "ia043",
-      "toSide": "left",
+      "fromNode": "ia008",
+      "fromSide": "bottom",
+      "toNode": "ia044",
+      "toSide": "top",
       "label": "模态"
     },
     {
       "id": "e044",
-      "fromNode": "ia043",
-      "fromSide": "right",
-      "toNode": "ia044",
-      "toSide": "left"
+      "fromNode": "ia044",
+      "fromSide": "bottom",
+      "toNode": "ia045",
+      "toSide": "top"
     },
     {
       "id": "e045",
-      "fromNode": "ia043",
-      "fromSide": "right",
-      "toNode": "ia045",
-      "toSide": "left"
+      "fromNode": "ia045",
+      "fromSide": "bottom",
+      "toNode": "ia046",
+      "toSide": "top"
     },
     {
       "id": "e046",
-      "fromNode": "ia043",
-      "fromSide": "right",
-      "toNode": "ia046",
-      "toSide": "left"
+      "fromNode": "ia046",
+      "fromSide": "bottom",
+      "toNode": "ia047",
+      "toSide": "top"
     },
     {
       "id": "e047",
-      "fromNode": "ia043",
-      "fromSide": "right",
-      "toNode": "ia047",
-      "toSide": "left"
-    },
-    {
-      "id": "e048",
-      "fromNode": "ia003",
+      "fromNode": "ia047",
       "fromSide": "bottom",
-      "toNode": "ia043",
-      "toSide": "left",
-      "label": "叠加于地图"
-    },
-    {
-      "id": "e049",
-      "fromNode": "ia007",
-      "fromSide": "left",
-      "toNode": "ia020",
-      "toSide": "right",
-      "label": "快捷入口"
+      "toNode": "ia048",
+      "toSide": "top"
     }
   ]
 }
