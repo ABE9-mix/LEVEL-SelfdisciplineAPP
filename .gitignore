@@ -11,3 +11,6 @@ Thumbs.db
 desktop.ini
 *.tmp
 *.swp
+
+# 本地恢复备份（只在事故排查时存在，不入库）
+_restore_backup_*/
