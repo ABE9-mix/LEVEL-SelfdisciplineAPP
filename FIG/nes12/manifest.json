@@ -1,0 +1,123 @@
+[
+ {
+  "page": "BUTTONS",
+  "name": "BUTTON · 按钮 4 态",
+  "asset": "BUTTON_按钮_4_态--1x.png",
+  "asset8x": "BUTTON_按钮_4_态--8x.png",
+  "w": 300,
+  "h": 210,
+  "colors": 13,
+  "offPalettePx": 0,
+  "offNearText": 0
+ },
+ {
+  "page": "BUTTONS",
+  "name": "INSTANCE · 实例改文案",
+  "asset": "INSTANCE_实例改文案--1x.png",
+  "asset8x": "INSTANCE_实例改文案--8x.png",
+  "w": 300,
+  "h": 210,
+  "colors": 8,
+  "offPalettePx": 0,
+  "offNearText": 0
+ },
+ {
+  "page": "LIST & MENU",
+  "name": "ROW · 列表行",
+  "asset": "ROW_列表行--1x.png",
+  "asset8x": "ROW_列表行--8x.png",
+  "w": 240,
+  "h": 130,
+  "colors": 5,
+  "offPalettePx": 0,
+  "offNearText": 0
+ },
+ {
+  "page": "LIST & MENU",
+  "name": "MENU · 菜单窗",
+  "asset": "MENU_菜单窗--1x.png",
+  "asset8x": "MENU_菜单窗--8x.png",
+  "w": 220,
+  "h": 210,
+  "colors": 28,
+  "offPalettePx": 93,
+  "offNearText": 59
+ },
+ {
+  "page": "LIST & MENU",
+  "name": "DIALOG · 消息窗",
+  "asset": "DIALOG_消息窗--1x.png",
+  "asset8x": "DIALOG_消息窗--8x.png",
+  "w": 260,
+  "h": 170,
+  "colors": 32,
+  "offPalettePx": 101,
+  "offNearText": 61
+ },
+ {
+  "page": "FORM",
+  "name": "FORM · 表单控件",
+  "asset": "FORM_表单控件--1x.png",
+  "asset8x": "FORM_表单控件--8x.png",
+  "w": 240,
+  "h": 266,
+  "colors": 9,
+  "offPalettePx": 0,
+  "offNearText": 0
+ },
+ {
+  "page": "SCREENS",
+  "name": "TITLE · 标题菜单",
+  "asset": "TITLE_标题菜单--1x.png",
+  "asset8x": "TITLE_标题菜单--8x.png",
+  "w": 272,
+  "h": 290,
+  "colors": 12,
+  "offPalettePx": 0,
+  "offNearText": 0
+ },
+ {
+  "page": "SCREENS",
+  "name": "PAUSE · 暂停菜单",
+  "asset": "PAUSE_暂停菜单--1x.png",
+  "asset8x": "PAUSE_暂停菜单--8x.png",
+  "w": 272,
+  "h": 290,
+  "colors": 34,
+  "offPalettePx": 119,
+  "offNearText": 0
+ },
+ {
+  "page": "SCREENS",
+  "name": "OPTIONS · 设置菜单",
+  "asset": "OPTIONS_设置菜单--1x.png",
+  "asset8x": "OPTIONS_设置菜单--8x.png",
+  "w": 272,
+  "h": 290,
+  "colors": 9,
+  "offPalettePx": 0,
+  "offNearText": 0
+ },
+ {
+  "page": "SCREENS",
+  "name": "ITEMS · 物品列表",
+  "asset": "ITEMS_物品列表--1x.png",
+  "asset8x": "ITEMS_物品列表--8x.png",
+  "w": 272,
+  "h": 290,
+  "colors": 48,
+  "offPalettePx": 168,
+  "offNearText": 168
+ },
+ {
+  "page": "SCREENS",
+  "name": "DIALOG · 对话场景",
+  "asset": "DIALOG_对话场景--1x.png",
+  "asset8x": "DIALOG_对话场景--8x.png",
+  "w": 272,
+  "h": 290,
+  "colors": 38,
+  "offPalettePx": 119,
+  "offNearText": 0
+ }
+]
