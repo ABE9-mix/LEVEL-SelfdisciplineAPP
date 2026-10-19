@@ -1,6 +1,6 @@
 {
 	"nodes":[
-		{"id":"9d3f80842bd3e0d7","type":"text","text":"LEVEL","x":-542,"y":-11,"width":250,"height":60},
+		{"id":"9d3f80842bd3e0d7","type":"text","text":"CINIS","x":-542,"y":-11,"width":250,"height":60},
 		{"id":"7e8bc32503867916","type":"text","text":"启动引导","x":-200,"y":-160,"width":250,"height":60},
 		{"id":"f23e5f55b807b245","type":"text","text":"底部导航","x":-201,"y":77,"width":250,"height":60},
 		{"id":"a0f4e122c684a4a3","type":"text","text":"每日金句","x":607,"y":-530,"width":250,"height":60},
