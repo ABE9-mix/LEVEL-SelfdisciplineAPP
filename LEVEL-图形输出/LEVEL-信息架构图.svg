@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2160" height="2170" viewBox="0 0 2160 2170">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#D6DEE8"/></marker></defs>
+<rect x="0" y="0" width="2160" height="2170" fill="#F7F9FC"/>
+<path d="M284,759.5 L310,759.5 L310,294 L360,294" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M284,759.5 L310,759.5 L310,1225 L360,1225" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M584,294 L610,294 L610,180 L660,180" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M584,294 L610,294 L610,294 L660,294" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M584,294 L610,294 L610,408 L660,408" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,180 L910,180 L910,180 L960,180" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,294 L910,294 L910,256 L960,256" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,294 L910,294 L910,332 L960,332" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M584,1225 L610,1225 L610,636 L660,636" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M584,1225 L610,1225 L610,1054 L660,1054" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M584,1225 L610,1225 L610,1434 L660,1434" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M584,1225 L610,1225 L610,1814 L660,1814" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,636 L910,636 L910,484 L960,484" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,636 L910,636 L910,560 L960,560" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,636 L910,636 L910,674 L960,674" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,636 L910,636 L910,788 L960,788" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1184,560 L1210,560 L1210,560 L1260,560" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1484,560 L1510,560 L1510,560 L1560,560" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1784,560 L1810,560 L1810,560 L1860,560" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1184,674 L1210,674 L1210,636 L1260,636" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1184,674 L1210,674 L1210,712 L1260,712" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1484,712 L1510,712 L1510,712 L1560,712" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1184,788 L1210,788 L1210,788 L1260,788" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1054 L910,1054 L910,864 L960,864" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1054 L910,1054 L910,940 L960,940" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1054 L910,1054 L910,1016 L960,1016" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1054 L910,1054 L910,1092 L960,1092" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1054 L910,1054 L910,1168 L960,1168" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1054 L910,1054 L910,1244 L960,1244" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1184,864 L1210,864 L1210,864 L1260,864" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1484,864 L1510,864 L1510,864 L1560,864" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1434 L910,1434 L910,1320 L960,1320" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1434 L910,1434 L910,1396 L960,1396" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1434 L910,1434 L910,1472 L960,1472" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1434 L910,1434 L910,1548 L960,1548" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1184,1472 L1210,1472 L1210,1472 L1260,1472" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M1184,1548 L1210,1548 L1210,1548 L1260,1548" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1814 L910,1814 L910,1624 L960,1624" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1814 L910,1814 L910,1700 L960,1700" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1814 L910,1814 L910,1776 L960,1776" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1814 L910,1814 L910,1852 L960,1852" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1814 L910,1814 L910,1928 L960,1928" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<path d="M884,1814 L910,1814 L910,2004 L960,2004" fill="none" stroke="#D6DEE8" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<rect x="60" y="729.5" width="224" height="60" rx="26" fill="#1B2330" stroke="#1B2330" stroke-width="1.2"/>
+<text x="75" y="764.54" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" text-anchor="start">LEVEL</text>
+<rect x="360" y="264" width="224" height="60" rx="26" fill="#1B2330" stroke="#1B2330" stroke-width="1.2"/>
+<text x="375" y="299.04" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" text-anchor="start">启动引导</text>
+<rect x="360" y="264" width="224" height="60" rx="26" fill="none" stroke="#1B2330" stroke-width="1.8"/>
+<rect x="660" y="150" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="675" y="184.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">欢迎页</text>
+<rect x="960" y="150" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="184.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">每日金句</text>
+<rect x="660" y="264" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="675" y="298.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">首次启动</text>
+<rect x="960" y="226" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="260.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">创建 / 选择首个目标</text>
+<rect x="960" y="302" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="336.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">频率提醒设置</text>
+<rect x="660" y="378" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="675" y="412.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">进入首页</text>
+<rect x="360" y="1195" width="224" height="60" rx="26" fill="#1B2330" stroke="#1B2330" stroke-width="1.2"/>
+<text x="375" y="1230.04" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" text-anchor="start">底部导航</text>
+<rect x="360" y="1195" width="224" height="60" rx="26" fill="none" stroke="#1B2330" stroke-width="1.8"/>
+<rect x="660" y="606" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="675" y="641.4" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="15" font-weight="400" fill="#1F2933" text-anchor="start">今日</text>
+<rect x="660" y="606" width="224" height="60" rx="8" fill="none" stroke="#2F6BFF" stroke-width="1.8"/>
+<rect x="660" y="606" width="224" height="3" rx="1.5" fill="#2F6BFF" stroke="none"/>
+<rect x="960" y="454" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="479.45" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">今日概览</text>
+<text x="975" y="497.90999999999997" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">（进度条 / 今日完成比）</text>
+<rect x="960" y="530" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="564.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">今日任务清单</text>
+<rect x="1260" y="530" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="1275" y="564.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">任务条目</text>
+<rect x="1560" y="530" width="224" height="60" rx="8" fill="#EAF0FF" stroke="#2F6BFF" stroke-width="1.1"/>
+<text x="1575" y="564.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">勾选完成</text>
+<rect x="1860" y="530" width="224" height="60" rx="8" fill="#EAF0FF" stroke="#2F6BFF" stroke-width="1.1"/>
+<text x="1875" y="564.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">即时反馈（轻提示）</text>
+<rect x="960" y="644" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="678.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">新建任务</text>
+<rect x="1260" y="606" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="1275" y="640.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">任务名称</text>
+<rect x="1260" y="682" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="1275" y="716.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">频率设置（复用频率设置组件）</text>
+<rect x="1560" y="682" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="1575" y="716.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">提醒设置（复用提醒设置组件）</text>
+<rect x="960" y="758" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="792.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">专注入口</text>
+<rect x="1260" y="758" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="1275" y="792.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">专注计时页（不占用底部导航）</text>
+<rect x="660" y="1024" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="675" y="1059.4" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="15" font-weight="400" fill="#1F2933" text-anchor="start">目标</text>
+<rect x="660" y="1024" width="224" height="60" rx="8" fill="none" stroke="#2F6BFF" stroke-width="1.8"/>
+<rect x="660" y="1024" width="224" height="3" rx="1.5" fill="#2F6BFF" stroke="none"/>
+<rect x="960" y="834" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="868.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">目标列表</text>
+<rect x="1260" y="834" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="1275" y="868.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">目标详情</text>
+<rect x="1560" y="834" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="1575" y="868.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">历史记录</text>
+<rect x="960" y="910" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="944.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">创建目标</text>
+<rect x="960" y="986" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1020.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">编辑目标</text>
+<rect x="960" y="1062" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1096.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">频率设置</text>
+<rect x="960" y="1138" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1172.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">提醒设置</text>
+<rect x="960" y="1214" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1248.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">暂停 / 恢复</text>
+<rect x="660" y="1404" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="675" y="1439.4" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="15" font-weight="400" fill="#1F2933" text-anchor="start">成长</text>
+<rect x="660" y="1404" width="224" height="60" rx="8" fill="none" stroke="#2F6BFF" stroke-width="1.8"/>
+<rect x="660" y="1404" width="224" height="3" rx="1.5" fill="#2F6BFF" stroke="none"/>
+<rect x="960" y="1290" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1324.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">当前等级</text>
+<rect x="960" y="1366" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1400.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">经验进度</text>
+<rect x="960" y="1442" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1476.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">日 / 周 / 月统计</text>
+<rect x="1260" y="1442" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="1275" y="1476.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">成长趋势（趋势图展开）</text>
+<rect x="960" y="1518" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1552.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">阶段成就</text>
+<rect x="1260" y="1518" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="1275" y="1552.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">历史记录</text>
+<rect x="660" y="1784" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="675" y="1819.4" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="15" font-weight="400" fill="#1F2933" text-anchor="start">我的</text>
+<rect x="660" y="1784" width="224" height="60" rx="8" fill="none" stroke="#2F6BFF" stroke-width="1.8"/>
+<rect x="660" y="1784" width="224" height="3" rx="1.5" fill="#2F6BFF" stroke="none"/>
+<rect x="960" y="1594" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1628.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">个人资料</text>
+<rect x="960" y="1670" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1704.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">通知设置</text>
+<rect x="960" y="1746" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1780.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">成长反馈偏好</text>
+<rect x="960" y="1822" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1856.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">激励开关</text>
+<rect x="960" y="1898" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="1932.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">数据与隐私管理</text>
+<rect x="960" y="1974" width="224" height="60" rx="8" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="975" y="2008.68" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#1F2933" text-anchor="start">关于我们</text>
+<circle cx="882" cy="380" r="11" fill="#2F6BFF"/>
+<text x="882" y="384" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="11" font-weight="600" fill="#FFFFFF" text-anchor="middle">1</text>
+<circle cx="1482" cy="760" r="11" fill="#2F6BFF"/>
+<text x="1482" y="764" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="11" font-weight="600" fill="#FFFFFF" text-anchor="middle">2</text>
+<circle cx="1182" cy="1824" r="11" fill="#2F6BFF"/>
+<text x="1182" y="1828" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="11" font-weight="600" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="60" y="54" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="26" font-weight="600" fill="#1F2933" text-anchor="start">LEVEL 信息架构图</text>
+<text x="292" y="54" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="13" font-weight="400" fill="#8A94A2" text-anchor="start">Information Architecture · 页面层级与父子关系</text>
+<line x1="60" y1="78" x2="2100" y2="78" stroke="#E6ECF4" stroke-width="1"/>
+<text x="60" y="112" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10.5" font-weight="400" fill="#A9B3C0" text-anchor="start">应用</text>
+<text x="360" y="112" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10.5" font-weight="400" fill="#A9B3C0" text-anchor="start">主导航</text>
+<text x="660" y="112" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10.5" font-weight="400" fill="#A9B3C0" text-anchor="start">Tab</text>
+<text x="960" y="112" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10.5" font-weight="400" fill="#A9B3C0" text-anchor="start">页面</text>
+<text x="1260" y="112" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10.5" font-weight="400" fill="#A9B3C0" text-anchor="start">子页面</text>
+<text x="1560" y="112" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10.5" font-weight="400" fill="#A9B3C0" text-anchor="start">状态</text>
+<text x="1860" y="112" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10.5" font-weight="400" fill="#A9B3C0" text-anchor="start">反馈</text>
+<text x="60" y="2042" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="12" font-weight="500" fill="#525E6C" text-anchor="start">跨页跳转（非层级，编号见对应节点右上角）</text>
+<circle cx="69" cy="2066" r="9" fill="#2F6BFF"/>
+<text x="69" y="2069.5" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="88" y="2070" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="11.5" font-weight="400" fill="#8A94A2" text-anchor="start">进入首页  →  今日（进入首页）</text>
+<circle cx="69" cy="2090" r="9" fill="#2F6BFF"/>
+<text x="69" y="2093.5" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="88" y="2094" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="11.5" font-weight="400" fill="#8A94A2" text-anchor="start">专注计时页（不占用底部导航）  →  今日（计时结束）</text>
+<circle cx="69" cy="2114" r="9" fill="#2F6BFF"/>
+<text x="69" y="2117.5" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="88" y="2118" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="11.5" font-weight="400" fill="#8A94A2" text-anchor="start">激励开关  →  即时反馈（轻提示）（影响反馈呈现）</text>
+<rect x="760" y="2096" width="22" height="16" rx="8" fill="#1B2330" stroke="#1B2330" stroke-width="1.2"/>
+<text x="788" y="2108" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="11.5" font-weight="400" fill="#525E6C" text-anchor="start">根 / 导航层级</text>
+<rect x="867.664" y="2096" width="22" height="16" rx="4" fill="#FFFFFF" stroke="#D6DEE8" stroke-width="1.2"/>
+<text x="895.664" y="2108" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="11.5" font-weight="400" fill="#525E6C" text-anchor="start">页面</text>
+<circle cx="946.864" cy="2103" r="8" fill="#2F6BFF"/>
+<text x="946.864" y="2107" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="9.5" font-weight="600" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="966.864" y="2108" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="11.5" font-weight="400" fill="#525E6C" text-anchor="start">跨页跳转（编号）</text>
+<text x="2100" y="2146" font-family="'OPPO Sans 4.0','Microsoft YaHei',sans-serif" font-size="10.5" font-weight="400" fill="#A9B3C0" text-anchor="end">来源：LEVEL 游戏化自律 App 设计调研报告｜由 Obsidian Canvas 节点重排</text>
+</svg>
