@@ -1,415 +1,55 @@
 {
-  "nodes": [
-    {
-      "id": "n001",
-      "type": "text",
-      "text": "星港计划 STARPORT\n星际探索任务计划 APP",
-      "x": -1100,
-      "y": -240,
-      "width": 300,
-      "height": 90,
-      "color": "6"
-    },
-    {
-      "id": "n002",
-      "type": "text",
-      "text": "【主界面】三维小星球地图\n相机固定 + 球体自转\nFOV35° / 3.33R / 可见35%\n真实昼夜·六相位光照",
-      "x": -1100,
-      "y": 0,
-      "width": 320,
-      "height": 130,
-      "color": "4"
-    },
-    {
-      "id": "n003",
-      "type": "text",
-      "text": "HUD 浮动层（只提示）\n相位徽标 · Lv+推进值\n决策AI一句话 · 今日4/6\n中央「开始专注」· 底栏4+1",
-      "x": -1100,
-      "y": 220,
-      "width": 320,
-      "height": 130,
-      "color": "5"
-    },
-    {
-      "id": "n004",
-      "type": "text",
-      "text": "舱窗面板（编辑）\nL1 设施 → L2 计划 → L3 任务\n地图保持可见，最多3层",
-      "x": -1100,
-      "y": 440,
-      "width": 320,
-      "height": 110,
-      "color": "5"
-    },
-    {
-      "id": "n005",
-      "type": "text",
-      "text": "今日列表（副视图）\n地图 ⇄ 列表 一键切\n同一路由·320ms·状态保留",
-      "x": -1100,
-      "y": 640,
-      "width": 320,
-      "height": 100,
-      "color": "4"
-    },
-    {
-      "id": "n006",
-      "type": "text",
-      "text": "动态星空（远景）\n六相位 · 约300颗真实亮星可点\n点开 → 知识卡",
-      "x": -1100,
-      "y": 840,
-      "width": 320,
-      "height": 100,
-      "color": "5"
-    },
-    {
-      "id": "n007",
-      "type": "text",
-      "text": "机构 Agency（=地图设施）\n模板9种 / 自定义\n编制 I0–I4 换形制\n状态：筹备·在营·巡航·停机·归档",
-      "x": -640,
-      "y": -240,
-      "width": 300,
-      "height": 120,
-      "color": "2"
-    },
-    {
-      "id": "n008",
-      "type": "text",
-      "text": "计划 Program\n周期7/14/21/30天·8周\n频率·休息日·提醒·难度档\n远征节点（阶段挑战）",
-      "x": -640,
-      "y": -60,
-      "width": 300,
-      "height": 110,
-      "color": "2"
-    },
-    {
-      "id": "n009",
-      "type": "text",
-      "text": "任务 Mission\n定时/计数/布尔\n执行方式：点火·窗口·记录\n最小完成线 60%",
-      "x": -640,
-      "y": 120,
-      "width": 300,
-      "height": 110,
-      "color": "2"
-    },
-    {
-      "id": "n010",
-      "type": "text",
-      "text": "执行层\n点火：番茄钟15/25/45/60\n窗口：真实闹钟+晨昏蒙影分级\n记录：两次点击内完成",
-      "x": -640,
-      "y": 300,
-      "width": 300,
-      "height": 110,
-      "color": "1"
-    },
-    {
-      "id": "n011",
-      "type": "text",
-      "text": "结算（四层顺序）\n①判定 ②归属\n③确定收益 XP/RC\n④扰动 roll → 卡",
-      "x": -640,
-      "y": 480,
-      "width": 300,
-      "height": 110,
-      "color": "1"
-    },
-    {
-      "id": "n012",
-      "type": "text",
-      "text": "数值与成长\nXP产出表·同日递减 1/.8/.6/.4/.3/.2\n等级曲线 gap=240+40(n-1) Lv.1–30\n防刷五道防线·中立性承诺",
-      "x": -180,
-      "y": -240,
-      "width": 320,
-      "height": 120,
-      "color": "3"
-    },
-    {
-      "id": "n013",
-      "type": "text",
-      "text": "星港扩建（半养成）\n8设施×5级=40次\n门槛制：不消耗任何东西\n领域广度第二把锁\n6–9个月走完",
-      "x": -180,
-      "y": -60,
-      "width": 320,
-      "height": 140,
-      "color": "3"
-    },
-    {
-      "id": "n014",
-      "type": "text",
-      "text": "个性化自定义（16项）\n星球名/涂装·机构名/代号/域色/徽记/口号\nHUD主题·星空亮度·星座连线·舱内视图\n命名权（本地，不欺瞒）",
-      "x": -180,
-      "y": 140,
-      "width": 320,
-      "height": 130,
-      "color": "3"
-    },
-    {
-      "id": "n015",
-      "type": "text",
-      "text": "星图（只增不减）\n机构锚点·计划航迹·彗星轨迹\n晨星·命名权·全谱测绘\n停机设施不消失不破败",
-      "x": -180,
-      "y": 320,
-      "width": 320,
-      "height": 120,
-      "color": "3"
-    },
-    {
-      "id": "n016",
-      "type": "text",
-      "text": "研究成果（知识卡）\n6系列 PLA/STA/DEE/TIM/HUM/SKY\nT0–T3 稀有度\n真实天文事实 + 可核查来源\n首批60张（含20张样例）",
-      "x": -640,
-      "y": 700,
-      "width": 320,
-      "height": 140,
-      "color": "3"
-    },
-    {
-      "id": "n017",
-      "type": "text",
-      "text": "轨道扰动（随机彩蛋）\nT1微光60% / T2尘暴25%\nT3极光12% / T4彗星3%\n保底：18次必T3·60次必T4\n概率公开·月加成≤8%",
-      "x": -640,
-      "y": 880,
-      "width": 320,
-      "height": 140,
-      "color": "1"
-    },
-    {
-      "id": "n018",
-      "type": "text",
-      "text": "决策 AI（引导语气）\n有人味的副手：判断→建议→一键采纳\n短吐槽每日≤2次·三档可调\n可读到数据才叫「决策」",
-      "x": -180,
-      "y": 700,
-      "width": 320,
-      "height": 130,
-      "color": "5"
-    },
-    {
-      "id": "n019",
-      "type": "text",
-      "text": "观测台（陈述语气）\n只报数不下判断\n知识卡署名者\n周报·趋势·对照",
-      "x": -180,
-      "y": 880,
-      "width": 320,
-      "height": 100,
-      "color": "5"
-    },
-    {
-      "id": "n020",
-      "type": "text",
-      "text": "六条设计底线\n行动先于表达·记录只增不减\n随机不改变难度·养成不做义务\n不比较·概率公开",
-      "x": -180,
-      "y": -440,
-      "width": 320,
-      "height": 110,
-      "color": "6"
-    },
-    {
-      "id": "n021",
-      "type": "text",
-      "text": "世界观：小星球「晨昏」\nA燃料只能是真的 B星球每天自转\nC星图只增不减 D信号带噪声\nE星球小到可被看遍",
-      "x": -640,
-      "y": -440,
-      "width": 320,
-      "height": 120,
-      "color": "6"
-    },
-    {
-      "id": "n022",
-      "type": "text",
-      "text": "写作红线与禁词\n禁：征服/占领/打败/太棒/加油/排行榜…\n不用叹号 · 天文数字必须可核查",
-      "x": -1100,
-      "y": -440,
-      "width": 320,
-      "height": 100,
-      "color": "6"
-    }
-  ],
-  "edges": [
-    {
-      "id": "e001",
-      "fromNode": "n001",
-      "fromSide": "right",
-      "toNode": "n021",
-      "toSide": "left"
-    },
-    {
-      "id": "e002",
-      "fromNode": "n001",
-      "fromSide": "right",
-      "toNode": "n002",
-      "toSide": "left"
-    },
-    {
-      "id": "e003",
-      "fromNode": "n001",
-      "fromSide": "right",
-      "toNode": "n012",
-      "toSide": "left"
-    },
-    {
-      "id": "e004",
-      "fromNode": "n001",
-      "fromSide": "right",
-      "toNode": "n020",
-      "toSide": "left"
-    },
-    {
-      "id": "e005",
-      "fromNode": "n021",
-      "fromSide": "right",
-      "toNode": "n007",
-      "toSide": "left"
-    },
-    {
-      "id": "e006",
-      "fromNode": "n021",
-      "fromSide": "right",
-      "toNode": "n022",
-      "toSide": "left"
-    },
-    {
-      "id": "e007",
-      "fromNode": "n002",
-      "fromSide": "right",
-      "toNode": "n003",
-      "toSide": "left"
-    },
-    {
-      "id": "e008",
-      "fromNode": "n002",
-      "fromSide": "right",
-      "toNode": "n004",
-      "toSide": "left"
-    },
-    {
-      "id": "e009",
-      "fromNode": "n002",
-      "fromSide": "right",
-      "toNode": "n005",
-      "toSide": "left"
-    },
-    {
-      "id": "e010",
-      "fromNode": "n002",
-      "fromSide": "right",
-      "toNode": "n006",
-      "toSide": "left"
-    },
-    {
-      "id": "e011",
-      "fromNode": "n002",
-      "fromSide": "right",
-      "toNode": "n007",
-      "toSide": "left"
-    },
-    {
-      "id": "e012",
-      "fromNode": "n007",
-      "fromSide": "right",
-      "toNode": "n008",
-      "toSide": "left"
-    },
-    {
-      "id": "e013",
-      "fromNode": "n008",
-      "fromSide": "right",
-      "toNode": "n009",
-      "toSide": "left"
-    },
-    {
-      "id": "e014",
-      "fromNode": "n009",
-      "fromSide": "right",
-      "toNode": "n010",
-      "toSide": "left"
-    },
-    {
-      "id": "e015",
-      "fromNode": "n010",
-      "fromSide": "right",
-      "toNode": "n011",
-      "toSide": "left"
-    },
-    {
-      "id": "e016",
-      "fromNode": "n011",
-      "fromSide": "right",
-      "toNode": "n012",
-      "toSide": "left"
-    },
-    {
-      "id": "e017",
-      "fromNode": "n012",
-      "fromSide": "right",
-      "toNode": "n013",
-      "toSide": "left"
-    },
-    {
-      "id": "e018",
-      "fromNode": "n012",
-      "fromSide": "right",
-      "toNode": "n014",
-      "toSide": "left"
-    },
-    {
-      "id": "e019",
-      "fromNode": "n012",
-      "fromSide": "right",
-      "toNode": "n015",
-      "toSide": "left"
-    },
-    {
-      "id": "e020",
-      "fromNode": "n011",
-      "fromSide": "right",
-      "toNode": "n016",
-      "toSide": "left"
-    },
-    {
-      "id": "e021",
-      "fromNode": "n011",
-      "fromSide": "right",
-      "toNode": "n017",
-      "toSide": "left"
-    },
-    {
-      "id": "e022",
-      "fromNode": "n016",
-      "fromSide": "right",
-      "toNode": "n006",
-      "toSide": "left"
-    },
-    {
-      "id": "e023",
-      "fromNode": "n017",
-      "fromSide": "right",
-      "toNode": "n015",
-      "toSide": "left"
-    },
-    {
-      "id": "e024",
-      "fromNode": "n022",
-      "fromSide": "right",
-      "toNode": "n018",
-      "toSide": "left"
-    },
-    {
-      "id": "e025",
-      "fromNode": "n022",
-      "fromSide": "right",
-      "toNode": "n019",
-      "toSide": "left"
-    },
-    {
-      "id": "e026",
-      "fromNode": "n003",
-      "fromSide": "right",
-      "toNode": "n018",
-      "toSide": "left"
-    },
-    {
-      "id": "e027",
-      "fromNode": "n003",
-      "fromSide": "right",
-      "toNode": "n004",
-      "toSide": "left"
-    }
-  ]
+	"nodes":[
+		{"id":"n001","type":"text","text":"星港计划 STARPORT\n星际探索任务计划 APP","x":-1100,"y":-240,"width":300,"height":90,"color":"6"},
+		{"id":"n002","type":"text","text":"【主界面】三维小星球地图\n相机固定 + 球体自转\nFOV35° / 3.33R / 可见35%\n真实昼夜·六相位光照","x":-1100,"y":0,"width":320,"height":130,"color":"4"},
+		{"id":"n003","type":"text","text":"HUD 浮动层（只提示）\n相位徽标 · Lv+推进值\n决策AI一句话 · 今日4/6\n中央「开始专注」· 底栏4+1","x":-1100,"y":220,"width":320,"height":130,"color":"5"},
+		{"id":"n004","type":"text","text":"舱窗面板（编辑）\nL1 设施 → L2 计划 → L3 任务\n地图保持可见，最多3层","x":-1100,"y":440,"width":320,"height":110,"color":"5"},
+		{"id":"n005","type":"text","text":"今日列表（副视图）\n地图 ⇄ 列表 一键切\n同一路由·320ms·状态保留","x":-1100,"y":640,"width":320,"height":100,"color":"4"},
+		{"id":"n006","type":"text","text":"动态星空（远景）\n六相位 · 约300颗真实亮星可点\n点开 → 知识卡","x":-1100,"y":840,"width":320,"height":100,"color":"5"},
+		{"id":"n007","type":"text","text":"机构 Agency（=地图设施）\n模板9种 / 自定义\n编制 I0–I4 换形制\n状态：筹备·在营·巡航·停机·归档","x":-640,"y":-240,"width":300,"height":120,"color":"2"},
+		{"id":"n008","type":"text","text":"计划 Program\n周期7/14/21/30天·8周\n频率·休息日·提醒·难度档\n远征节点（阶段挑战）","x":-640,"y":-60,"width":300,"height":110,"color":"2"},
+		{"id":"n009","type":"text","text":"任务 Mission\n定时/计数/布尔\n执行方式：点火·窗口·记录\n最小完成线 60%","x":-640,"y":120,"width":300,"height":110,"color":"2"},
+		{"id":"n010","type":"text","text":"执行层\n点火：番茄钟15/25/45/60\n窗口：真实闹钟+晨昏蒙影分级\n记录：两次点击内完成","x":-640,"y":300,"width":300,"height":110,"color":"1"},
+		{"id":"n011","type":"text","text":"结算（四层顺序）\n①判定 ②归属\n③确定收益 XP/RC\n④扰动 roll → 卡","x":-640,"y":480,"width":300,"height":110,"color":"1"},
+		{"id":"n012","type":"text","text":"数值与成长\nXP产出表·同日递减 1/.8/.6/.4/.3/.2\n等级曲线 gap=240+40(n-1) Lv.1–30\n防刷五道防线·中立性承诺","x":-180,"y":-240,"width":320,"height":120,"color":"3"},
+		{"id":"n013","type":"text","text":"星港扩建（半养成）\n8设施×5级=40次\n门槛制：不消耗任何东西\n领域广度第二把锁\n6–9个月走完","x":-180,"y":-60,"width":320,"height":140,"color":"3"},
+		{"id":"n014","type":"text","text":"个性化自定义（16项）\n星球名/涂装·机构名/代号/域色/徽记/口号\nHUD主题·星空亮度·星座连线·舱内视图\n命名权（本地，不欺瞒）","x":-180,"y":140,"width":320,"height":130,"color":"3"},
+		{"id":"n015","type":"text","text":"星图（只增不减）\n机构锚点·计划航迹·彗星轨迹\n晨星·命名权·全谱测绘\n停机设施不消失不破败","x":-180,"y":320,"width":320,"height":120,"color":"3"},
+		{"id":"n016","type":"text","text":"研究成果（知识卡）\n6系列 PLA/STA/DEE/TIM/HUM/SKY\nT0–T3 稀有度\n真实天文事实 + 可核查来源\n首批60张（含20张样例）","x":-640,"y":700,"width":320,"height":140,"color":"3"},
+		{"id":"n017","type":"text","text":"轨道扰动（随机彩蛋）\nT1微光60% / T2尘暴25%\nT3极光12% / T4彗星3%\n保底：18次必T3·60次必T4\n概率公开·月加成≤8%","x":-640,"y":880,"width":320,"height":140,"color":"1"},
+		{"id":"n018","type":"text","text":"决策 AI（引导语气）\n有人味的副手：判断→建议→一键采纳\n短吐槽每日≤2次·三档可调\n可读到数据才叫「决策」","x":-180,"y":700,"width":320,"height":130,"color":"5"},
+		{"id":"n019","type":"text","text":"观测台（陈述语气）\n只报数不下判断\n知识卡署名者\n周报·趋势·对照","x":-180,"y":880,"width":320,"height":100,"color":"5"},
+		{"id":"n020","type":"text","text":"六条设计底线\n行动先于表达·记录只增不减\n随机不改变难度·养成不做义务\n不比较·概率公开","x":-180,"y":-440,"width":320,"height":110,"color":"6"},
+		{"id":"n021","type":"text","text":"世界观：小星球「晨昏」\nA燃料只能是真的 B星球每天自转\nC星图只增不减 D信号带噪声\nE星球小到可被看遍","x":-640,"y":-440,"width":320,"height":120,"color":"6"},
+		{"id":"n022","type":"text","text":"写作红线与禁词\n禁：征服/占领/打败/太棒/加油/排行榜…\n不用叹号 · 天文数字必须可核查","x":-1100,"y":-440,"width":320,"height":100,"color":"6"}
+	],
+	"edges":[
+		{"id":"e001","fromNode":"n001","fromSide":"right","toNode":"n021","toSide":"left"},
+		{"id":"e002","fromNode":"n001","fromSide":"right","toNode":"n002","toSide":"left"},
+		{"id":"e003","fromNode":"n001","fromSide":"right","toNode":"n012","toSide":"left"},
+		{"id":"e004","fromNode":"n001","fromSide":"right","toNode":"n020","toSide":"left"},
+		{"id":"e005","fromNode":"n021","fromSide":"right","toNode":"n007","toSide":"left"},
+		{"id":"e006","fromNode":"n021","fromSide":"right","toNode":"n022","toSide":"left"},
+		{"id":"e007","fromNode":"n002","fromSide":"right","toNode":"n003","toSide":"left"},
+		{"id":"e008","fromNode":"n002","fromSide":"right","toNode":"n004","toSide":"left"},
+		{"id":"e009","fromNode":"n002","fromSide":"right","toNode":"n005","toSide":"left"},
+		{"id":"e010","fromNode":"n002","fromSide":"right","toNode":"n006","toSide":"left"},
+		{"id":"e011","fromNode":"n002","fromSide":"right","toNode":"n007","toSide":"left"},
+		{"id":"e012","fromNode":"n007","fromSide":"right","toNode":"n008","toSide":"left"},
+		{"id":"e013","fromNode":"n008","fromSide":"right","toNode":"n009","toSide":"left"},
+		{"id":"e014","fromNode":"n009","fromSide":"right","toNode":"n010","toSide":"left"},
+		{"id":"e015","fromNode":"n010","fromSide":"right","toNode":"n011","toSide":"left"},
+		{"id":"e016","fromNode":"n011","fromSide":"right","toNode":"n012","toSide":"left"},
+		{"id":"e017","fromNode":"n012","fromSide":"right","toNode":"n013","toSide":"left"},
+		{"id":"e018","fromNode":"n012","fromSide":"right","toNode":"n014","toSide":"left"},
+		{"id":"e019","fromNode":"n012","fromSide":"right","toNode":"n015","toSide":"left"},
+		{"id":"e020","fromNode":"n011","fromSide":"right","toNode":"n016","toSide":"left"},
+		{"id":"e021","fromNode":"n011","fromSide":"right","toNode":"n017","toSide":"left"},
+		{"id":"e022","fromNode":"n016","fromSide":"right","toNode":"n006","toSide":"left"},
+		{"id":"e023","fromNode":"n017","fromSide":"right","toNode":"n015","toSide":"left"},
+		{"id":"e024","fromNode":"n022","fromSide":"right","toNode":"n018","toSide":"left"},
+		{"id":"e025","fromNode":"n022","fromSide":"right","toNode":"n019","toSide":"left"},
+		{"id":"e026","fromNode":"n003","fromSide":"right","toNode":"n018","toSide":"left"},
+		{"id":"e027","fromNode":"n003","fromSide":"right","toNode":"n004","toSide":"left"}
+	]
 }
