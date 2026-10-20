@@ -1,0 +1,609 @@
+{
+  "nodes": [
+    {
+      "id": "n001",
+      "type": "text",
+      "text": "星港计划 STARPORT\n星际探索主题任务计划 APP\n信息架构 v2（三标签版）",
+      "x": -180.0,
+      "y": -880.0,
+      "width": 540.0,
+      "height": 72.0,
+      "color": "6"
+    },
+    {
+      "id": "n002",
+      "type": "text",
+      "text": "主页面（星港主页）",
+      "x": -180.0,
+      "y": -790.0,
+      "width": 540.0,
+      "height": 56.0,
+      "color": "6"
+    },
+    {
+      "id": "n003",
+      "type": "text",
+      "text": "顶部 · 星球视窗\n特色视觉区（随标题一起固定在顶部）",
+      "x": -1000.0,
+      "y": -790.0,
+      "width": 300.0,
+      "height": 66.0,
+      "color": "4"
+    },
+    {
+      "id": "n004",
+      "type": "text",
+      "text": "角落入口区\n（不占主内容的两个小图标）",
+      "x": 700.0,
+      "y": -790.0,
+      "width": 300.0,
+      "height": 60.0,
+      "color": "5"
+    },
+    {
+      "id": "n005",
+      "type": "text",
+      "text": "分段选择器（横向切换）\n计划 ／ 任务 ／ 基地",
+      "x": -650.0,
+      "y": -690.0,
+      "width": 1100.0,
+      "height": 56.0,
+      "color": "4"
+    },
+    {
+      "id": "n006",
+      "type": "text",
+      "text": "星球模型\n三维小星球 · 可旋转",
+      "x": -1000.0,
+      "y": -690.0,
+      "width": 300.0,
+      "height": 60.0,
+      "color": "4"
+    },
+    {
+      "id": "n007",
+      "type": "text",
+      "text": "设施动画\n机构 = 星球上的建筑",
+      "x": -1000.0,
+      "y": -600.0,
+      "width": 300.0,
+      "height": 60.0,
+      "color": "4"
+    },
+    {
+      "id": "n008",
+      "type": "text",
+      "text": "标题（可自定义）\n点击改名 · 固定在顶部",
+      "x": -1000.0,
+      "y": -510.0,
+      "width": 300.0,
+      "height": 60.0,
+      "color": "4"
+    },
+    {
+      "id": "n009",
+      "type": "text",
+      "text": "图例\n紫=产品/主页面 · 绿=一级入口\n橙=计划 · 红=任务 · 黄=基地\n青=设置/账户 · ★=二级页",
+      "x": -1000.0,
+      "y": -360.0,
+      "width": 300.0,
+      "height": 92.0,
+      "color": "6"
+    },
+    {
+      "id": "n010",
+      "type": "text",
+      "text": "计划\n（目标规划）",
+      "x": -650.0,
+      "y": -600.0,
+      "width": 300.0,
+      "height": 60.0,
+      "color": "2"
+    },
+    {
+      "id": "n011",
+      "type": "text",
+      "text": "任务\n（具体执行）",
+      "x": -250.0,
+      "y": -600.0,
+      "width": 280.0,
+      "height": 60.0,
+      "color": "1"
+    },
+    {
+      "id": "n012",
+      "type": "text",
+      "text": "基地\n（类养成系统）",
+      "x": 150.0,
+      "y": -600.0,
+      "width": 280.0,
+      "height": 60.0,
+      "color": "3"
+    },
+    {
+      "id": "n013",
+      "type": "text",
+      "text": "设置图标",
+      "x": 560.0,
+      "y": -690.0,
+      "width": 260.0,
+      "height": 50.0,
+      "color": "5"
+    },
+    {
+      "id": "n014",
+      "type": "text",
+      "text": "账户头像\n（身份个性化入口）",
+      "x": 900.0,
+      "y": -690.0,
+      "width": 280.0,
+      "height": 56.0,
+      "color": "5"
+    },
+    {
+      "id": "n015",
+      "type": "text",
+      "text": "★ 设置页",
+      "x": 560.0,
+      "y": -600.0,
+      "width": 260.0,
+      "height": 48.0,
+      "color": "5"
+    },
+    {
+      "id": "n016",
+      "type": "text",
+      "text": "★ 账户个性化页",
+      "x": 900.0,
+      "y": -600.0,
+      "width": 280.0,
+      "height": 48.0,
+      "color": "5"
+    },
+    {
+      "id": "n017",
+      "type": "text",
+      "text": "计划列表\n按机构/领域分组",
+      "x": -650.0,
+      "y": -500.0,
+      "width": 300.0,
+      "height": 60.0,
+      "color": "2"
+    },
+    {
+      "id": "n018",
+      "type": "text",
+      "text": "★ 计划详细设置\n周期 · 频率 · 休息日 · 提醒",
+      "x": -650.0,
+      "y": -410.0,
+      "width": 300.0,
+      "height": 64.0,
+      "color": "2"
+    },
+    {
+      "id": "n019",
+      "type": "text",
+      "text": "新建计划\n模板优先（≤60 秒）",
+      "x": -650.0,
+      "y": -320.0,
+      "width": 300.0,
+      "height": 60.0,
+      "color": "2"
+    },
+    {
+      "id": "n020",
+      "type": "text",
+      "text": "今日任务\n待办清单 · 快速勾选",
+      "x": -250.0,
+      "y": -500.0,
+      "width": 280.0,
+      "height": 60.0,
+      "color": "1"
+    },
+    {
+      "id": "n021",
+      "type": "text",
+      "text": "★ 任务详细设置\n类型 · 目标量 · 执行方式",
+      "x": -250.0,
+      "y": -410.0,
+      "width": 280.0,
+      "height": 64.0,
+      "color": "1"
+    },
+    {
+      "id": "n022",
+      "type": "text",
+      "text": "★ 任务进行页面\n点火计时 / 闹钟窗 / 自由记录",
+      "x": -250.0,
+      "y": -320.0,
+      "width": 280.0,
+      "height": 64.0,
+      "color": "1"
+    },
+    {
+      "id": "n023",
+      "type": "text",
+      "text": "★ 任务结算页面\n判定 · 收益 · 随机扰动",
+      "x": -250.0,
+      "y": -230.0,
+      "width": 280.0,
+      "height": 64.0,
+      "color": "1"
+    },
+    {
+      "id": "n024",
+      "type": "text",
+      "text": "基地总览\n设施阵列 · 状态灯",
+      "x": 150.0,
+      "y": -500.0,
+      "width": 280.0,
+      "height": 60.0,
+      "color": "3"
+    },
+    {
+      "id": "n025",
+      "type": "text",
+      "text": "设施详情与升级\n8 设施 × 5 级 · 门槛制",
+      "x": 150.0,
+      "y": -410.0,
+      "width": 280.0,
+      "height": 64.0,
+      "color": "3"
+    },
+    {
+      "id": "n026",
+      "type": "text",
+      "text": "星港扩建清单\n40 门槛 + 还差多少",
+      "x": 150.0,
+      "y": -320.0,
+      "width": 280.0,
+      "height": 60.0,
+      "color": "3"
+    },
+    {
+      "id": "n027",
+      "type": "text",
+      "text": "★ 资源查看页面\n查看任务收获（成果 · 材料 · 累计）",
+      "x": 150.0,
+      "y": -230.0,
+      "width": 280.0,
+      "height": 66.0,
+      "color": "3"
+    },
+    {
+      "id": "n028",
+      "type": "text",
+      "text": "通知与提醒",
+      "x": 560.0,
+      "y": -410.0,
+      "width": 260.0,
+      "height": 48.0,
+      "color": "5"
+    },
+    {
+      "id": "n029",
+      "type": "text",
+      "text": "反馈偏好\n副手语气三档",
+      "x": 560.0,
+      "y": -320.0,
+      "width": 260.0,
+      "height": 56.0,
+      "color": "5"
+    },
+    {
+      "id": "n030",
+      "type": "text",
+      "text": "随机扰动与概率公开\n概率表 · 保底计数",
+      "x": 560.0,
+      "y": -230.0,
+      "width": 260.0,
+      "height": 62.0,
+      "color": "5"
+    },
+    {
+      "id": "n031",
+      "type": "text",
+      "text": "数据与隐私 · 导出备份\nJSON / CSV",
+      "x": 560.0,
+      "y": -140.0,
+      "width": 260.0,
+      "height": 62.0,
+      "color": "5"
+    },
+    {
+      "id": "n032",
+      "type": "text",
+      "text": "身份与呼号\n指挥官代号 · 座舱呼号",
+      "x": 900.0,
+      "y": -410.0,
+      "width": 280.0,
+      "height": 62.0,
+      "color": "5"
+    },
+    {
+      "id": "n033",
+      "type": "text",
+      "text": "星球命名与涂装\n名称 · 4 套涂装",
+      "x": 900.0,
+      "y": -320.0,
+      "width": 280.0,
+      "height": 62.0,
+      "color": "5"
+    },
+    {
+      "id": "n034",
+      "type": "text",
+      "text": "徽记与旗帜\n像素徽记 8 选 1",
+      "x": 900.0,
+      "y": -230.0,
+      "width": 280.0,
+      "height": 62.0,
+      "color": "5"
+    },
+    {
+      "id": "n035",
+      "type": "text",
+      "text": "指挥官档案\n等级 · 累计航时 · 成就",
+      "x": 900.0,
+      "y": -140.0,
+      "width": 280.0,
+      "height": 62.0,
+      "color": "5"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e001",
+      "fromNode": "n001",
+      "fromSide": "bottom",
+      "toNode": "n002",
+      "toSide": "top"
+    },
+    {
+      "id": "e002",
+      "fromNode": "n002",
+      "fromSide": "left",
+      "toNode": "n003",
+      "toSide": "right",
+      "label": "顶部"
+    },
+    {
+      "id": "e003",
+      "fromNode": "n002",
+      "fromSide": "right",
+      "toNode": "n004",
+      "toSide": "left",
+      "label": "角落"
+    },
+    {
+      "id": "e004",
+      "fromNode": "n002",
+      "fromSide": "bottom",
+      "toNode": "n005",
+      "toSide": "top",
+      "label": "主内容"
+    },
+    {
+      "id": "e005",
+      "fromNode": "n003",
+      "fromSide": "bottom",
+      "toNode": "n006",
+      "toSide": "top"
+    },
+    {
+      "id": "e006",
+      "fromNode": "n006",
+      "fromSide": "bottom",
+      "toNode": "n007",
+      "toSide": "top"
+    },
+    {
+      "id": "e007",
+      "fromNode": "n007",
+      "fromSide": "bottom",
+      "toNode": "n008",
+      "toSide": "top"
+    },
+    {
+      "id": "e008",
+      "fromNode": "n005",
+      "fromSide": "bottom",
+      "toNode": "n010",
+      "toSide": "top",
+      "label": "①"
+    },
+    {
+      "id": "e009",
+      "fromNode": "n005",
+      "fromSide": "bottom",
+      "toNode": "n011",
+      "toSide": "top",
+      "label": "②"
+    },
+    {
+      "id": "e010",
+      "fromNode": "n005",
+      "fromSide": "bottom",
+      "toNode": "n012",
+      "toSide": "top",
+      "label": "③"
+    },
+    {
+      "id": "e011",
+      "fromNode": "n004",
+      "fromSide": "bottom",
+      "toNode": "n013",
+      "toSide": "top",
+      "label": "设置"
+    },
+    {
+      "id": "e012",
+      "fromNode": "n004",
+      "fromSide": "bottom",
+      "toNode": "n014",
+      "toSide": "top",
+      "label": "账户"
+    },
+    {
+      "id": "e013",
+      "fromNode": "n013",
+      "fromSide": "bottom",
+      "toNode": "n015",
+      "toSide": "top"
+    },
+    {
+      "id": "e014",
+      "fromNode": "n014",
+      "fromSide": "bottom",
+      "toNode": "n016",
+      "toSide": "top"
+    },
+    {
+      "id": "e015",
+      "fromNode": "n010",
+      "fromSide": "bottom",
+      "toNode": "n017",
+      "toSide": "top"
+    },
+    {
+      "id": "e016",
+      "fromNode": "n017",
+      "fromSide": "bottom",
+      "toNode": "n018",
+      "toSide": "top",
+      "label": "打开"
+    },
+    {
+      "id": "e017",
+      "fromNode": "n018",
+      "fromSide": "bottom",
+      "toNode": "n019",
+      "toSide": "top",
+      "label": "新建"
+    },
+    {
+      "id": "e018",
+      "fromNode": "n011",
+      "fromSide": "bottom",
+      "toNode": "n020",
+      "toSide": "top"
+    },
+    {
+      "id": "e019",
+      "fromNode": "n020",
+      "fromSide": "bottom",
+      "toNode": "n021",
+      "toSide": "top",
+      "label": "设置"
+    },
+    {
+      "id": "e020",
+      "fromNode": "n021",
+      "fromSide": "bottom",
+      "toNode": "n022",
+      "toSide": "top",
+      "label": "开始"
+    },
+    {
+      "id": "e021",
+      "fromNode": "n022",
+      "fromSide": "bottom",
+      "toNode": "n023",
+      "toSide": "top",
+      "label": "完成"
+    },
+    {
+      "id": "e022",
+      "fromNode": "n012",
+      "fromSide": "bottom",
+      "toNode": "n024",
+      "toSide": "top"
+    },
+    {
+      "id": "e023",
+      "fromNode": "n024",
+      "fromSide": "bottom",
+      "toNode": "n025",
+      "toSide": "top"
+    },
+    {
+      "id": "e024",
+      "fromNode": "n025",
+      "fromSide": "bottom",
+      "toNode": "n026",
+      "toSide": "top"
+    },
+    {
+      "id": "e025",
+      "fromNode": "n026",
+      "fromSide": "bottom",
+      "toNode": "n027",
+      "toSide": "top",
+      "label": "收获"
+    },
+    {
+      "id": "e026",
+      "fromNode": "n023",
+      "fromSide": "right",
+      "toNode": "n027",
+      "toSide": "left",
+      "label": "查看收获"
+    },
+    {
+      "id": "e027",
+      "fromNode": "n015",
+      "fromSide": "bottom",
+      "toNode": "n028",
+      "toSide": "top"
+    },
+    {
+      "id": "e028",
+      "fromNode": "n028",
+      "fromSide": "bottom",
+      "toNode": "n029",
+      "toSide": "top"
+    },
+    {
+      "id": "e029",
+      "fromNode": "n029",
+      "fromSide": "bottom",
+      "toNode": "n030",
+      "toSide": "top"
+    },
+    {
+      "id": "e030",
+      "fromNode": "n030",
+      "fromSide": "bottom",
+      "toNode": "n031",
+      "toSide": "top"
+    },
+    {
+      "id": "e031",
+      "fromNode": "n016",
+      "fromSide": "bottom",
+      "toNode": "n032",
+      "toSide": "top"
+    },
+    {
+      "id": "e032",
+      "fromNode": "n032",
+      "fromSide": "bottom",
+      "toNode": "n033",
+      "toSide": "top"
+    },
+    {
+      "id": "e033",
+      "fromNode": "n033",
+      "fromSide": "bottom",
+      "toNode": "n034",
+      "toSide": "top"
+    },
+    {
+      "id": "e034",
+      "fromNode": "n034",
+      "fromSide": "bottom",
+      "toNode": "n035",
+      "toSide": "top"
+    }
+  ]
+}
