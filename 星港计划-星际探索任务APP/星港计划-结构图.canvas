@@ -1,217 +1,30 @@
 {
-  "nodes": [
-    {
-      "id": "s01",
-      "type": "text",
-      "text": "星港计划 · 系统结构图\n（机制怎么互相喂 ／ 与 IA 图分工：IA 管页面，本图管关系）",
-      "x": -380.0,
-      "y": -160.0,
-      "width": 1080.0,
-      "height": 64.0,
-      "color": "6"
-    },
-    {
-      "id": "s02",
-      "type": "text",
-      "text": "机构 Agency\n（领域容器 = 星球上的设施）",
-      "x": 0.0,
-      "y": 0.0,
-      "width": 260.0,
-      "height": 64.0,
-      "color": "2"
-    },
-    {
-      "id": "s03",
-      "type": "text",
-      "text": "计划 Program\n（周期目标，例：8 周力量）",
-      "x": 0.0,
-      "y": 110.0,
-      "width": 260.0,
-      "height": 64.0,
-      "color": "2"
-    },
-    {
-      "id": "s04",
-      "type": "text",
-      "text": "任务 Mission\n（可执行动作，例：训练一次）",
-      "x": 0.0,
-      "y": 220.0,
-      "width": 260.0,
-      "height": 64.0,
-      "color": "1"
-    },
-    {
-      "id": "s05",
-      "type": "text",
-      "text": "执行\n点火（番茄钟）／窗口（闹钟）／记录",
-      "x": 0.0,
-      "y": 330.0,
-      "width": 260.0,
-      "height": 64.0,
-      "color": "1"
-    },
-    {
-      "id": "s06",
-      "type": "text",
-      "text": "结算\n判定 → 收益 → 随机 roll",
-      "x": 0.0,
-      "y": 440.0,
-      "width": 260.0,
-      "height": 64.0,
-      "color": "1"
-    },
-    {
-      "id": "s07",
-      "type": "text",
-      "text": "推进值 XP\n每次成功必给，永不回退",
-      "x": -380.0,
-      "y": 580.0,
-      "width": 240.0,
-      "height": 64.0,
-      "color": "3"
-    },
-    {
-      "id": "s08",
-      "type": "text",
-      "text": "研究成果（知识卡）\n真实天文知识 + 可核查来源",
-      "x": 10.0,
-      "y": 580.0,
-      "width": 240.0,
-      "height": 64.0,
-      "color": "3"
-    },
-    {
-      "id": "s09",
-      "type": "text",
-      "text": "轨道扰动（随机彩蛋）\n只加惊喜：不改判定、不改难度",
-      "x": 420.0,
-      "y": 580.0,
-      "width": 240.0,
-      "height": 64.0,
-      "color": "3"
-    },
-    {
-      "id": "s10",
-      "type": "text",
-      "text": "指挥官等级\n纯累计，只解锁表达",
-      "x": -380.0,
-      "y": 700.0,
-      "width": 240.0,
-      "height": 60.0,
-      "color": "3"
-    },
-    {
-      "id": "s11",
-      "type": "text",
-      "text": "星图\n只增不减的永久记录",
-      "x": 10.0,
-      "y": 700.0,
-      "width": 240.0,
-      "height": 60.0,
-      "color": "3"
-    },
-    {
-      "id": "s12",
-      "type": "text",
-      "text": "星港扩建（半养成）\n8 设施 × 5 级 · 门槛制",
-      "x": -380.0,
-      "y": 820.0,
-      "width": 240.0,
-      "height": 64.0,
-      "color": "3"
-    },
-    {
-      "id": "s13",
-      "type": "text",
-      "text": "两条不变量\n① 记录只增不减：等级 / 星港 / 星图永不回退\n② 事事有现实锚点：没有货币、体力、等待墙、排行榜\n\n去向映射：机构·计划 →「计划」页 ／ 任务·执行 →「任务」页 ／ 星港扩建 →「基地」页",
-      "x": -380.0,
-      "y": 950.0,
-      "width": 1080.0,
-      "height": 110.0,
-      "color": "6"
-    }
-  ],
-  "edges": [
-    {
-      "id": "e01",
-      "fromNode": "s01",
-      "fromSide": "bottom",
-      "toNode": "s02",
-      "toSide": "top"
-    },
-    {
-      "id": "e02",
-      "fromNode": "s02",
-      "fromSide": "bottom",
-      "toNode": "s03",
-      "toSide": "top"
-    },
-    {
-      "id": "e03",
-      "fromNode": "s03",
-      "fromSide": "bottom",
-      "toNode": "s04",
-      "toSide": "top"
-    },
-    {
-      "id": "e04",
-      "fromNode": "s04",
-      "fromSide": "bottom",
-      "toNode": "s05",
-      "toSide": "top"
-    },
-    {
-      "id": "e05",
-      "fromNode": "s05",
-      "fromSide": "bottom",
-      "toNode": "s06",
-      "toSide": "top"
-    },
-    {
-      "id": "e06",
-      "fromNode": "s06",
-      "fromSide": "bottom",
-      "toNode": "s07",
-      "toSide": "top",
-      "label": "推进值"
-    },
-    {
-      "id": "e07",
-      "fromNode": "s06",
-      "fromSide": "bottom",
-      "toNode": "s08",
-      "toSide": "top",
-      "label": "研究成果"
-    },
-    {
-      "id": "e08",
-      "fromNode": "s06",
-      "fromSide": "bottom",
-      "toNode": "s09",
-      "toSide": "top",
-      "label": "概率触发"
-    },
-    {
-      "id": "e09",
-      "fromNode": "s07",
-      "fromSide": "bottom",
-      "toNode": "s10",
-      "toSide": "top"
-    },
-    {
-      "id": "e10",
-      "fromNode": "s08",
-      "fromSide": "bottom",
-      "toNode": "s11",
-      "toSide": "top"
-    },
-    {
-      "id": "e11",
-      "fromNode": "s10",
-      "fromSide": "bottom",
-      "toNode": "s12",
-      "toSide": "top",
-      "label": "门槛达成"
-    }
-  ]
+	"nodes":[
+		{"id":"s01","type":"text","text":"星港计划 · 系统结构图\n（机制怎么互相喂 ／ 与 IA 图分工：IA 管页面，本图管关系）","x":-380,"y":-160,"width":1080,"height":64,"color":"6"},
+		{"id":"s02","type":"text","text":"机构 Agency\n（领域容器 = 星球上的设施）","x":0,"y":0,"width":260,"height":64,"color":"2"},
+		{"id":"s03","type":"text","text":"计划 Program\n（周期目标，例：8 周力量）","x":0,"y":110,"width":260,"height":64,"color":"2"},
+		{"id":"s04","type":"text","text":"任务 Mission\n（可执行动作，例：训练一次）","x":0,"y":220,"width":260,"height":64,"color":"1"},
+		{"id":"s05","type":"text","text":"执行\n点火（番茄钟）／窗口（闹钟）／记录","x":0,"y":330,"width":260,"height":64,"color":"1"},
+		{"id":"s06","type":"text","text":"结算\n判定 → 收益 → 随机 roll","x":0,"y":440,"width":260,"height":64,"color":"1"},
+		{"id":"s07","type":"text","text":"推进值 XP\n每次成功必给，永不回退","x":-380,"y":580,"width":240,"height":64,"color":"3"},
+		{"id":"s08","type":"text","text":"研究成果（知识卡）\n真实天文知识 + 可核查来源","x":10,"y":580,"width":240,"height":100,"color":"3"},
+		{"id":"s09","type":"text","text":"轨道扰动（随机彩蛋）\n只加惊喜：不改判定、不改难度","x":420,"y":580,"width":240,"height":120,"color":"3"},
+		{"id":"s10","type":"text","text":"指挥官等级\n纯累计，只解锁表达","x":-380,"y":700,"width":240,"height":60,"color":"3"},
+		{"id":"s12","type":"text","text":"星港扩建（半养成）\n8 设施 × 5 级 · 门槛制","x":-380,"y":820,"width":240,"height":64,"color":"3"},
+		{"id":"s13","type":"text","text":"两条不变量\n① 记录只增不减：等级 / 星港 / 星图永不回退\n② 事事有现实锚点：没有货币、体力、等待墙、排行榜\n\n去向映射：机构·计划 →「计划」页 ／ 任务·执行 →「任务」页 ／ 星港扩建 →「基地」页","x":-380,"y":950,"width":1080,"height":170,"color":"6"},
+		{"id":"s11","type":"text","text":"星图\n只增不减的永久记录","x":10,"y":730,"width":240,"height":60,"color":"3"}
+	],
+	"edges":[
+		{"id":"e01","fromNode":"s01","fromSide":"bottom","toNode":"s02","toSide":"top"},
+		{"id":"e02","fromNode":"s02","fromSide":"bottom","toNode":"s03","toSide":"top"},
+		{"id":"e03","fromNode":"s03","fromSide":"bottom","toNode":"s04","toSide":"top"},
+		{"id":"e04","fromNode":"s04","fromSide":"bottom","toNode":"s05","toSide":"top"},
+		{"id":"e05","fromNode":"s05","fromSide":"bottom","toNode":"s06","toSide":"top"},
+		{"id":"e06","fromNode":"s06","fromSide":"bottom","toNode":"s07","toSide":"top","label":"推进值"},
+		{"id":"e07","fromNode":"s06","fromSide":"bottom","toNode":"s08","toSide":"top","label":"研究成果"},
+		{"id":"e08","fromNode":"s06","fromSide":"bottom","toNode":"s09","toSide":"top","label":"概率触发"},
+		{"id":"e09","fromNode":"s07","fromSide":"bottom","toNode":"s10","toSide":"top"},
+		{"id":"e10","fromNode":"s08","fromSide":"bottom","toNode":"s11","toSide":"top"},
+		{"id":"e11","fromNode":"s10","fromSide":"bottom","toNode":"s12","toSide":"top","label":"门槛达成"}
+	]
 }
