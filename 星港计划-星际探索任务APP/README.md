@@ -56,6 +56,7 @@
 | [10-星球地图与三维场景](10-星球地图与三维场景.md) | **三维层规范**：相机、球体、光照六相位、设施形制 LOD、HUD、舱窗面板、性能预算、验收判据 | 设计 / 开发 / 美术 |
 | [11-任务主题与知识卡](11-任务主题与知识卡.md) | **主题 ↔ 卡片关联**：重复度估算（36 主题）、36 主题总表、13 个主题 × 6 张完整卡（含真实探索记录） | 策划 / 内容 |
 | [12-知识卡配图说明](12-知识卡配图说明.md) | **78 张知识卡配图**：像素风生成方式、色板锚点、尺寸与用法、重跑方法、已知限制 | 设计 / 美术 / 开发 |
+| [13-像素组件库规范](13-像素组件库规范.md) | **组件标准化**：33 个令牌、7 个组件集 / 26 变体、尺寸收敛对照、文字属性规则 | 设计 / 前端 |
 
 ---
 
@@ -78,6 +79,16 @@
 | [design/gen-wireframe.mjs](design/gen-wireframe.mjs) | 线框生成器（改坐标改这里，重跑即可） |
 | [design/wireframe.jsx](design/wireframe.jsx) | 渲染输入 |
 | [design/audit-wireframe.mjs](design/audit-wireframe.mjs) | 线框自检（塌陷 / 零尺寸 / 越界） |
+
+### 像素组件库（Figma 画板 `881:430`）
+
+| 文件 | 说明 |
+|---|---|
+| [13-像素组件库规范.md](13-像素组件库规范.md) | 令牌表 / 组件清单 / 尺寸收敛对照 / 用法与禁忌 |
+| [design/组件库-标准.png](design/组件库-标准.png) | 画板总览图 |
+| [design/gen-kit.mjs](design/gen-kit.mjs) | 组件变体生成器 |
+| [design/make-components.mjs](design/make-components.mjs) | 帧 → 组件 → 合并变体 |
+| [design/add-text-props.mjs](design/add-text-props.mjs) | 加文字属性并跨变体绑定 |
 
 ### 知识卡配图（78 张）
 
