@@ -80,14 +80,15 @@
 | [design/wireframe.jsx](design/wireframe.jsx) | 渲染输入 |
 | [design/audit-wireframe.mjs](design/audit-wireframe.mjs) | 线框自检（塌陷 / 零尺寸 / 越界） |
 
-### 像素组件库（Figma 画板 `881:430`）
+### 像素组件库（Figma 画板 `881:430` + `887:689`）
 
 | 文件 | 说明 |
 |---|---|
-| [13-像素组件库规范.md](13-像素组件库规范.md) | 令牌表 / 组件清单 / 尺寸收敛对照 / 用法与禁忌 |
-| [design/组件库-标准.png](design/组件库-标准.png) | 画板总览图 |
-| [design/gen-kit.mjs](design/gen-kit.mjs) | 组件变体生成器 |
-| [design/make-components.mjs](design/make-components.mjs) | 帧 → 组件 → 合并变体 |
+| [13-像素组件库规范.md](13-像素组件库规范.md) | 令牌表 / **25 个组件集 · 84 变体** / 尺寸收敛对照 / 文字属性规则 / 用法与禁忌 |
+| [design/组件库-标准.png](design/组件库-标准.png) | v1 画板（令牌 + 7 组件集） |
+| [design/组件库-标准v2.png](design/组件库-标准v2.png) | v2 画板（补齐的 18 个组件集） |
+| [design/gen-kit.mjs](design/gen-kit.mjs) · [design/gen-kit2.mjs](design/gen-kit2.mjs) | 两批组件变体生成器 |
+| [design/make-components.mjs](design/make-components.mjs) · [design/make-components2.mjs](design/make-components2.mjs) | 帧 → 组件 → 合并变体 → 回板 |
 | [design/add-text-props.mjs](design/add-text-props.mjs) | 加文字属性并跨变体绑定 |
 
 ### 知识卡配图（78 张）
