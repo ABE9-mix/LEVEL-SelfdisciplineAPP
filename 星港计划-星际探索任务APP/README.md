@@ -55,6 +55,7 @@
 | [09-术语表与文案规范](09-术语表与文案规范.md) | 术语对照、长度上限、8 组关键屏文案、禁词表、校核脚本 | 文案 / 设计 |
 | [10-星球地图与三维场景](10-星球地图与三维场景.md) | **三维层规范**：相机、球体、光照六相位、设施形制 LOD、HUD、舱窗面板、性能预算、验收判据 | 设计 / 开发 / 美术 |
 | [11-任务主题与知识卡](11-任务主题与知识卡.md) | **主题 ↔ 卡片关联**：重复度估算（36 主题）、36 主题总表、13 个主题 × 6 张完整卡（含真实探索记录） | 策划 / 内容 |
+| [12-知识卡配图说明](12-知识卡配图说明.md) | **78 张知识卡配图**：像素风生成方式、色板锚点、尺寸与用法、重跑方法、已知限制 | 设计 / 美术 / 开发 |
 
 ---
 
@@ -77,6 +78,17 @@
 | [design/gen-wireframe.mjs](design/gen-wireframe.mjs) | 线框生成器（改坐标改这里，重跑即可） |
 | [design/wireframe.jsx](design/wireframe.jsx) | 渲染输入 |
 | [design/audit-wireframe.mjs](design/audit-wireframe.mjs) | 线框自检（塌陷 / 零尺寸 / 越界） |
+
+### 知识卡配图（78 张）
+
+| 文件 | 说明 |
+|---|---|
+| [assets/knowledge-cards/contact-sheet.png](assets/knowledge-cards/contact-sheet.png) | **78 张总览**（评审先看这张） |
+| [assets/knowledge-cards/](assets/knowledge-cards/) | `<ID>.png` 512×768（缩略）／ `<ID>_x3.png` 1536×2304（详情大图） |
+| [assets/knowledge-cards/manifest.json](assets/knowledge-cards/manifest.json) | 卡片 ↔ 文件 ↔ 提示词 ↔ seed 对照表 |
+| [12-知识卡配图说明.md](12-知识卡配图说明.md) | 色板锚点、尺寸用法、重跑方法、已知限制 |
+
+> ⚠️ 显示时必须用 `image-rendering: pixelated`（Flutter 用 `FilterQuality.none`），否则像素块会被插值抹糊。
 
 ---
 
