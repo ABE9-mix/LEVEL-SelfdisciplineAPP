@@ -134,12 +134,13 @@
   <div class="r"><span>FPS</span><span id="d-fps">—</span></div>
   <div class="r"><span>掉帧 &gt;33ms</span><span id="d-drop">—</span></div>
   <div class="r"><span>三角面</span><span id="d-tri">—</span></div>
-  <div class="r"><span>视角</span><span id="d-view">—</span></div>
+  <div class="r"><span>模式</span><span id="d-view">globe</span></div>
+  <div class="r"><span>聚焦对象</span><span id="d-focus">—</span></div>
   <div class="r"><span>像素化</span><span id="d-px">—</span></div>
   <div class="r"><span>DPR / 倍率</span><span id="d-dpr">—</span></div>
   <div class="r"><span>WebGPU</span><span id="d-gpu">—</span></div>
   <div class="r"><span>GPU</span><span id="d-glr" style="font-size:10px;max-width:150px;text-align:right">—</span></div>
-  <div class="tip">F 全屏 · P 像素化开关 · 1/2/3/4 像素尺寸 · V 切换视角<br>
+  <div class="tip">拖拽旋转 · 双指缩放 · 点建筑聚焦 · Esc 退出<br>F 全屏 · P 像素化 · 1/2/3/4 像素尺寸<br>
     W 试切 WebGPU（切后像素化暂停，见 15 章说明）<br>这些数字可直接放答辩 PPT：帧率与首帧都是实测值。</div>
 </div>
 
@@ -169,7 +170,7 @@
   </div>
 
   <div class="body" id="body"></div>
-  <div class="hint">实时渲染 + 像素化后处理 · P 切换像素化 · 1/2/3/4 改像素尺寸 · D 看指标</div>
+  <div class="hint">实时渲染 + 像素化后处理 · 拖动旋转 · 双指缩放 · 点建筑聚焦 · D 看指标</div>
 </div>
 
 <!-- three.js 以经典脚本加载（内联打包，暴露 window.THREE）
@@ -208,43 +209,167 @@ const SCALE = 2;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
 
-/* ── 两套机位 ──────────────────────────────────────────────────────
-   ① horizon 地平线视角（默认）
-      相机贴近地表，地平线横切画面：天空约 1/3、星球约 2/3。
-      参数是解出来的（逐像素对球求交、按「天空面积 = 1/3」反解 φ）：
-        相机距球心  d = 1.15R  （离地 0.115R）
-        光轴上抬    φ = 56.856° (= 0.992332 rad)
-        → 视觉天空面积 33.3%（按大气壳 R=1.035 计）
-        → 视觉地平线：中央 29.5%、左右边缘 40.5%（曲率落差 11%）
-      为什么不是更远：d = 1.65 时落差 47%，读起来是「一颗球」而不是「地平线」；
-      d = 1.06 时落差仅 10%，但相机离大气壳只剩 0.025R，近裁剪面会切到。
-      1.15 是「看出这是星球」与「不切到大气」之间的平衡点。
-      注意 near 必须设 0.001：相机到大气壳只有 0.115R 余量。
-   ② globe 全景点视角（原视角，按 V 切换）
-      星球居中完整呈现，适合看设施全貌。
-   ──────────────────────────────────────────────────────────────── */
-const VIEWS = {
-  horizon: { dist: 1.15, phi: 0.992332, fov: 35, near: 0.001 },
-  globe:   { dist: 3.45, phi: 0,        fov: 35, near: 0.1   },
-};
-let viewMode = 'horizon';
+/* ══ 相机与交互 ═══════════════════════════════════════════════════
+   三种状态：
+     globe     全景待机（默认）—— 星球低速自转，可拖动旋转、双指缩放
+     focus     聚焦某座建筑 —— 相机落到该建筑低空，地平线横切、建筑在下三分之一
+     transit   两种状态之间的过渡（700ms 缓动，期间不接受输入）
 
-function applyView(mode){
-  viewMode = mode;
-  const v = VIEWS[mode];
-  camera.fov = v.fov;
-  camera.near = v.near;
-  camera.updateProjectionMatrix();
-  if (mode === 'horizon') {
-    camera.position.set(0, 0, v.dist);
-    camera.lookAt(0, Math.sin(v.phi), v.dist - Math.cos(v.phi));
-  } else {
-    camera.position.set(0, 0.5, v.dist);
-    camera.lookAt(0, 0.05, 0);
-  }
-  if (typeof window !== 'undefined' && $('d-view')) $('d-view').textContent = mode;
+   focus 取景参数是实测的（逐像素射线求交扫描，非手推公式）：
+     dist = 1.10R   back = 0.19R   pitch = +8°
+     → 实测天空 35.9%（≈1/3）、建筑恒在屏幕中央 x、y≈68%
+     → 建筑屏高约 55px，看得清也点得准
+   ════════════════════════════════════════════════════════════════ */
+/* focus 取景参数：先解析扫描定位，再用实际渲染帧逐档实测校正。
+   （解析式按半径 1 的球求交，但实际还有一层 1.035R 大气壳会遮住地平线
+    上方一条天空，所以解析值偏乐观——必须按实测调。）
+   实测（780×454 截图统计最暗色占比 = 天空面积）：
+     dist 1.05 → 天空 41.0%   dist 1.10 → 35.9%   dist 1.15 → 28.4%
+     dist 1.20 → 22.3%        dist 1.30 → 14.7%
+   取 1.10：天空 35.9%（≈1/3），建筑屏底 y≈68%，屏高约 55px、可点面积约 1900 像素。 */
+const FAC = { dist: 1.10, back: 0.19, pitch: 8 * Math.PI / 180 };
+const GLOBE = {
+  // 390×227 视口 aspect=1.72，球投影受"高度"约束：
+  //   d=3.0 → 占高 112%（上下裁）  d=3.6 → 占高 92%（完整，接近满高）  d=4.2 → 78%
+  // 默认取 3.6：完整可见且够大，留一点余量给待机自转时的视觉呼吸
+  dist: 3.60, distMin: 2.80, distMax: 5.60,
+  el: 18 * Math.PI / 180, elMin: 4 * Math.PI / 180, elMax: 58 * Math.PI / 180,
+};
+const FOC_DIST_MIN = 1.03, FOC_DIST_MAX = 1.80;
+const IDLE_DELAY = 2000;      // 停止操作多久恢复自转（ms）
+const IDLE_SPIN  = 0.055;     // 待机自转 rad/s（比原来慢一个量级）
+const TRANSIT_MS = 700;
+
+const S = {
+  mode: 'globe',              // globe | focus | transit
+  focusIdx: -1,
+  spin: 0,                    // 星球自转角（唯一真相）
+  spinVel: 0,                 // 拖动惯性
+  dist: GLOBE.dist,
+  el: GLOBE.el,
+  lastInput: performance.now(),
+  // 过渡
+  t0: 0, dur: TRANSIT_MS, from: null, to: null, next: 'globe',
+};
+
+/* 相机目标（每帧计算后 lerp 到这里） */
+const WORLD_UP = new THREE.Vector3(0, 1, 0);
+const camUp = new THREE.Vector3(0, 1, 0);
+const camPos = new THREE.Vector3(0, 1.0, 3.2);
+const camLook = new THREE.Vector3(0, 0, 0);
+
+const _n = new THREE.Vector3();      // 建筑世界法线
+const _tp = new THREE.Vector3();     // 相机目标位置
+const _tl = new THREE.Vector3();     // 相机目标看点
+
+const _v1 = new THREE.Vector3(), _v2 = new THREE.Vector3(), _v3 = new THREE.Vector3();
+
+/* 全局机位：球面轨道 */
+function globeTargets() {
+  const d = S.dist, el = S.el;
+  _tp.set(0, Math.sin(el) * d, Math.cos(el) * d);
+  _tl.set(0, 0, 0);
 }
-applyView(viewMode);
+
+/* 聚焦机位：给定建筑世界法线 */
+function focusTargets(nw) {
+  const lat = Math.asin(Math.max(-1, Math.min(1, nw.y)));
+  const lon = Math.atan2(nw.x, nw.z);
+  // 朝北切向
+  _v1.set(-Math.sin(lat) * Math.sin(lon), Math.cos(lat), -Math.sin(lat) * Math.cos(lon));
+  if (_v1.lengthSq() < 1e-8) _v1.set(0, 0, -1);
+  _v1.normalize();
+  // 相机 = (n - back·tN) 拉伸到 dist
+  _v2.copy(nw).addScaledVector(_v1, -FAC.back).normalize();
+  _tp.copy(_v2).multiplyScalar(S.dist);
+  // 看向建筑，再绕 right 抬 pitch
+  _tl.copy(nw);
+  _v3.copy(_tl).sub(_tp).normalize();
+  const right = _v1.clone().crossVectors(_v3, nw);
+  if (right.lengthSq() < 1e-8) right.set(1, 0, 0);
+  right.normalize();
+  _v3.applyAxisAngle(right, FAC.pitch);
+  _tl.copy(_tp).add(_v3);
+}
+
+
+/* 取某座建筑的当前世界法线（随星球自转变化） */
+function worldNormalOf(idx) {
+  const m = facs[idx];
+  if (!m) return null;
+  _n.copy(m.position).normalize().applyQuaternion(planet.quaternion);
+  return _n;
+}
+
+/* 切换模式（带过渡） */
+function goGlobe() {
+  if (S.mode === 'globe') return;
+  S.from = { pos: camPos.clone(), look: camLook.clone() };
+  S.mode = 'transit'; S.next = 'globe'; S.focusIdx = -1;
+  globeTargets();
+  S.to = { pos: _tp.clone(), look: _tl.clone() };
+  STAT.t0 = performance.now(); S.dur = TRANSIT_MS;
+  S.dist = GLOBE.dist;
+  if ($('d-view')) $('d-view').textContent = 'globe';
+  if ($('d-focus')) $('d-focus').textContent = '—';
+}
+
+function goFocus(idx) {
+  const nw = worldNormalOf(idx);
+  if (!nw) return;
+  S.from = { pos: camPos.clone(), look: camLook.clone() };
+  S.mode = 'transit'; S.next = 'focus'; S.focusIdx = idx;
+  focusTargets(nw.clone());
+  S.to = { pos: _tp.clone(), look: _tl.clone() };
+  STAT.t0 = performance.now(); S.dur = TRANSIT_MS;
+  S.dist = FAC.dist;
+  if ($('d-view')) $('d-view').textContent = 'focus';
+  if ($('d-focus')) $('d-focus').textContent = '#' + (idx + 1);
+}
+
+/* 每帧更新相机 */
+const _ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+function updateCamera(now) {
+  if (S.mode === 'transit') {
+    const k = Math.min(1, (now - STAT.t0) / S.dur);
+    const e = _ease(k);
+    camPos.lerpVectors(S.from.pos, S.to.pos, e);
+    camLook.lerpVectors(S.from.look, S.to.look, e);
+    if (k >= 1) { S.mode = S.next; }
+  } else if (S.mode === 'focus') {
+    const nw = worldNormalOf(S.focusIdx);
+    if (nw) focusTargets(nw.clone());
+    camPos.lerp(_tp, 0.35);
+    camLook.lerp(_tl, 0.35);
+  } else {
+    globeTargets();
+    camPos.lerp(_tp, 0.30);
+    camLook.lerp(_tl, 0.30);
+  }
+  camera.position.copy(camPos);
+  /* up 向量必须按模式给：
+     globe  → 世界 +Y（常规轨道相机）
+     focus  → 该建筑的径向法线。用世界 +Y 当地平线会斜：
+              建筑在 lat 44–64 时径向与 +Y 差 26–46°，
+              截图实测地平线明显歪斜（左下高、右上低）。
+              换成径向后地平线才是水平的。 */
+  if (S.mode === 'focus') {
+    const nw = worldNormalOf(S.focusIdx);
+    if (nw) camUp.lerp(nw, 0.35);
+  } else if (S.mode === 'transit') {
+    camUp.lerp(S.next === 'focus' ? worldNormalOf(S.focusIdx) ?? WORLD_UP : WORLD_UP, 0.2);
+  } else {
+    camUp.lerp(WORLD_UP, 0.25);
+  }
+  camUp.normalize();
+  camera.up.copy(camUp);
+  camera.lookAt(camLook);
+  camera.near = S.mode === 'focus' || S.mode === 'transit' ? 0.01 : 0.05;
+  camera.updateProjectionMatrix();
+}
+globeTargets();
+camPos.copy(_tp); camLook.copy(_tl);
+
 
 /* 程序化星球贴图：低饱和海陆 + 极冠（不用外部资源，离线也能跑） */
 function makePlanetTexture(){
@@ -527,7 +652,7 @@ window.__px = {
 };
 
 /* ── 统计 ── */
-const S = { n: 0, t0: performance.now(), first: 0, times: [], drop: 0, win: performance.now() };
+const STAT = { n: 0, t0: performance.now(), first: 0, times: [], drop: 0, win: performance.now() };
 /* 注意：renderer.info.render 在**每次** render 调用后重置，
    像素化模式下最后一次 render 是全屏 quad（2 面），会把场景真实面数覆盖掉。
    所以在场景渲染后立即取值，不能等到 refresh() 里再读。 */
@@ -541,11 +666,37 @@ function tick(ts) {
   last = ts;
 
   const now = performance.now();
-  const dt = now - (S.prev || now); S.prev = now;
+  const dt = now - (STAT.prev || now); STAT.prev = now;
 
-  if (S.n === 0) { S.first = now - S.t0; $('d-first').textContent = S.first.toFixed(0) + ' ms'; }
+  if (STAT.n === 0) { STAT.first = now - STAT.t0; $('d-first').textContent = STAT.first.toFixed(0) + ' ms'; }
 
-  planet.rotation.y += .0016;
+  // 星球自转：只有 globe 待机且无输入时才转
+  /* 自转与惯性一律按实际 dt 积分，不能每帧加固定量：
+     软件渲染下只有 40–50fps，每帧固定 1/60 会让实际转速比设定值低 20–30%
+     （实测 IDLE_SPIN=0.055 跑出 0.041 rad/s）。
+     step = 本帧时长 / (1/60)，把"每 60fps 帧的量"换算成"本帧该给的量"。 */
+  const idle = now - S.lastInput > IDLE_DELAY;
+  if (S.mode === 'globe') {
+    if (!S.dragging) {
+      const dtSec = Math.min(0.05, dt / 1000);   // 上限 50ms：切后台回来时防止大跳
+      const step = dtSec * 60;
+      S.spin += S.spinVel * step;
+      S.spinVel *= Math.pow(0.92, step);         // 惯性衰减（按帧率归一）
+      if (Math.abs(S.spinVel) < 0.0005) S.spinVel = 0;
+      if (idle && Math.abs(S.spinVel) < 0.01) S.spin += IDLE_SPIN * dtSec;
+    }
+    planet.rotation.y = S.spin;
+  }
+  updateCamera(now);
+
+  /* 建筑距离补偿缩放（LOD）
+     透视下建筑尺寸 ∝ 1/相机距离：
+       focus（距球心 1.4R，离建筑约 0.4R）→ 屏高约 30px
+       globe（距球心 3.6R，离建筑约 2.6R）→ 同尺寸只剩约 4.6px，看不清也难点
+     按距离反向放大，让建筑在两档都维持 10–30px 的可辨、可点尺寸。
+     物理上不严格，但交互上必要。 */
+  const lvScale = Math.max(1, Math.min(3.2, (S.dist - 0.95) / 1.4));
+  for (let i = 0; i < facs.length; i++) facs[i].scale.setScalar(lvScale);
   // 太阳缓慢横移，地平线视野内的明暗渐变会随之变化
   const sx = -2.2 + 1.1 * Math.sin(now * .00005);
   sun.position.set(sx, 1.6, 1.2);
@@ -564,15 +715,15 @@ function tick(ts) {
     sceneTris = renderer.info.render.triangles;
   }
 
-  S.n++;
-  if (dt > 0 && dt < 500) { S.times.push(dt); if (S.times.length > 3000) S.times.shift(); }
-  if (dt > 33) S.drop++;
+  STAT.n++;
+  if (dt > 0 && dt < 500) { STAT.times.push(dt); if (STAT.times.length > 3000) STAT.times.shift(); }
+  if (dt > 33) STAT.drop++;
 
-  if (now - S.win > 500) { S.win = now; refresh(now); }
+  if (now - STAT.win > 500) { STAT.win = now; refresh(now); }
 }
 
 function refresh() {
-  const a = S.times.slice().sort((x, y) => x - y);
+  const a = STAT.times.slice().sort((x, y) => x - y);
   if (!a.length) return;
   const p = q => a[Math.min(a.length - 1, Math.floor(a.length * q))];
   const p50 = p(.5), p95 = p(.95);
@@ -580,7 +731,7 @@ function refresh() {
   $('d-p95').textContent = p95.toFixed(2) + ' ms';
   $('d-p95').className = p95 <= 16.8 ? 'ok' : p95 <= 33.4 ? 'warn' : 'bad';
   $('d-fps').textContent = (1000 / Math.max(p50, .01)).toFixed(0);
-  $('d-drop').textContent = S.drop;
+  $('d-drop').textContent = STAT.drop;
   $('d-tri').textContent = triCount().toLocaleString();
   $('d-backend').textContent = backend;
 }
@@ -602,7 +753,8 @@ addEventListener('keydown', e => {
   if (k === 'f') document.documentElement.requestFullscreen?.().catch(() => {});
   if (k === 'w') tryWebGPU();
   // 视角：V 在「地平线视角 / 全景点视角」之间切换
-  if (k === 'v') { applyView(viewMode === 'horizon' ? 'globe' : 'horizon'); }
+  // 视角：Esc / V 退出聚焦回到全景
+  if (k === 'escape' || k === 'v') { goGlobe(); }
   // 像素化：P 开关，1/2/3/4 切档（大像素边长，设备像素）
   if (k === 'p') { setPixel(!pixelOn); }
   if ('1234'.includes(k)) { setPixel(true, PX_LEVELS[+k]); }
@@ -659,9 +811,159 @@ async function tryWebGPU() {
   );
 }
 
+/* ══ 交互：拖动旋转 / 双指缩放 / 点建筑聚焦 ═══════════════════════
+   globe：单指拖动=旋转（带惯性）、双指=缩放、点建筑=聚焦
+   focus：单指拖动=微调俯角、双指=缩放、点天空或 Esc=退回
+   ═══════════════════════════════════════════════════════════════ */
+const raycaster = new THREE.Raycaster();
+const pointerNDC = new THREE.Vector2();
+const el = renderer.domElement;
+
+const T = {
+  pointers: new Map(),
+  pinchStartDist: 0,
+  pinchStartScale: 0,
+  lastX: 0, lastY: 0,
+  downOn: -1,
+  downPos: { x: 0, y: 0 },
+};
+
+function hitFacilities(clientX, clientY) {
+  const r = el.getBoundingClientRect();
+  pointerNDC.x = ((clientX - r.left) / r.width) * 2 - 1;
+  pointerNDC.y = -((clientY - r.top) / r.height) * 2 + 1;
+  raycaster.setFromCamera(pointerNDC, camera);
+  const hits = raycaster.intersectObjects(facs, false);
+  if (hits.length) return facs.indexOf(hits[0].object);
+  // 屏幕空间兜底：建筑在远景下很小，命中区放宽到 20px
+  let best = -1, bestD = 400;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < facs.length; i++) {
+    v.copy(facs[i].position); planet.localToWorld(v);
+    const p = v.clone().project(camera);
+    if (p.z > 1) continue;
+    const sx = (p.x * .5 + .5) * r.width + r.left;
+    const sy = (-p.y * .5 + .5) * r.height + r.top;
+    const d = (sx - clientX) ** 2 + (sy - clientY) ** 2;
+    if (d < bestD) { bestD = d; best = i; }
+  }
+  return best;
+}
+
+const ptrList = () => [...T.pointers.values()];
+
+el.addEventListener('pointerdown', e => {
+  el.setPointerCapture?.(e.pointerId);
+  T.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  S.lastInput = performance.now();
+
+  if (T.pointers.size === 1) {
+    S.dragging = true;
+    S.spinVel = 0;
+    T.lastX = e.clientX; T.lastY = e.clientY;
+    T.downPos = { x: e.clientX, y: e.clientY };
+    T.downOn = S.mode === 'globe' ? hitFacilities(e.clientX, e.clientY) : -1;
+  } else if (T.pointers.size === 2) {
+    const [a, b] = ptrList();
+    T.pinchStartDist = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+    T.pinchStartScale = S.dist;
+    S.dragging = false;
+    T.downOn = -1;
+  }
+});
+
+el.addEventListener('pointermove', e => {
+  if (!T.pointers.has(e.pointerId)) return;
+  T.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  S.lastInput = performance.now();
+
+  if (T.pointers.size >= 2) {
+    const [a, b] = ptrList();
+    const d = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+    const k = T.pinchStartDist / d;      // 张开 → k<1 → 拉近
+    const lo = S.mode === 'focus' ? FOC_DIST_MIN : GLOBE.distMin;
+    const hi = S.mode === 'focus' ? FOC_DIST_MAX : GLOBE.distMax;
+    S.dist = Math.max(lo, Math.min(hi, T.pinchStartScale * k));
+    return;
+  }
+
+  if (!S.dragging) return;
+  const dx = e.clientX - T.lastX;
+  const dy = e.clientY - T.lastY;
+  T.lastX = e.clientX; T.lastY = e.clientY;
+
+  if (Math.hypot(e.clientX - T.downPos.x, e.clientY - T.downPos.y) > 6) T.downOn = -1;
+
+  if (S.mode === 'globe') {
+    S.spin += dx * 0.006;
+    S.spinVel = dx * 0.006;            // 供松手后的惯性
+    S.el = Math.max(GLOBE.elMin, Math.min(GLOBE.elMax, S.el + dy * 0.004));
+  } else if (S.mode === 'focus') {
+    // 聚焦时微调俯角与绕建筑方位，保持地平线不丢
+    S.el = Math.max(GLOBE.elMin, Math.min(GLOBE.elMax, S.el - dy * 0.002));
+    S.spin += dx * 0.0012;
+  }
+});
+
+function endPointer(e) {
+  const wasSingle = T.pointers.size === 1;
+  T.pointers.delete(e.pointerId);
+
+  if (T.pointers.size === 0) {
+    if (wasSingle && T.downOn >= 0) {
+      goFocus(T.downOn);               // 点中建筑 → 聚焦
+    } else if (wasSingle && T.downOn === -1 && S.mode === 'focus') {
+      goGlobe();                        // 点空白 → 退出聚焦
+    }
+    S.dragging = false;
+    T.downOn = -1;
+  } else {
+    S.dragging = true;
+    const [a] = ptrList();
+    if (a) { T.lastX = a.x; T.lastY = a.y; }
+  }
+}
+el.addEventListener('pointerup', endPointer);
+el.addEventListener('pointercancel', endPointer);
+
+/* 滚轮缩放（桌面调试） */
+el.addEventListener('wheel', e => {
+  e.preventDefault();
+  S.lastInput = performance.now();
+  const lo = S.mode === 'focus' ? FOC_DIST_MIN : GLOBE.distMin;
+  const hi = S.mode === 'focus' ? FOC_DIST_MAX : GLOBE.distMax;
+  S.dist = Math.max(lo, Math.min(hi, S.dist * (1 + Math.sign(e.deltaY) * 0.08)));
+}, { passive: false });
+
+/* 自动化测试接口 */
+window.__cam = {
+  get mode() { return S.mode; },
+  get focusIdx() { return S.focusIdx; },
+  get dist() { return S.dist; },
+  get el() { return S.el; },
+  get spin() { return S.spin; },
+  focus: i => goFocus(i),
+  globe: () => goGlobe(),
+  /* 冻结待机自转：导出截图时用，保证每次出图一致 */
+  freeze: () => { S.lastInput = Infinity; S.spinVel = 0; },
+  thaw: () => { S.lastInput = performance.now(); },
+  setSpin: v => { S.spin = v; planet.rotation.y = v; },
+  setDist: d => { S.dist = d; },
+  facilityScreen: i => {
+    const v = new THREE.Vector3().copy(facs[i].position);
+    planet.localToWorld(v);
+    const r = el.getBoundingClientRect();
+    const p = v.clone().project(camera);
+    return { x: (p.x * .5 + .5) * r.width + r.left, y: (-p.y * .5 + .5) * r.height + r.top };
+  },
+};
+
 requestAnimationFrame(tick);
 </script>
 </body>
 </html>
+
+
+
 
 

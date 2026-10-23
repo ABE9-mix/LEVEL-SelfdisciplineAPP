@@ -130,6 +130,9 @@ async function prepare(dpr) {
 const TABS = [['plan', '01-主界面-计划'], ['task', '02-主界面-任务'], ['base', '03-主界面-基地']];
 for (const dpr of [2, 3]) {
   const g = await prepare(dpr);
+  // 冻结待机自转 + 固定转角，保证每次导出的构图一致
+  await js(`window.__cam.freeze(); window.__cam.setSpin(2.4); window.__cam.setDist(3.6); 1`);
+  await sleep(900);
   console.log(`\n整屏 @${dpr}x (phone ${g.phone.w}×${g.phone.h})`);
   for (const [key, name] of TABS) {
     await js(`document.querySelector('[data-k="${key}"]').click(); 1`);
@@ -147,6 +150,8 @@ for (const dpr of [2, 3]) {
   const clip = { x: g.stage.x, y: g.stage.y, width: g.stage.w, height: g.stage.h, scale: 1 };
 
   await js(`document.querySelector('[data-k="plan"]').click(); 1`);
+  await js(`window.__cam.freeze(); window.__cam.setSpin(2.4); window.__cam.globe(); window.__cam.setDist(3.6); 1`);
+  await sleep(1200);
   await js(`window.__px.setPixel(true, 2); 1`);
   await sleep(1000);
   await shot(join(OUT, '04-三维视窗-像素化开-780x454.png'), { clip });
@@ -161,11 +166,20 @@ for (const dpr of [2, 3]) {
     await shot(join(OUT, `06-三维视窗-像素化档位${n}.png`), { clip });
   }
   await js(`window.__px.setPixel(true, 2); 1`);
+
+  /* 聚焦视角：点 4 号建筑 → 切地平线视角 */
+  await js(`window.__cam.focus(3); 1`);
+  await sleep(1500);
+  await shot(join(OUT, '08-三维视窗-聚焦地平线-780x454.png'), { clip });
+  await js(`window.__cam.globe(); 1`);
+  await sleep(1200);
 }
 
 /* ── 3. 透明底整屏 ── */
 {
   const g = await prepare(2);
+  await js(`window.__cam.freeze(); window.__cam.setSpin(2.4); window.__cam.setDist(3.6); 1`);
+  await sleep(900);
   console.log('\n透明底整屏 @2x');
   // 仅改 CSS 不够：headless 的页面底仍是白的，必须用 CDP 覆写默认背景为透明
   await send('Emulation.setDefaultBackgroundColorOverride', {
