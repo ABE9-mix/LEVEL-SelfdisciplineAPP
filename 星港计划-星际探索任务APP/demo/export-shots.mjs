@@ -2,8 +2,8 @@
 //
 // 产出（design/三维截图/）：
 //   01-03  整屏（含手机框）@2x / @3x，计划 / 任务 / 基地 三个标签
-//   04-05  三维视窗原生裁切 716×360，像素化开 / 关
-//   06     像素化各档位（×2 / ×3 / ×6）
+//   04-05  三维视窗原生裁切 780×454（390×227 @2x），像素化开 / 关
+//   06     像素化各档位（×3 / ×4 / ×6；默认档已在 04）
 //   07     透明底整屏 @2x（便于合成进设计稿）
 //   08     总览拼图
 //
@@ -147,20 +147,20 @@ for (const dpr of [2, 3]) {
   const clip = { x: g.stage.x, y: g.stage.y, width: g.stage.w, height: g.stage.h, scale: 1 };
 
   await js(`document.querySelector('[data-k="plan"]').click(); 1`);
-  await js(`window.__px.setPixel(true, 4); 1`);
+  await js(`window.__px.setPixel(true, 2); 1`);
   await sleep(1000);
-  await shot(join(OUT, '04-三维视窗-像素化开-716x360.png'), { clip });
+  await shot(join(OUT, '04-三维视窗-像素化开-780x454.png'), { clip });
 
   await js(`window.__px.setPixel(false); 1`);
   await sleep(1000);
-  await shot(join(OUT, '05-三维视窗-像素化关-716x360.png'), { clip });
+  await shot(join(OUT, '05-三维视窗-像素化关-780x454.png'), { clip });
 
-  for (const [k, n] of [[2, 'x2'], [3, 'x3'], [6, 'x6']]) {
+  for (const [k, n] of [[3, 'x3'], [4, 'x4'], [6, 'x6']]) {
     await js(`window.__px.setPixel(true, ${k}); 1`);
     await sleep(800);
     await shot(join(OUT, `06-三维视窗-像素化档位${n}.png`), { clip });
   }
-  await js(`window.__px.setPixel(true, 4); 1`);
+  await js(`window.__px.setPixel(true, 2); 1`);
 }
 
 /* ── 3. 透明底整屏 ── */
@@ -192,3 +192,4 @@ try { chrome.kill(); } catch {}
 await sleep(400);
 try { rmSync(PROFILE, { recursive: true, force: true }); } catch {}
 process.exit(0);
+

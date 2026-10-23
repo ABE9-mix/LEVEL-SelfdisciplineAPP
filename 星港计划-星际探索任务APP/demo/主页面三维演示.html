@@ -30,45 +30,64 @@
     display:flex;align-items:center;justify-content:center;overflow:hidden}
 
   /* ── 手机框（390×844 设计基准，按窗口等比缩放） ── */
+  /* 不用 border：border 会占内容区，390 的画布右侧会被裁掉 2px，
+     实测在截图里残留 4 设备像素宽的板外色竖列（#1B222C 一列贯穿到底）。
+     改用 inset 阴影画 1px 描边，内容区完整是 390。 */
   #phone{width:390px;height:844px;transform-origin:center center;
-    background:var(--bg);border-radius:38px;border:1px solid #1B222C;overflow:hidden;
+    background:var(--bg);border-radius:38px;border:0;overflow:hidden;
     display:flex;flex-direction:column;position:relative;
-    box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.03)}
+    box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 0 0 1px #1B222C}
 
-  /* 顶部安全区 + 标题 + 星球视窗（358×180） */
-  .top{padding:8px 16px 0}
+  /* ══ 无界三维窗口 ══
+     三维画布铺满顶部整幅 390×227（47 状态栏 + 180 内容区），
+     状态栏、可自定义标题、角落图标全部**浮在画布之上**，不再是画布上方的独立区块。
+     这样天空就有足够高度，地平线视角才成立。
+
+        ┌──────────────────────────┐  ← 画布从这里开始（y=0）
+        │  9:41            星港    │  ← 状态栏（浮层）
+        │  晨昏                     │  ← 标题（浮层）
+        │  Lv.12 · 推进值 4,180     │
+        │        ～ 地 平 线 ～      │  ← 天空 ~1/3
+        │  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁  │
+        │      星球（占下方 2/3）    │
+        └──────────────────────────┘  ← y=227
+  */
+  .top{
+    position:absolute;top:0;left:0;right:0;z-index:6;
+    padding:8px 16px 0;pointer-events:none;
+  }
   .statusbar{height:39px;display:flex;align-items:center;justify-content:space-between;
     color:var(--ink2);font-size:12px;font-variant-numeric:tabular-nums}
   .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-  .title{font-size:19px;font-weight:600;letter-spacing:.5px}
-  .title small{display:block;font-size:11px;font-weight:400;color:var(--ink3);letter-spacing:0}
+  .title{font-size:19px;font-weight:600;letter-spacing:.5px;
+    text-shadow:0 1px 6px rgba(0,0,0,.55)}
+  .title small{display:block;font-size:11px;font-weight:400;color:var(--ink3);
+    letter-spacing:0;text-shadow:0 1px 4px rgba(0,0,0,.55)}
 
-  /* 角落入口 */
-  .corners{position:absolute;top:59px;right:16px;display:flex;gap:8px;z-index:5}
-  .icobtn{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);
-    background:rgba(22,27,35,.8);display:flex;align-items:center;justify-content:center;
+  /* 角落入口（浮在画布右上） */
+  .corners{position:absolute;top:59px;right:16px;display:flex;gap:8px;z-index:7}
+  .icobtn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(46,55,69,.85);
+    background:rgba(16,20,27,.72);display:flex;align-items:center;justify-content:center;
     font-size:13px;color:var(--ink2);backdrop-filter:blur(6px)}
 
-  /* 星球视窗 */
-  /* 用 inset 阴影代替 border：border 会让内容区变成 356×178，
-     渲染尺寸与像素格就不再是整数倍关系，块边会被重采样抹掉 */
-  #stage{position:relative;width:358px;height:180px;margin:0 auto;border-radius:16px;
-    overflow:hidden;background:#050810;
-    box-shadow:inset 0 0 0 1px var(--line), 0 8px 24px rgba(0,0,0,.35)}
-  /* 像素化开启时圆角归零：① 圆角会让画布边缘被抗锯齿混色，
-     产生 #07090F 这类板外色（实测 984 个板外像素里 424 个贴边）；
-     ② 项目像素规范本身就是 radius/none = 0（13 §2.2），正好一致 */
-  /* inset 阴影会画在 canvas 之上，1px 描边与画布颜色混合 →
-     实测产生 984 个板外像素（#07090F 一类）。像素化时改为光靠 outline 描述边界 */
-  #stage.pixelated{border-radius:0; box-shadow:none; outline:1px solid var(--line)}
-  #stage canvas{display:block;width:358px;height:180px;image-rendering:pixelated}
+  /* 三维视窗：满幅，无外边距、无圆角 */
+  /* 不用 border：border 会让内容区变成 388×225，渲染尺寸与像素格不再整数倍，
+     块边会被重采样抹掉（实测过）。用 inset 阴影或 outline 描述边界。 */
+  #stage{position:relative;width:390px;height:227px;flex:0 0 auto;
+    margin:0;overflow:hidden;background:#050810;
+    box-shadow:inset 0 -1px 0 var(--line)}
+  #stage canvas{display:block;width:390px;height:227px;image-rendering:pixelated}
   /* 像素化开启时关掉柔光层：它会在画布上叠加板外色，破坏色板纯度 */
   #stage.pixelated .glow{display:none}
   #stage .glow{position:absolute;inset:0;pointer-events:none;
     background:radial-gradient(70% 120% at 50% 110%,rgba(232,164,104,.10),transparent 60%)}
+  /* 画布底部压一层渐隐，让三维与下方列表衔接不生硬 */
+  #stage::after{content:'';position:absolute;left:0;right:0;bottom:0;height:28px;
+    pointer-events:none;background:linear-gradient(to bottom,transparent,var(--bg))}
+  #stage.pixelated::after{display:none}
 
-  /* 分段选择器 */
-  .seg{margin:14px auto 0;width:358px;height:36px;display:flex;gap:4px;
+  /* 分段选择器（紧接画布下方） */
+  .seg{margin:12px auto 0;width:358px;height:36px;display:flex;gap:4px;
     background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:4px}
   .seg button{flex:1;border:0;border-radius:8px;background:transparent;color:var(--ink2);
     font:inherit;font-size:13px;cursor:pointer;transition:background .16s,color .16s}
@@ -115,15 +134,21 @@
   <div class="r"><span>FPS</span><span id="d-fps">—</span></div>
   <div class="r"><span>掉帧 &gt;33ms</span><span id="d-drop">—</span></div>
   <div class="r"><span>三角面</span><span id="d-tri">—</span></div>
+  <div class="r"><span>视角</span><span id="d-view">—</span></div>
   <div class="r"><span>像素化</span><span id="d-px">—</span></div>
   <div class="r"><span>DPR / 倍率</span><span id="d-dpr">—</span></div>
   <div class="r"><span>WebGPU</span><span id="d-gpu">—</span></div>
   <div class="r"><span>GPU</span><span id="d-glr" style="font-size:10px;max-width:150px;text-align:right">—</span></div>
-  <div class="tip">F 全屏 · P 像素化开关 · 1/2/3/4 像素尺寸<br>W 试切 WebGPU（切后像素化暂停，见 15 章说明）<br>这些数字可直接放答辩 PPT：帧率与首帧都是实测值。</div>
+  <div class="tip">F 全屏 · P 像素化开关 · 1/2/3/4 像素尺寸 · V 切换视角<br>
+    W 试切 WebGPU（切后像素化暂停，见 15 章说明）<br>这些数字可直接放答辩 PPT：帧率与首帧都是实测值。</div>
 </div>
 
-<!-- 手机框 -->
+<!-- 手机框：三维画布在最底层铺满顶部 390×227，浮层压在上面 -->
 <div id="phone">
+  <!-- ① 三维画布（最底层，无界） -->
+  <div id="stage"><div class="glow"></div></div>
+
+  <!-- ② 浮层：状态栏 + 可自定义标题 -->
   <div class="top">
     <div class="statusbar"><span>9:41</span><span>星港</span></div>
     <div class="header">
@@ -131,12 +156,11 @@
     </div>
   </div>
 
+  <!-- ③ 浮层：角落入口 -->
   <div class="corners">
     <div class="icobtn" title="设置">⚙</div>
     <div class="icobtn" title="账户">指</div>
   </div>
-
-  <div id="stage"><div class="glow"></div></div>
 
   <div class="seg" id="seg">
     <button data-k="plan" class="on">计划</button>
@@ -175,11 +199,52 @@ if (!THREE) {
 }
 
 /* ── 场景 ── */
-const W = 358, H = 180, SCALE = Math.min(devicePixelRatio || 1, 2);
+/* 三维画布满幅 390×227（47 状态栏 + 180 内容区），见 CSS 注释 */
+const W = 390, H = 227;
+/* 渲染倍率固定 2x（不跟随设备 DPR）
+   理由：像素化后有效分辨率只有 390×227 起，倍率再低块边会发虚；
+   2x 在 390×227 视口上开销很小（实测 p50 ≈ 8–17ms）。 */
+const SCALE = 2;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
-camera.position.set(0, 0.5, 3.45);          // 相机固定（设计约定）
-camera.lookAt(0, 0.05, 0);
+
+/* ── 两套机位 ──────────────────────────────────────────────────────
+   ① horizon 地平线视角（默认）
+      相机贴近地表，地平线横切画面：天空约 1/3、星球约 2/3。
+      参数是解出来的（逐像素对球求交、按「天空面积 = 1/3」反解 φ）：
+        相机距球心  d = 1.15R  （离地 0.115R）
+        光轴上抬    φ = 56.856° (= 0.992332 rad)
+        → 视觉天空面积 33.3%（按大气壳 R=1.035 计）
+        → 视觉地平线：中央 29.5%、左右边缘 40.5%（曲率落差 11%）
+      为什么不是更远：d = 1.65 时落差 47%，读起来是「一颗球」而不是「地平线」；
+      d = 1.06 时落差仅 10%，但相机离大气壳只剩 0.025R，近裁剪面会切到。
+      1.15 是「看出这是星球」与「不切到大气」之间的平衡点。
+      注意 near 必须设 0.001：相机到大气壳只有 0.115R 余量。
+   ② globe 全景点视角（原视角，按 V 切换）
+      星球居中完整呈现，适合看设施全貌。
+   ──────────────────────────────────────────────────────────────── */
+const VIEWS = {
+  horizon: { dist: 1.15, phi: 0.992332, fov: 35, near: 0.001 },
+  globe:   { dist: 3.45, phi: 0,        fov: 35, near: 0.1   },
+};
+let viewMode = 'horizon';
+
+function applyView(mode){
+  viewMode = mode;
+  const v = VIEWS[mode];
+  camera.fov = v.fov;
+  camera.near = v.near;
+  camera.updateProjectionMatrix();
+  if (mode === 'horizon') {
+    camera.position.set(0, 0, v.dist);
+    camera.lookAt(0, Math.sin(v.phi), v.dist - Math.cos(v.phi));
+  } else {
+    camera.position.set(0, 0.5, v.dist);
+    camera.lookAt(0, 0.05, 0);
+  }
+  if (typeof window !== 'undefined' && $('d-view')) $('d-view').textContent = mode;
+}
+applyView(viewMode);
 
 /* 程序化星球贴图：低饱和海陆 + 极冠（不用外部资源，离线也能跑） */
 function makePlanetTexture(){
@@ -225,19 +290,34 @@ const atmo = new THREE.Mesh(
 );
 scene.add(atmo);
 
-/* 设施：8 座小建筑，贴在球面上 */
-const facGeo = new THREE.BoxGeometry(.085, .12, .085);
-const facMat = new THREE.MeshStandardMaterial({ color: 0xE8A468, roughness: .55, emissive: 0x8a4a18, emissiveIntensity: .9 });
+/* 设施：8 座小建筑，贴在球面上。
+   位置按「地平线视角可见区」排布，经屏幕投影验证：
+     lat 44–64°、lon ±36°，全部落在地平线下方（距地平线 31–56px），
+     且横向均匀铺开（屏 x：44 / 78 / 118 / 158 / 200 / 240 / 280 / 314）。
+   在全景视角下它们聚在球面上半部，也仍可见。 */
+const FACILITY_SPOTS = [
+  [44, -36], [52, -36], [64, -36],
+  [60,  -9], [60,   9],
+  [64,  36], [52,  36], [44,  36],
+];
+const facGeo = new THREE.BoxGeometry(.028, .040, .028);
 const facs = [];
-for (let i = 0; i < 8; i++) {
-  const m = new THREE.Mesh(facGeo, facMat);
-  const lat = (i / 7) * 2.2 - 1.1;
-  const lon = i * 0.9;
-  m.position.set(Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon)).multiplyScalar(1.045);
-  m.lookAt(0, 0, 0);
-  m.rotateX(Math.PI / 2);
-  const half = Math.random() > .5;
-  if (half) m.material = new THREE.MeshStandardMaterial({ color: 0x5FBF8F, roughness: .55, emissive: 0x1f4a38, emissiveIntensity: .9 });
+for (let i = 0; i < FACILITY_SPOTS.length; i++) {
+  const [latd, lond] = FACILITY_SPOTS[i];
+  const lat = latd * Math.PI / 180, lon = lond * Math.PI / 180;
+  // 地平线视角是俯视地表，建筑要"立"在球面上 → 用该点法线做朝向
+  const n = new THREE.Vector3(
+    Math.cos(lat) * Math.sin(lon), Math.sin(lat), Math.cos(lat) * Math.cos(lon)
+  );
+  const m = new THREE.Mesh(facGeo, new THREE.MeshStandardMaterial({
+    color: i % 3 === 1 ? 0x5FBF8F : 0xE8A468,
+    roughness: .5,
+    emissive: i % 3 === 1 ? 0x2f6a50 : 0xb06020,
+    emissiveIntensity: 1.4,
+  }));
+  // 稍微抬离球面，避免与球体共面 z-fighting
+  m.position.copy(n).multiplyScalar(1.006);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), n);
   facs.push(m); planet.add(m);
 }
 
@@ -256,11 +336,13 @@ for (let i = 0; i < 8; i++) {
   scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xB9CFE6, size: .055, sizeAttenuation: true, transparent: true, opacity: .8 })));
 }
 
-/* 光照：模拟晨昏线 */
-const sun = new THREE.DirectionalLight(0xfff2dc, 3.4);
-sun.position.set(-2.4, 1.0, 1.7);
+/* 光照：模拟晨昏线
+   地平线视角下相机在球的正前方偏上，太阳从左上方打过来，
+   使星球左上方受光、右下方入夜 —— 与"天空占 1/3"的画面对齐 */
+const sun = new THREE.DirectionalLight(0xfff2dc, 3.2);
+sun.position.set(-2.2, 1.6, 1.2);
 scene.add(sun);
-scene.add(new THREE.AmbientLight(0x2A3550, 1.15));
+scene.add(new THREE.AmbientLight(0x2A3550, 1.3));
 
 /* ── 渲染器 ── */
 let renderer, backend = 'WebGL2';
@@ -307,9 +389,14 @@ const paletteVec3 = PALETTE_SRGB.map(h => new THREE.Vector3(
 ));
 
 /* 虚拟分辨率档位：大像素边长（设备像素）。0 = 关闭。
-   在 358×180 视口、DPR 2 下：4 → 179×90 格，一个"大像素"= 2 CSS px */
+   358×180 视口、渲染倍率 2x → 画布 716×360。
+   ×2 → 358×180 格（等于 1 CSS px / 格，最细）
+   ×3 → 238×120 格
+   ×4 → 179×90 格
+   ×6 → 119×60 格
+   默认 ×2：块只有 1 CSS px，看起来是"细腻的像素感"而不是马赛克。 */
 const PX_LEVELS = [0, 2, 3, 4, 6];
-let pxSize = 4;          // 默认开 4，视觉上明确但不糊
+let pxSize = 2;
 let pixelOn = true;
 
 /* 全屏后处理：无需 EffectComposer，自己搭一个正交相机 + 全屏四边形 */
@@ -319,7 +406,7 @@ const postMat = new THREE.ShaderMaterial({
   defines: { PAL: PAL_N },
   uniforms: {
     tDiffuse: { value: null },
-    uGrid:    { value: new THREE.Vector2(179, 90) },
+    uGrid:    { value: new THREE.Vector2(390, 227) },
     uPalette: { value: paletteVec3 },
     uDither:  { value: 0.06 },   // sRGB 空间的抖动幅度
   },
@@ -384,13 +471,13 @@ const postMat = new THREE.ShaderMaterial({
 postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), postMat));
 
 /* 低分辨率 RenderTarget：最近邻放大是"硬像素"的关键 */
-const rt = new THREE.WebGLRenderTarget(179, 90, {
+const rt = new THREE.WebGLRenderTarget(390, 227, {
   minFilter: THREE.NearestFilter,
   magFilter: THREE.NearestFilter,
   depthBuffer: true,
 });
 
-let vGridW = 179, vGridH = 90;
+let vGridW = 390, vGridH = 227;
 const _db = new THREE.Vector2();
 
 function layoutPixels(){
@@ -458,8 +545,10 @@ function tick(ts) {
 
   if (S.n === 0) { S.first = now - S.t0; $('d-first').textContent = S.first.toFixed(0) + ' ms'; }
 
-  planet.rotation.y += .0022;
-  sun.position.set(-2.4 * Math.cos(now * .00006), 1.0, 1.7);
+  planet.rotation.y += .0016;
+  // 太阳缓慢横移，地平线视野内的明暗渐变会随之变化
+  const sx = -2.2 + 1.1 * Math.sin(now * .00005);
+  sun.position.set(sx, 1.6, 1.2);
 
   if (pixelOn && backend === 'WebGL2') {
     // ① 场景渲染到低分辨率 RT（无 MSAA → 硬边）
@@ -512,6 +601,8 @@ addEventListener('keydown', e => {
   if (k === 'd') $('dbg').classList.toggle('on');
   if (k === 'f') document.documentElement.requestFullscreen?.().catch(() => {});
   if (k === 'w') tryWebGPU();
+  // 视角：V 在「地平线视角 / 全景点视角」之间切换
+  if (k === 'v') { applyView(viewMode === 'horizon' ? 'globe' : 'horizon'); }
   // 像素化：P 开关，1/2/3/4 切档（大像素边长，设备像素）
   if (k === 'p') { setPixel(!pixelOn); }
   if ('1234'.includes(k)) { setPixel(true, PX_LEVELS[+k]); }
@@ -572,3 +663,5 @@ requestAnimationFrame(tick);
 </script>
 </body>
 </html>
+
+
