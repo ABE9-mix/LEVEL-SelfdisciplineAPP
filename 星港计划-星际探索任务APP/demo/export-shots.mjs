@@ -168,10 +168,21 @@ for (const dpr of [2, 3]) {
   await js(`window.__px.setPixel(true, 2); 1`);
 
   /* 聚焦视角：点 4 号建筑 → 切地平线视角 */
-  await js(`window.__cam.focus(3); 1`);
-  await sleep(1500);
+  await js(`window.__cam.focus(3); window.__cam.orbit(0, 0); 1`);
+  await sleep(1600);
   await shot(join(OUT, '08-三维视窗-聚焦地平线-780x454.png'), { clip });
-  await js(`window.__cam.globe(); 1`);
+
+  /* 聚焦后绕建筑环绕（把拖动的结果定格下来） */
+  await js(`window.__cam.orbit(1.12, 0); 1`);
+  await sleep(1400);
+  await shot(join(OUT, '09-三维视窗-聚焦环绕-780x454.png'), { clip });
+
+  /* 抬高到俯视（极角往下压，θ ≈ 37°） */
+  await js(`window.__cam.orbit(0, -0.55); 1`);
+  await sleep(1400);
+  await shot(join(OUT, '10-三维视窗-聚焦俯视-780x454.png'), { clip });
+
+  await js(`window.__cam.orbit(0, 0); window.__cam.globe(); 1`);
   await sleep(1200);
 }
 

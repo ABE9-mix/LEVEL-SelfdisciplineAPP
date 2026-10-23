@@ -213,7 +213,7 @@ const camera = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
    三种状态：
      globe     全景待机（默认）—— 星球低速自转，可拖动旋转、双指缩放
      focus     聚焦某座建筑 —— 相机落到该建筑低空，地平线横切、建筑在下三分之一
-     transit   两种状态之间的过渡（700ms 缓动，期间不接受输入）
+     transit   两种状态之间的过渡（950ms smootherstep，期间不接受输入）
 
    focus 取景参数是实测的（逐像素射线求交扫描，非手推公式）：
      dist = 1.10R   back = 0.19R   pitch = +8°
@@ -236,9 +236,20 @@ const GLOBE = {
   el: 18 * Math.PI / 180, elMin: 4 * Math.PI / 180, elMax: 58 * Math.PI / 180,
 };
 const FOC_DIST_MIN = 1.03, FOC_DIST_MAX = 1.80;
+/* 聚焦轨道约束：
+   FOC_POL_MIN 极角下限——再往上相机与 up（=径向）接近共线，lookAt 会退化
+   FOC_R_MIN   相机到球心的最小半径——低于它相机会钻进 1.035R 大气壳 */
+const FOC_POL_MIN = 22 * Math.PI / 180;
+const FOC_R_MIN = 1.05;
+/* 轨道枢轴 / 看点半径取 1.0（球面），不是设施网格的 1.006。
+   原因：原 home 机位的 lookAt 就是单位法线方向（半径 1.0），
+   换成 1.006 会让"相机→看点"的仰角从 21.45° 变 19.99°，
+   叠上 +8° pitch 后建筑屏位从 68.2% 掉到 72.3% —— 实测已验证会漂 4%。
+   设施盒体实际跨半径 0.986–1.026，1.0 就在盒体内部，取枢轴并无问题。 */
+const FOC_PIVOT_R = 1.0;
 const IDLE_DELAY = 2000;      // 停止操作多久恢复自转（ms）
 const IDLE_SPIN  = 0.055;     // 待机自转 rad/s（比原来慢一个量级）
-const TRANSIT_MS = 700;
+const TRANSIT_MS = 950;
 
 const S = {
   mode: 'globe',              // globe | focus | transit
@@ -247,6 +258,10 @@ const S = {
   spinVel: 0,                 // 拖动惯性
   dist: GLOBE.dist,
   el: GLOBE.el,
+  // 聚焦轨道：绕建筑旋转的两个角（相对 home 机位的增量）
+  fAz: 0,                     // 方位角增量（绕法线转）
+  fPol: 0,                    // 极角增量（改变俯视程度）
+  th0: 0, ph0: 0,             // home 机位在建筑局部基下的分解结果（每帧算）
   lastInput: performance.now(),
   // 过渡
   t0: 0, dur: TRANSIT_MS, from: null, to: null, next: 'globe',
@@ -263,6 +278,7 @@ const _tp = new THREE.Vector3();     // 相机目标位置
 const _tl = new THREE.Vector3();     // 相机目标看点
 
 const _v1 = new THREE.Vector3(), _v2 = new THREE.Vector3(), _v3 = new THREE.Vector3();
+const _v4 = new THREE.Vector3(), _v5 = new THREE.Vector3();
 
 /* 全局机位：球面轨道 */
 function globeTargets() {
@@ -271,24 +287,66 @@ function globeTargets() {
   _tl.set(0, 0, 0);
 }
 
-/* 聚焦机位：给定建筑世界法线 */
+/* ── 聚焦机位：以建筑为球心的第二层轨道相机 ──────────────────────
+   相机不再钉在一条固定射线上，而是绕建筑旋转。做法：
+
+   ① 在建筑处建局部正交基
+        n  = 该点法线（也是球的径向）
+        tN = 朝北切向          tE = n × tN（朝东）
+   ② 先按实测验证过的 home 机位算出相对建筑的偏移
+        home = normalize(n − back·tN) · FAC.dist
+        off  = home − P            （P = n · FOC_PIVOT_R，枢轴）
+   ③ 把 off 在局部基下分解成球坐标 (r, θ₀, φ₀)：
+        r  = |off|
+        θ₀ = 与 n 的夹角          φ₀ = 绕 n 的方位
+   ④ 叠加用户拖动量 (fPol, fAz)，夹住极角，再还原成方向
+   ⑤ 缩放走 S.dist（沿用既有范围），即 r' = r · S.dist / FAC.dist
+
+   关键性质：fAz = fPol = 0 时数学上等价于原 home 机位，
+   所以之前实测校正过的取景（天空 35.9%、建筑 y=68%）原样保留。
+   ──────────────────────────────────────────────────────────────── */
 function focusTargets(nw) {
+  // ① 建筑局部正交基
   const lat = Math.asin(Math.max(-1, Math.min(1, nw.y)));
   const lon = Math.atan2(nw.x, nw.z);
-  // 朝北切向
-  _v1.set(-Math.sin(lat) * Math.sin(lon), Math.cos(lat), -Math.sin(lat) * Math.cos(lon));
+  _v1.set(-Math.sin(lat) * Math.sin(lon), Math.cos(lat), -Math.sin(lat) * Math.cos(lon)); // tN
   if (_v1.lengthSq() < 1e-8) _v1.set(0, 0, -1);
   _v1.normalize();
-  // 相机 = (n - back·tN) 拉伸到 dist
-  _v2.copy(nw).addScaledVector(_v1, -FAC.back).normalize();
-  _tp.copy(_v2).multiplyScalar(S.dist);
-  // 看向建筑，再绕 right 抬 pitch
-  _tl.copy(nw);
+  _v4.crossVectors(nw, _v1).normalize();                       // tE
+
+  // ② home 机位 → 相对建筑的偏移
+  _v5.copy(nw).multiplyScalar(FOC_PIVOT_R);                    // P：枢轴（球面点）
+  _v2.copy(nw).addScaledVector(_v1, -FAC.back).normalize().multiplyScalar(FAC.dist);
+  _v2.sub(_v5);                                                // off = home − P
+
+  // ③ 分解成 (r, θ₀, φ₀)
+  const r0 = _v2.length();
+  S.th0 = Math.acos(Math.max(-1, Math.min(1, _v2.dot(nw) / r0)));
+  S.ph0 = Math.atan2(_v2.dot(_v4), _v2.dot(_v1));
+
+  // ④ 叠加轨道量 + 夹极角
+  const r = r0 * (S.dist / FAC.dist);
+  // 相机不钻大气壳：|P + dir·r|² ≥ FOC_R_MIN²
+  const cosLim = (FOC_R_MIN * FOC_R_MIN - FOC_PIVOT_R * FOC_PIVOT_R - r * r) / (2 * FOC_PIVOT_R * r);
+  const thMax = Math.max(FOC_POL_MIN, Math.acos(Math.max(-1, Math.min(1, cosLim))));
+  const th = Math.max(FOC_POL_MIN, Math.min(thMax, S.th0 + S.fPol));
+  S.fPol = th - S.th0;                       // 反算回去，避免"拖过头"累积
+  const ph = S.ph0 + S.fAz;
+  const st = Math.sin(th), ct = Math.cos(th);
+
+  // ⑤ pos = P + r·( n·cosθ + (tN·cosφ + tE·sinφ)·sinθ )
+  _tp.copy(_v5)
+     .addScaledVector(nw, r * ct)
+     .addScaledVector(_v1, r * st * Math.cos(ph))
+     .addScaledVector(_v4, r * st * Math.sin(ph));
+
+  // ⑥ 看向建筑，再绕 right 抬 pitch（把建筑压到画面下三分之一）
+  _tl.copy(_v5);
   _v3.copy(_tl).sub(_tp).normalize();
-  const right = _v1.clone().crossVectors(_v3, nw);
-  if (right.lengthSq() < 1e-8) right.set(1, 0, 0);
-  right.normalize();
-  _v3.applyAxisAngle(right, FAC.pitch);
+  _v2.crossVectors(_v3, nw);
+  if (_v2.lengthSq() < 1e-8) _v2.set(1, 0, 0);
+  _v2.normalize();
+  _v3.applyAxisAngle(_v2, FAC.pitch);
   _tl.copy(_tp).add(_v3);
 }
 
@@ -319,6 +377,7 @@ function goFocus(idx) {
   if (!nw) return;
   S.from = { pos: camPos.clone(), look: camLook.clone() };
   S.mode = 'transit'; S.next = 'focus'; S.focusIdx = idx;
+  S.fAz = 0; S.fPol = 0;                     // 每次聚焦都回到 home 机位
   focusTargets(nw.clone());
   S.to = { pos: _tp.clone(), look: _tl.clone() };
   STAT.t0 = performance.now(); S.dur = TRANSIT_MS;
@@ -327,24 +386,39 @@ function goFocus(idx) {
   if ($('d-focus')) $('d-focus').textContent = '#' + (idx + 1);
 }
 
-/* 每帧更新相机 */
-const _ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-function updateCamera(now) {
+/* ── 缓动与跟手系数 ──────────────────────────────────────────────
+   过渡用 quintic smootherstep：t³(t(6t−15)+10)
+     它的首尾不但一阶导为 0，二阶导也是 0 → 起步和收尾都没有"顿一下"的感觉。
+     原来用的 cubic ease-in-out 首尾一阶导为 0 但二阶导突变，
+     观感上是"猛地起步 → 匀速 → 猛地刹住"，也就是反馈里说的"速度变化太快"。
+     峰值速度（相对平均速度）：cubic ease-in-out = 3.00×，smootherstep = 1.875×。
+     峰值出现在 t=0.5，f'(0.5) 由 +12 突变为 −12（jerk 尖峰）也是"猛"的来源之一；
+     smootherstep 的 f'(0)=f'(1)=0 且全程连续。
+   跟手插值按 dt 归一（原来写死 0.35/帧，帧率一低就跟不上）：
+     1 − e^(−rate·dt)，rate=26 在 60fps 下 ≈ 0.35
+   ──────────────────────────────────────────────────────────────── */
+const _ease = t => t * t * t * (t * (t * 6 - 15) + 10);
+const _followK = (rate, dtSec) => 1 - Math.exp(-rate * dtSec);
+function updateCamera(now, dtSec = 1 / 60) {
+  let k;
   if (S.mode === 'transit') {
-    const k = Math.min(1, (now - STAT.t0) / S.dur);
-    const e = _ease(k);
+    const t = Math.min(1, (now - STAT.t0) / S.dur);
+    const e = _ease(t);
     camPos.lerpVectors(S.from.pos, S.to.pos, e);
     camLook.lerpVectors(S.from.look, S.to.look, e);
-    if (k >= 1) { S.mode = S.next; }
+    if (t >= 1) { S.mode = S.next; }
+    k = 0.35;
   } else if (S.mode === 'focus') {
     const nw = worldNormalOf(S.focusIdx);
     if (nw) focusTargets(nw.clone());
-    camPos.lerp(_tp, 0.35);
-    camLook.lerp(_tl, 0.35);
+    k = _followK(26, dtSec);
+    camPos.lerp(_tp, k);
+    camLook.lerp(_tl, k);
   } else {
     globeTargets();
-    camPos.lerp(_tp, 0.30);
-    camLook.lerp(_tl, 0.30);
+    k = _followK(22, dtSec);
+    camPos.lerp(_tp, k);
+    camLook.lerp(_tl, k);
   }
   camera.position.copy(camPos);
   /* up 向量必须按模式给：
@@ -355,11 +429,11 @@ function updateCamera(now) {
               换成径向后地平线才是水平的。 */
   if (S.mode === 'focus') {
     const nw = worldNormalOf(S.focusIdx);
-    if (nw) camUp.lerp(nw, 0.35);
+    if (nw) camUp.lerp(nw, k);
   } else if (S.mode === 'transit') {
-    camUp.lerp(S.next === 'focus' ? worldNormalOf(S.focusIdx) ?? WORLD_UP : WORLD_UP, 0.2);
+    camUp.lerp(S.next === 'focus' ? worldNormalOf(S.focusIdx) ?? WORLD_UP : WORLD_UP, k * 0.6);
   } else {
-    camUp.lerp(WORLD_UP, 0.25);
+    camUp.lerp(WORLD_UP, _followK(20, dtSec));
   }
   camUp.normalize();
   camera.up.copy(camUp);
@@ -675,10 +749,10 @@ function tick(ts) {
      软件渲染下只有 40–50fps，每帧固定 1/60 会让实际转速比设定值低 20–30%
      （实测 IDLE_SPIN=0.055 跑出 0.041 rad/s）。
      step = 本帧时长 / (1/60)，把"每 60fps 帧的量"换算成"本帧该给的量"。 */
+  const dtSec = Math.min(0.05, dt / 1000);   // 上限 50ms：切后台回来时防止大跳
   const idle = now - S.lastInput > IDLE_DELAY;
   if (S.mode === 'globe') {
     if (!S.dragging) {
-      const dtSec = Math.min(0.05, dt / 1000);   // 上限 50ms：切后台回来时防止大跳
       const step = dtSec * 60;
       S.spin += S.spinVel * step;
       S.spinVel *= Math.pow(0.92, step);         // 惯性衰减（按帧率归一）
@@ -687,7 +761,7 @@ function tick(ts) {
     }
     planet.rotation.y = S.spin;
   }
-  updateCamera(now);
+  updateCamera(now, dtSec);
 
   /* 建筑距离补偿缩放（LOD）
      透视下建筑尺寸 ∝ 1/相机距离：
@@ -813,7 +887,7 @@ async function tryWebGPU() {
 
 /* ══ 交互：拖动旋转 / 双指缩放 / 点建筑聚焦 ═══════════════════════
    globe：单指拖动=旋转（带惯性）、双指=缩放、点建筑=聚焦
-   focus：单指拖动=微调俯角、双指=缩放、点天空或 Esc=退回
+   focus：单指拖动=以建筑为中心环绕、双指=缩放、点天空或 Esc=退回
    ═══════════════════════════════════════════════════════════════ */
 const raycaster = new THREE.Raycaster();
 const pointerNDC = new THREE.Vector2();
@@ -826,6 +900,7 @@ const T = {
   lastX: 0, lastY: 0,
   downOn: -1,
   downPos: { x: 0, y: 0 },
+  moved: false,          // 本次按下后是否拖动过（用于区分「点击」与「拖动」）
 };
 
 function hitFacilities(clientX, clientY) {
@@ -862,6 +937,7 @@ el.addEventListener('pointerdown', e => {
     S.spinVel = 0;
     T.lastX = e.clientX; T.lastY = e.clientY;
     T.downPos = { x: e.clientX, y: e.clientY };
+    T.moved = false;
     T.downOn = S.mode === 'globe' ? hitFacilities(e.clientX, e.clientY) : -1;
   } else if (T.pointers.size === 2) {
     const [a, b] = ptrList();
@@ -892,16 +968,20 @@ el.addEventListener('pointermove', e => {
   const dy = e.clientY - T.lastY;
   T.lastX = e.clientX; T.lastY = e.clientY;
 
-  if (Math.hypot(e.clientX - T.downPos.x, e.clientY - T.downPos.y) > 6) T.downOn = -1;
+  if (Math.hypot(e.clientX - T.downPos.x, e.clientY - T.downPos.y) > 6) { T.downOn = -1; T.moved = true; }
 
   if (S.mode === 'globe') {
     S.spin += dx * 0.006;
     S.spinVel = dx * 0.006;            // 供松手后的惯性
     S.el = Math.max(GLOBE.elMin, Math.min(GLOBE.elMax, S.el + dy * 0.004));
   } else if (S.mode === 'focus') {
-    // 聚焦时微调俯角与绕建筑方位，保持地平线不丢
-    S.el = Math.max(GLOBE.elMin, Math.min(GLOBE.elMax, S.el - dy * 0.002));
-    S.spin += dx * 0.0012;
+    /* 以建筑为中心环绕：
+         横向 → 方位角（绕法线转，建筑始终在画面中央）
+         纵向 → 极角（往下拖 = 相机升高 = 更俯视）
+       极角的夹取在 focusTargets 里做（那里才知道当前半径 r），
+       拖过头不会再累积，松手反向立刻响应。 */
+    S.fAz += dx * 0.008;
+    S.fPol -= dy * 0.004;
   }
 });
 
@@ -910,13 +990,14 @@ function endPointer(e) {
   T.pointers.delete(e.pointerId);
 
   if (T.pointers.size === 0) {
-    if (wasSingle && T.downOn >= 0) {
-      goFocus(T.downOn);               // 点中建筑 → 聚焦
-    } else if (wasSingle && T.downOn === -1 && S.mode === 'focus') {
-      goGlobe();                        // 点空白 → 退出聚焦
+    // 只有「没拖动过」才算点击。
+    // 之前只判断 downOn===-1，导致聚焦态下随便拖一下、松手就退回全景 —— 已修。
+    if (wasSingle && !T.moved) {
+      if (T.downOn >= 0) goFocus(T.downOn);          // 点中建筑 → 聚焦
+      else if (S.mode === 'focus') goGlobe();        // 点空白 → 退出聚焦
     }
     S.dragging = false;
-    T.downOn = -1;
+    T.downOn = -1; T.moved = false;
   } else {
     S.dragging = true;
     const [a] = ptrList();
@@ -924,6 +1005,8 @@ function endPointer(e) {
   }
 }
 el.addEventListener('pointerup', endPointer);
+/* 说明：拖动与点击的区分靠 T.moved（位移 >6px 置位）。
+   聚焦态下拖动只是环绕，不会退出；只有真正的轻点空白才退回全景。 */
 el.addEventListener('pointercancel', endPointer);
 
 /* 滚轮缩放（桌面调试） */
@@ -942,6 +1025,12 @@ window.__cam = {
   get dist() { return S.dist; },
   get el() { return S.el; },
   get spin() { return S.spin; },
+  get fAz() { return S.fAz; },
+  get fPol() { return S.fPol; },
+  get th0() { return S.th0; },
+  get camPos() { return { x: camPos.x, y: camPos.y, z: camPos.z }; },
+  get camLook() { return { x: camLook.x, y: camLook.y, z: camLook.z }; },
+  orbit: (az, pol) => { S.fAz = az; S.fPol = pol; },
   focus: i => goFocus(i),
   globe: () => goGlobe(),
   /* 冻结待机自转：导出截图时用，保证每次出图一致 */
@@ -949,6 +1038,11 @@ window.__cam = {
   thaw: () => { S.lastInput = performance.now(); },
   setSpin: v => { S.spin = v; planet.rotation.y = v; },
   setDist: d => { S.dist = d; },
+  facilityWorld: i => {
+    const v = new THREE.Vector3().copy(facs[i].position);
+    planet.localToWorld(v);
+    return { x: v.x, y: v.y, z: v.z };
+  },
   facilityScreen: i => {
     const v = new THREE.Vector3().copy(facs[i].position);
     planet.localToWorld(v);
@@ -962,6 +1056,7 @@ requestAnimationFrame(tick);
 </script>
 </body>
 </html>
+
 
 
 
