@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>星港计划 · 主页面三维演示</title>
+<!--
+  课前准备（二选一）：
+  1) 联网演示：直接打开本文件即可（three.js 从 CDN 加载）
+  2) 离线演示：下载 three.module.js 到本目录，把下面 importmap 的 three 改成 "./three.module.js"
+  操作：D 键 = 性能指标面板；F = 全屏切换；点击分段选择器 = 切标签
+-->
+<style>
+  :root{
+    --bg:#070A10; --surface:#161B23; --line:#232A35; --ink:#E9EDF3; --ink2:#9BA6B4; --ink3:#5E6A78;
+    --accent:#E8A468; --ok:#5FBF8F;
+  }
+  *{box-sizing:border-box;-webkit-text-size-adjust:100%}
+  html,body{height:100%}
+  body{margin:0;background:radial-gradient(120% 90% at 50% 0%,#101826 0%,#070A10 55%,#04060A 100%);
+    color:var(--ink);font:14px/1.5 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+  /* ── 手机框（390×844 设计基准，按窗口等比缩放） ── */
+  #phone{width:390px;height:844px;transform-origin:center center;
+    background:var(--bg);border-radius:38px;border:1px solid #1B222C;overflow:hidden;
+    display:flex;flex-direction:column;position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.03)}
+
+  /* 顶部安全区 + 标题 + 星球视窗（358×180） */
+  .top{padding:8px 16px 0}
+  .statusbar{height:39px;display:flex;align-items:center;justify-content:space-between;
+    color:var(--ink2);font-size:12px;font-variant-numeric:tabular-nums}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .title{font-size:19px;font-weight:600;letter-spacing:.5px}
+  .title small{display:block;font-size:11px;font-weight:400;color:var(--ink3);letter-spacing:0}
+
+  /* 角落入口 */
+  .corners{position:absolute;top:59px;right:16px;display:flex;gap:8px;z-index:5}
+  .icobtn{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);
+    background:rgba(22,27,35,.8);display:flex;align-items:center;justify-content:center;
+    font-size:13px;color:var(--ink2);backdrop-filter:blur(6px)}
+
+  /* 星球视窗 */
+  #stage{position:relative;width:358px;height:180px;margin:0 auto;border-radius:16px;
+    overflow:hidden;border:1px solid var(--line);background:#050810}
+  #stage canvas{display:block;width:100%;height:100%}
+  #stage .glow{position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(70% 120% at 50% 110%,rgba(232,164,104,.10),transparent 60%)}
+
+  /* 分段选择器 */
+  .seg{margin:14px auto 0;width:358px;height:36px;display:flex;gap:4px;
+    background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:4px}
+  .seg button{flex:1;border:0;border-radius:8px;background:transparent;color:var(--ink2);
+    font:inherit;font-size:13px;cursor:pointer;transition:background .16s,color .16s}
+  .seg button.on{background:#2A3441;color:var(--ink)}
+
+  /* 内容区（占位列表，示意用） */
+  .body{flex:1;padding:14px 16px 0;overflow:hidden}
+  .sect{font-size:12px;color:var(--ink3);margin:2px 0 8px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:11px 12px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .card .nm{font-size:13px}
+  .card .mt{font-size:11px;color:var(--ink3);margin-top:2px}
+  .card .rt{margin-left:auto;font-size:11px;color:var(--accent);font-variant-numeric:tabular-nums}
+  .emptyhint{color:var(--ink3);font-size:12px;padding:16px 0;text-align:center}
+
+  /* 底部提示 */
+  .hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;
+    font-size:10px;color:#3A4552;letter-spacing:.5px}
+
+  /* ── 调试面板（D 键） ── */
+  #dbg{position:fixed;left:14px;top:14px;z-index:50;display:none;
+    background:rgba(10,14,20,.92);border:1px solid var(--line);border-radius:12px;
+    padding:12px 14px;font-size:12px;min-width:270px;backdrop-filter:blur(8px)}
+  #dbg.on{display:block}
+  #dbg h4{margin:0 0 8px;font-size:12px;font-weight:600;color:var(--accent)}
+  #dbg .r{display:flex;justify-content:space-between;gap:18px;padding:3px 0;
+    border-bottom:1px solid rgba(35,42,53,.7);font-variant-numeric:tabular-nums}
+  #dbg .r:last-child{border:0}
+  #dbg .r span:first-child{color:var(--ink2)}
+  .ok{color:var(--ok)} .bad{color:#C4614E} .warn{color:var(--accent)}
+  #dbg .tip{margin-top:8px;font-size:10px;color:var(--ink3);line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- 调试/实测面板 -->
+<div id="dbg">
+  <h4>渲染指标（D 关闭）</h4>
+  <div class="r"><span>后端</span><span id="d-backend">—</span></div>
+  <div class="r"><span>首帧</span><span id="d-first">—</span></div>
+  <div class="r"><span>帧时间 p50</span><span id="d-p50">—</span></div>
+  <div class="r"><span>帧时间 p95</span><span id="d-p95">—</span></div>
+  <div class="r"><span>FPS</span><span id="d-fps">—</span></div>
+  <div class="r"><span>掉帧 &gt;33ms</span><span id="d-drop">—</span></div>
+  <div class="r"><span>三角面</span><span id="d-tri">—</span></div>
+  <div class="r"><span>DPR / 倍率</span><span id="d-dpr">—</span></div>
+  <div class="r"><span>WebGPU</span><span id="d-gpu">—</span></div>
+  <div class="r"><span>GPU</span><span id="d-glr" style="font-size:10px;max-width:150px;text-align:right">—</span></div>
+  <div class="tip">F 全屏 · W 试切 WebGPU（失败自动回退）<br>这些数字可直接放答辩 PPT：帧率与首帧都是实测值。</div>
+</div>
+
+<!-- 手机框 -->
+<div id="phone">
+  <div class="top">
+    <div class="statusbar"><span>9:41</span><span>星港</span></div>
+    <div class="header">
+      <div class="title" id="title">晨昏<small>Lv.12 · 推进值 4,180</small></div>
+    </div>
+  </div>
+
+  <div class="corners">
+    <div class="icobtn" title="设置">⚙</div>
+    <div class="icobtn" title="账户">指</div>
+  </div>
+
+  <div id="stage"><div class="glow"></div></div>
+
+  <div class="seg" id="seg">
+    <button data-k="plan" class="on">计划</button>
+    <button data-k="task">任务</button>
+    <button data-k="base">基地</button>
+  </div>
+
+  <div class="body" id="body"></div>
+  <div class="hint">三维视窗为实时渲染（three.js / WebGL2）· 按 D 看指标</div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three/build/three.module.js" } }
+</script>
+
+<script type="module">
+const $ = id => document.getElementById(id);
+const stage = $('stage');
+
+/* ── 自适应缩放：把 390×844 的手机框塞进窗口 ── */
+function fit(){
+  const s = Math.min(1, (innerHeight - 36) / 844, (innerWidth - 36) / 390);
+  $('phone').style.transform = `scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+
+/* ── 加载 three.js ── */
+let THREE;
+try { THREE = await import('three'); }
+catch (e) {
+  stage.innerHTML = '<div style="color:#C4614E;font-size:12px;padding:16px">three.js 加载失败（需联网）。<br>离线演示请把 three.module.js 放到本目录并改 importmap。</div>';
+  throw e;
+}
+
+/* ── 场景 ── */
+const W = 358, H = 180, SCALE = Math.min(devicePixelRatio || 1, 2);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
+camera.position.set(0, 0.5, 3.45);          // 相机固定（设计约定）
+camera.lookAt(0, 0.05, 0);
+
+/* 程序化星球贴图：低饱和海陆 + 极冠（不用外部资源，离线也能跑） */
+function makePlanetTexture(){
+  const c = document.createElement('canvas');
+  c.width = 1024; c.height = 512;
+  const g = c.getContext('2d');
+  g.fillStyle = '#1D3352'; g.fillRect(0, 0, 1024, 512);                 // 海
+  // 陆块：随机圆叠加
+  for (let i = 0; i < 90; i++) {
+    const x = Math.random() * 1024;
+    const y = 60 + Math.random() * 392;
+    const r = 18 + Math.random() * 70;
+    const t = Math.random();
+    g.beginPath();
+    g.fillStyle = t > .6 ? '#3A5A4E' : t > .3 ? '#4A5F46' : '#5A6B4C';
+    g.ellipse(x, y, r, r * (0.5 + Math.random() * 0.6), Math.random() * 3, 0, 7);
+    g.fill();
+  }
+  // 极冠
+  g.fillStyle = 'rgba(210,224,236,.55)';
+  g.fillRect(0, 0, 1024, 26); g.fillRect(0, 486, 1024, 26);
+  // 轻微噪点，避免大面积纯色
+  for (let i = 0; i < 9000; i++) {
+    g.fillStyle = `rgba(255,255,255,${Math.random() * .04})`;
+    g.fillRect(Math.random() * 1024, Math.random() * 512, 1, 1);
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+/* 星球（64×32 = 4,096 面，按评估文档） */
+const planet = new THREE.Mesh(
+  new THREE.SphereGeometry(1, 64, 32),
+  new THREE.MeshStandardMaterial({ map: makePlanetTexture(), roughness: .92, metalness: .02 })
+);
+scene.add(planet);
+
+/* 大气边缘（一层略大的透明球，只在边缘显出颜色） */
+const atmo = new THREE.Mesh(
+  new THREE.SphereGeometry(1.035, 48, 24),
+  new THREE.MeshBasicMaterial({ color: 0x5A9BD4, transparent: true, opacity: .10, side: THREE.BackSide })
+);
+scene.add(atmo);
+
+/* 设施：8 座小建筑，贴在球面上 */
+const facGeo = new THREE.BoxGeometry(.085, .12, .085);
+const facMat = new THREE.MeshStandardMaterial({ color: 0xE8A468, roughness: .55, emissive: 0x8a4a18, emissiveIntensity: .9 });
+const facs = [];
+for (let i = 0; i < 8; i++) {
+  const m = new THREE.Mesh(facGeo, facMat);
+  const lat = (i / 7) * 2.2 - 1.1;
+  const lon = i * 0.9;
+  m.position.set(Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon)).multiplyScalar(1.045);
+  m.lookAt(0, 0, 0);
+  m.rotateX(Math.PI / 2);
+  const half = Math.random() > .5;
+  if (half) m.material = new THREE.MeshStandardMaterial({ color: 0x5FBF8F, roughness: .55, emissive: 0x1f4a38, emissiveIntensity: .9 });
+  facs.push(m); planet.add(m);
+}
+
+/* 星点背景 */
+{
+  const n = 420, pos = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const r = 14 + Math.random() * 10;
+    const th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
+    pos[i*3]   = r * Math.sin(ph) * Math.cos(th);
+    pos[i*3+1] = r * Math.cos(ph);
+    pos[i*3+2] = r * Math.sin(ph) * Math.sin(th);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xB9CFE6, size: .055, sizeAttenuation: true, transparent: true, opacity: .8 })));
+}
+
+/* 光照：模拟晨昏线 */
+const sun = new THREE.DirectionalLight(0xfff2dc, 3.4);
+sun.position.set(-2.4, 1.0, 1.7);
+scene.add(sun);
+scene.add(new THREE.AmbientLight(0x2A3550, 1.15));
+
+/* ── 渲染器 ── */
+let renderer, backend = 'WebGL2';
+renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(SCALE);
+renderer.setSize(W, H, false);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+stage.insertBefore(renderer.domElement, stage.firstChild);
+
+/* ── 统计 ── */
+const S = { n: 0, t0: performance.now(), first: 0, times: [], drop: 0, win: performance.now() };
+const triCount = () => renderer.info.render.triangles;
+
+let cap30 = false, last = 0;
+function tick(ts) {
+  requestAnimationFrame(tick);
+  if (cap30 && ts - last < 33.3) return;
+  last = ts;
+
+  const now = performance.now();
+  const dt = now - (S.prev || now); S.prev = now;
+
+  if (S.n === 0) { S.first = now - S.t0; $('d-first').textContent = S.first.toFixed(0) + ' ms'; }
+
+  planet.rotation.y += .0022;
+  const k = .5 + .5 * Math.sin(now * .002);
+  sun.position.set(-2.4 * Math.cos(now * .00006), 1.0, 1.7);
+  renderer.render(scene, camera);
+
+  S.n++;
+  if (dt > 0 && dt < 500) { S.times.push(dt); if (S.times.length > 3000) S.times.shift(); }
+  if (dt > 33) S.drop++;
+
+  if (now - S.win > 500) { S.win = now; refresh(now); }
+}
+
+function refresh() {
+  const a = S.times.slice().sort((x, y) => x - y);
+  if (!a.length) return;
+  const p = q => a[Math.min(a.length - 1, Math.floor(a.length * q))];
+  const p50 = p(.5), p95 = p(.95);
+  $('d-p50').textContent = p50.toFixed(2) + ' ms';
+  $('d-p95').textContent = p95.toFixed(2) + ' ms';
+  $('d-p95').className = p95 <= 16.8 ? 'ok' : p95 <= 33.4 ? 'warn' : 'bad';
+  $('d-fps').textContent = (1000 / Math.max(p50, .01)).toFixed(0);
+  $('d-drop').textContent = S.drop;
+  $('d-tri').textContent = triCount().toLocaleString();
+  $('d-backend').textContent = backend;
+}
+
+/* 设备信息 */
+$('d-dpr').textContent = `${devicePixelRatio} / ×${SCALE}`;
+$('d-gpu').textContent = navigator.gpu ? 'API 存在' : '无';
+if (navigator.gpu) $('d-gpu').className = 'warn';
+{
+  const gl = renderer.getContext();
+  const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+  $('d-glr').textContent = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'n/a';
+}
+
+/* ── 交互 ── */
+addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  if (k === 'd') $('dbg').classList.toggle('on');
+  if (k === 'f') document.documentElement.requestFullscreen?.().catch(() => {});
+  if (k === 'w') tryWebGPU();
+});
+
+/* 分段选择器 + 占位内容（示意，非真实数据） */
+const DATA = {
+  plan: { sect: '进行中的计划 · 2', rows: [
+    ['#E8A468', '21 天 · 每天动 30 分钟', '体能署 · 第 5 / 21 天', '30 min'],
+    ['#5FBF8F', '8 周 · 每周 3 次力量', '体能署 · 第 12 / 24 格', '45 min'],
+  ]},
+  task: { sect: '今日任务 · 3', rows: [
+    ['#E8A468', '训练一次', '体能署 · 8周力量', '30 min'],
+    ['#5FBF8F', '听力 15 分钟', '语言局 · 第 3 天', '15 min'],
+    ['#5A9BD4', '读 20 页', '文书记 · 随时', '—'],
+  ]},
+  base: { sect: '星港 · 已建成 4 / 8', rows: [
+    ['#E8A468', '指挥塔 Lv.2', '还差 1,240 推进值', '扩建'],
+    ['#5FBF8F', '生保舱 Lv.1', '已启用', '查看'],
+    ['#5A9BD4', '观测台 Lv.1', '解锁 12 张成果', '查看'],
+  ]},
+};
+function renderBody(k) {
+  const d = DATA[k];
+  const rows = d.rows.map(([c, nm, mt, rt]) =>
+    `<div class="card"><div class="dot" style="background:${c}"></div>
+      <div><div class="nm">${nm}</div><div class="mt">${mt}</div></div>
+      <div class="rt">${rt}</div></div>`).join('');
+  $('body').innerHTML = `<div class="sect">${d.sect}</div>${rows}`;
+}
+$('seg').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  [...$('seg').children].forEach(x => x.classList.toggle('on', x === b));
+  renderBody(b.dataset.k);
+});
+renderBody('plan');
+
+/* 可选：WebGPU 尝试（答辩可讲「已评估并留了切换口」） */
+async function tryWebGPU() {
+  if (!navigator.gpu) { alert('本机无 WebGPU'); return; }
+  try {
+    const a = await navigator.gpu.requestAdapter();
+    if (!a) { alert('WebGPU API 存在但适配器不可用 → 正是评估文档里说的降级场景'); return; }
+    const { WebGPURenderer } = await import('three/webgpu');
+    const r = new WebGPURenderer({ antialias: true });
+    await r.init();
+    r.setPixelRatio(SCALE); r.setSize(W, H, false);
+    renderer.domElement.replaceWith(r.domElement);
+    renderer = r; backend = 'WebGPU';
+    $('d-backend').textContent = backend;
+  } catch (e) {
+    alert('WebGPU 初始化失败，保持 WebGL2：' + e.message);
+  }
+}
+
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

@@ -58,8 +58,9 @@
 | [12-知识卡配图说明](12-知识卡配图说明.md) | **78 张知识卡配图**：像素风生成方式、色板锚点、尺寸与用法、重跑方法、已知限制 | 设计 / 美术 / 开发 |
 | [13-像素组件库规范](13-像素组件库规范.md) | **组件标准化**：33 个令牌、7 个组件集 / 26 变体、尺寸收敛对照、文字属性规则 | 设计 / 前端 |
 | [14-高保真预览-运行记录](14-高保真预览-运行记录.md) | **人机协作运行记录**：每轮直接改 Figma 的变更日志、组件资产清单、待办、踩坑 | 设计 / 开发 |
-| [15-顶部三维渲染可行性评估](15-顶部三维渲染可行性评估.md) | **三维选型评估**：WebGPU vs WebGL2 vs 原生 vs 2.5D；渲染负荷重算（3.2 万面）、平台矩阵、8 项 WebView 风险、决策门、6 机型实测清单 | 开发 / 策划 |
-| [spike/planet-spike.html](spike/planet-spike.html) | **可运行实测页**：358×180 视口，WebGL2／WebGPU 切换、首帧与 p50/p95 统计、设备能力打表 | 开发 |
+| [15-顶部三维渲染可行性评估](15-顶部三维渲染可行性评估.md) | **三维选型评估（生产级参考）**：WebGPU vs WebGL2 vs 原生 vs 2.5D；渲染负荷重算（3.2 万面）、平台矩阵、8 项 WebView 风险、决策门 | 开发 / 策划 |
+| [16-课设版实现范围与答辩要点](16-课设版实现范围与答辩要点.md) | **课设范围裁定**：做什么/不做什么、4 条验收口径、兜底方案、工时、**答辩要点**（为什么不用 Unity、为什么 WebGPU 不做） | 全员 |
+| [demo/主页面三维演示.html](demo/主页面三维演示.html) | **可跑的三维演示页**：主页面框 + 358×180 星球视窗（程序化贴图、零资源），按 D 看帧率、W 试切 WebGPU | 答辩 / 演示 |
 
 ---
 
@@ -90,9 +91,9 @@
 | [13-像素组件库规范.md](13-像素组件库规范.md) | 令牌表 / **25 个组件集 · 84 变体** / 尺寸收敛对照 / 文字属性规则 / 用法与禁忌 |
 | [design/组件库-标准.png](design/组件库-标准.png) | v1 画板（令牌 + 7 组件集） |
 | [design/组件库-标准v2.png](design/组件库-标准v2.png) | v2 画板（补齐的 18 个组件集） |
-| [design/gen-kit.mjs](design/gen-kit.mjs) · [design/gen-kit2.mjs](design/gen-kit2.mjs) | 两批组件变体生成器 |
-| [design/make-components.mjs](design/make-components.mjs) · [design/make-components2.mjs](design/make-components2.mjs) | 帧 → 组件 → 合并变体 → 回板 |
-| [design/add-text-props.mjs](design/add-text-props.mjs) | 加文字属性并跨变体绑定 |
+| [design/gen-kit-v1.mjs](design/gen-kit-v1.mjs) · [design/gen-kit-v2.mjs](design/gen-kit-v2.mjs) | 两批组件变体生成器 |
+| [design/make-components-v1.mjs](design/make-components-v1.mjs) · [design/make-components-v2.mjs](design/make-components-v2.mjs) | 帧 → 组件 → 合并变体 → 回板 |
+| [design/add-text-props-v1.mjs](design/add-text-props-v1.mjs) · [design/add-text-props-v2.mjs](design/add-text-props-v2.mjs) | 加文字属性并跨变体绑定 |
 
 ### 知识卡配图（78 张）
 
@@ -171,7 +172,7 @@
 | 3 | 把第 09 章文案录进 `copy-items.mjs` 跑通校核（0 报错） | 我 / 文案 | 待办 |
 | 4 | 决策 AI 建议句库（≥20 组"判断 → 建议 → 一键采纳"） | 我 | 待办 |
 | 5 | 60 张知识卡 seed（现有 13 主题 × 6 = 78 张，余 23 主题 × 6 = 138 张待补） | 内容 | 进行中 |
-| 6 | 三维选型已定：**WebView + three.js（WebGL2 基线，WebGPU 可选）**；下一步跑 6 机型 S0 实测（[15](15-顶部三维渲染可行性评估.md) §八 + `spike/planet-spike.html`） | 开发 | 待实测 |
+| 6 | 三维已定稿（课设尺度）：**单页 three.js 演示**，范围见 [16](16-课设版实现范围与答辩要点.md)；可跑页在 `demo/主页面三维演示.html`，只需确认能跑 + 建议本地化 three.js | 你 | **待你打开确认** |
 | 7 | 任务主题 ↔ 知识卡关联：估算 36 主题，已出 12 主题 × 6 卡深样例 | 我 | **本轮已交付** |
 
 ---
@@ -186,4 +187,5 @@
 | **ORBIT 轨道** | 干净、有"周期"含义 | 已被大量产品占用 |
 
 正文统一用 **星港 / STARPORT**；星球默认名 **「晨昏」**。
+
 
