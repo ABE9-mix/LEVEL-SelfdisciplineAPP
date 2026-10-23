@@ -42,9 +42,20 @@
     font-size:13px;color:var(--ink2);backdrop-filter:blur(6px)}
 
   /* 星球视窗 */
+  /* 用 inset 阴影代替 border：border 会让内容区变成 356×178，
+     渲染尺寸与像素格就不再是整数倍关系，块边会被重采样抹掉 */
   #stage{position:relative;width:358px;height:180px;margin:0 auto;border-radius:16px;
-    overflow:hidden;border:1px solid var(--line);background:#050810}
-  #stage canvas{display:block;width:100%;height:100%}
+    overflow:hidden;background:#050810;
+    box-shadow:inset 0 0 0 1px var(--line), 0 8px 24px rgba(0,0,0,.35)}
+  /* 像素化开启时圆角归零：① 圆角会让画布边缘被抗锯齿混色，
+     产生 #07090F 这类板外色（实测 984 个板外像素里 424 个贴边）；
+     ② 项目像素规范本身就是 radius/none = 0（13 §2.2），正好一致 */
+  /* inset 阴影会画在 canvas 之上，1px 描边与画布颜色混合 →
+     实测产生 984 个板外像素（#07090F 一类）。像素化时改为光靠 outline 描述边界 */
+  #stage.pixelated{border-radius:0; box-shadow:none; outline:1px solid var(--line)}
+  #stage canvas{display:block;width:358px;height:180px;image-rendering:pixelated}
+  /* 像素化开启时关掉柔光层：它会在画布上叠加板外色，破坏色板纯度 */
+  #stage.pixelated .glow{display:none}
   #stage .glow{position:absolute;inset:0;pointer-events:none;
     background:radial-gradient(70% 120% at 50% 110%,rgba(232,164,104,.10),transparent 60%)}
 
@@ -96,10 +107,11 @@
   <div class="r"><span>FPS</span><span id="d-fps">—</span></div>
   <div class="r"><span>掉帧 &gt;33ms</span><span id="d-drop">—</span></div>
   <div class="r"><span>三角面</span><span id="d-tri">—</span></div>
+  <div class="r"><span>像素化</span><span id="d-px">—</span></div>
   <div class="r"><span>DPR / 倍率</span><span id="d-dpr">—</span></div>
   <div class="r"><span>WebGPU</span><span id="d-gpu">—</span></div>
   <div class="r"><span>GPU</span><span id="d-glr" style="font-size:10px;max-width:150px;text-align:right">—</span></div>
-  <div class="tip">F 全屏 · W 试切 WebGPU（失败自动回退）<br>这些数字可直接放答辩 PPT：帧率与首帧都是实测值。</div>
+  <div class="tip">F 全屏 · P 像素化开关 · 1/2/3/4 像素尺寸<br>W 试切 WebGPU（切后像素化暂停，见 15 章说明）<br>这些数字可直接放答辩 PPT：帧率与首帧都是实测值。</div>
 </div>
 
 <!-- 手机框 -->
@@ -125,11 +137,11 @@
   </div>
 
   <div class="body" id="body"></div>
-  <div class="hint">三维视窗为实时渲染（three.js / WebGL2）· 按 D 看指标</div>
+  <div class="hint">实时渲染 + 像素化后处理 · P 切换像素化 · 1/2/3/4 改像素尺寸 · D 看指标</div>
 </div>
 
 <script type="importmap">
-{ "imports": { "three": "https://unpkg.com/three/build/three.module.js" } }
+{ "imports": { "three": "./three.module.js" } }
 </script>
 
 <script type="module">
@@ -147,7 +159,7 @@ addEventListener('resize', fit); fit();
 let THREE;
 try { THREE = await import('three'); }
 catch (e) {
-  stage.innerHTML = '<div style="color:#C4614E;font-size:12px;padding:16px">three.js 加载失败（需联网）。<br>离线演示请把 three.module.js 放到本目录并改 importmap。</div>';
+  stage.innerHTML = '<div style="color:#C4614E;font-size:12px;padding:16px">three.js 加载失败：本目录缺少 three.module.js。<br>请把它与 html 放在同一目录。</div>';
   throw e;
 }
 
@@ -247,9 +259,182 @@ renderer.setSize(W, H, false);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 stage.insertBefore(renderer.domElement, stage.firstChild);
 
+/* ══════════════════════════════════════════════════════════════════
+   像素化后处理（pixelate + 色板量化 + Bayer 抖动）
+   目的：让三维视窗与项目像素风格统一。
+
+   颜色全部取自 07 §4.2 相位色板 + §4.3 accent，不是另配的一套色：
+     ?  详见 docs「13-像素组件库规范」的令牌表与 07 §4.2。
+   ══════════════════════════════════════════════════════════════════ */
+
+/* 16 色板：深空 → 相位中间调 → 高光/强调。
+   顺序无关（用最近色匹配），但按明度递增排列便于人工核对。 */
+const PALETTE_SRGB = [
+  0x03050A, // 深夜天空（07 §4.2 deep 天空）
+  0x0A1020, // 深夜 / 配图背景
+  0x101A2C, // 夜
+  0x151C2E, // 晨 天空
+  0x1D3352, // 星球海（demo 贴图底色）
+  0x24344E, // 深夜 高光
+  0x2A3550, // 晨 星球主色 / 环境光
+  0x3A2F44, // 昏 星球主色
+  0x3A5A80, // 夜 高光（配图中间调锚点）
+  0x4A6FA5, // 昼 星球主色
+  0x5A9BD4, // 夜 强调 / accent-confirm 蓝
+  0x5FBF8F, // §4.3 accent/green（设施已达成）
+  0x7FA3C9, // 昼 天空
+  0xC98A5A, // 晨 高光
+  0xE8A468, // §4.3 accent/amber（强调色，配额 ≤8%）
+  0xF2E4C9, // 昼 高光（奶油）
+];
+const PAL_N = PALETTE_SRGB.length;
+// GLSL 里按 sRGB 空间比较，所以色板直接用 sRGB 值
+const paletteVec3 = PALETTE_SRGB.map(h => new THREE.Vector3(
+  ((h >> 16) & 255) / 255,
+  ((h >> 8) & 255) / 255,
+  (h & 255) / 255
+));
+
+/* 虚拟分辨率档位：大像素边长（设备像素）。0 = 关闭。
+   在 358×180 视口、DPR 2 下：4 → 179×90 格，一个"大像素"= 2 CSS px */
+const PX_LEVELS = [0, 2, 3, 4, 6];
+let pxSize = 4;          // 默认开 4，视觉上明确但不糊
+let pixelOn = true;
+
+/* 全屏后处理：无需 EffectComposer，自己搭一个正交相机 + 全屏四边形 */
+const postScene = new THREE.Scene();
+const postCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const postMat = new THREE.ShaderMaterial({
+  defines: { PAL: PAL_N },
+  uniforms: {
+    tDiffuse: { value: null },
+    uGrid:    { value: new THREE.Vector2(179, 90) },
+    uPalette: { value: paletteVec3 },
+    uDither:  { value: 0.06 },   // sRGB 空间的抖动幅度
+  },
+  vertexShader: /* glsl */`
+    varying vec2 vUv;
+    void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
+  `,
+  fragmentShader: /* glsl */`
+    precision highp float;
+    uniform sampler2D tDiffuse;
+    uniform vec2  uGrid;
+    uniform vec3  uPalette[PAL];
+    uniform float uDither;
+    varying vec2 vUv;
+
+    // 有序抖动矩阵（Bayer 4×4），用算术式避免 GLSL1 的动态数组索引限制
+    float bayer2(vec2 a){ a = floor(a); return fract(a.x / 2.0 + a.y * a.y * 0.75); }
+    float bayer4(vec2 a){ return bayer2(0.5 * a) * 0.25 + bayer2(a); }
+
+    // sRGB ↔ linear：场景在 linear 空间渲染，量化必须在 sRGB 空间做，
+    // 否则暗部会被线性空间压扁、配色与 2D 稿对不上
+    vec3 lin2srgb(vec3 c){
+      return mix(c * 12.92, 1.055 * pow(max(c, vec3(0.0)), vec3(1.0/2.4)) - 0.055,
+                 step(vec3(0.0031308), c));
+    }
+    vec3 srgb2lin(vec3 c){
+      return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)),
+                 step(vec3(0.04045), c));
+    }
+
+    void main(){
+      // ① 按虚拟像素格取样：格心坐标 + 最近邻 → 硬像素边，无插值
+      vec2 cell = floor(vUv * uGrid);
+      vec2 uv   = (cell + 0.5) / uGrid;
+      vec3 lin  = texture2D(tDiffuse, uv).rgb;
+
+      // ② 转到 sRGB 空间做抖动 + 量化
+      //    抖动坐标用 cell 而非 gl_FragCoord：抖动点尺寸 = 一个大像素，
+      //    否则抖动会在放大后的块内碎裂，失去像素风
+      vec3 c = lin2srgb(lin);
+      c += (bayer4(cell) - 0.5) * uDither;
+      c = clamp(c, 0.0, 1.0);
+
+      // ③ 最近色匹配（加权 RGB，近似感知亮度）
+      float best = 1e9;
+      vec3  pick = uPalette[0];
+      for (int i = 0; i < PAL; i++){
+        vec3 df = c - uPalette[i];
+        float dist = dot(df * df, vec3(0.30, 0.59, 0.11));
+        if (dist < best){ best = dist; pick = uPalette[i]; }
+      }
+
+      // ④ 直接输出 sRGB 值
+      //    关键：ShaderMaterial **不会**被 three 自动套上 outputColorSpace 转换
+      //    （只有内置材质会）。所以这里必须写成"已编码的 sRGB"，不能再 srgb2lin，
+      //    否则会被压暗一次 —— 实测会得到 #0B1A37 这类板外色。
+      gl_FragColor = vec4(pick, 1.0);
+    }
+  `,
+  depthTest: false, depthWrite: false,
+});
+postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), postMat));
+
+/* 低分辨率 RenderTarget：最近邻放大是"硬像素"的关键 */
+const rt = new THREE.WebGLRenderTarget(179, 90, {
+  minFilter: THREE.NearestFilter,
+  magFilter: THREE.NearestFilter,
+  depthBuffer: true,
+});
+
+let vGridW = 179, vGridH = 90;
+const _db = new THREE.Vector2();
+
+function layoutPixels(){
+  renderer.getDrawingBufferSize(_db);
+  const px = pixelOn ? pxSize : 1;
+  vGridW = Math.max(16, Math.floor(_db.x / px));
+  vGridH = Math.max(9,  Math.floor(_db.y / px));
+  rt.setSize(vGridW, vGridH);
+  postMat.uniforms.uGrid.value.set(vGridW, vGridH);
+  updatePxLabel(_db.x, _db.y);
+}
+
+function updatePxLabel(dw, dh){
+  if (backend !== 'WebGL2') {
+    // WebGPU 分支不做后处理：ShaderMaterial 的后处理需改用 TSL 节点，
+    // 课设范围内不做（见 15 章：WebGPU 只作可选加速，不进验收）
+    $('d-px').textContent = 'WebGPU 路径未启用';
+    $('d-px').className = 'warn';
+  } else if (!pixelOn) {
+    $('d-px').textContent = '关（原生分辨率）';
+    $('d-px').className = '';
+  } else {
+    const scale = dw ? (dw / vGridW) : pxSize;
+    $('d-px').textContent = `${vGridW}×${vGridH} 格 · 放大 ×${scale.toFixed(2)} · ${PAL_N} 色`;
+    $('d-px').className = 'ok';
+  }
+}
+
+function setPixel(on, size){
+  pixelOn = on;
+  if (size) pxSize = size;
+  // 像素化时关掉柔光叠层，保证画布上的颜色只来自色板量化结果
+  stage.classList.toggle('pixelated', on && backend === 'WebGL2');
+  layoutPixels();
+}
+
+layoutPixels();
+stage.classList.add('pixelated');   // 初始即开启像素化 → 关掉柔光层
+
+/* 调试接口：暴露到 window，便于控制台/自动化调参与验证
+   （E2E 截图脚本靠它切开关，否则 module 作用域外访问不到） */
+window.__px = {
+  setPixel, get pixelOn(){ return pixelOn; },
+  get pxSize(){ return pxSize; },
+  get grid(){ return [vGridW, vGridH]; },
+  palette: PALETTE_SRGB.map(h => '#' + h.toString(16).toUpperCase().padStart(6,'0')),
+};
+
 /* ── 统计 ── */
 const S = { n: 0, t0: performance.now(), first: 0, times: [], drop: 0, win: performance.now() };
-const triCount = () => renderer.info.render.triangles;
+/* 注意：renderer.info.render 在**每次** render 调用后重置，
+   像素化模式下最后一次 render 是全屏 quad（2 面），会把场景真实面数覆盖掉。
+   所以在场景渲染后立即取值，不能等到 refresh() 里再读。 */
+let sceneTris = 0;
+const triCount = () => sceneTris;
 
 let cap30 = false, last = 0;
 function tick(ts) {
@@ -263,9 +448,21 @@ function tick(ts) {
   if (S.n === 0) { S.first = now - S.t0; $('d-first').textContent = S.first.toFixed(0) + ' ms'; }
 
   planet.rotation.y += .0022;
-  const k = .5 + .5 * Math.sin(now * .002);
   sun.position.set(-2.4 * Math.cos(now * .00006), 1.0, 1.7);
-  renderer.render(scene, camera);
+
+  if (pixelOn && backend === 'WebGL2') {
+    // ① 场景渲染到低分辨率 RT（无 MSAA → 硬边）
+    renderer.setRenderTarget(rt);
+    renderer.render(scene, camera);
+    sceneTris = renderer.info.render.triangles;   // 立即取值（下次 render 会重置）
+    // ② 全屏后处理：最近邻放大 + 抖动 + 色板量化
+    renderer.setRenderTarget(null);
+    postMat.uniforms.tDiffuse.value = rt.texture;
+    renderer.render(postScene, postCam);
+  } else {
+    renderer.render(scene, camera);
+    sceneTris = renderer.info.render.triangles;
+  }
 
   S.n++;
   if (dt > 0 && dt < 500) { S.times.push(dt); if (S.times.length > 3000) S.times.shift(); }
@@ -304,7 +501,11 @@ addEventListener('keydown', e => {
   if (k === 'd') $('dbg').classList.toggle('on');
   if (k === 'f') document.documentElement.requestFullscreen?.().catch(() => {});
   if (k === 'w') tryWebGPU();
+  // 像素化：P 开关，1/2/3/4 切档（大像素边长，设备像素）
+  if (k === 'p') { setPixel(!pixelOn); }
+  if ('1234'.includes(k)) { setPixel(true, PX_LEVELS[+k]); }
 });
+addEventListener('resize', () => { layoutPixels(); });
 
 /* 分段选择器 + 占位内容（示意，非真实数据） */
 const DATA = {
@@ -351,6 +552,7 @@ async function tryWebGPU() {
     renderer.domElement.replaceWith(r.domElement);
     renderer = r; backend = 'WebGPU';
     $('d-backend').textContent = backend;
+    updatePxLabel();   // 提示：WebGPU 路径下像素化暂停
   } catch (e) {
     alert('WebGPU 初始化失败，保持 WebGL2：' + e.message);
   }
