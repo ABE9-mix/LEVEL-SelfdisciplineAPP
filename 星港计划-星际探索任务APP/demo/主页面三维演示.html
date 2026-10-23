@@ -140,7 +140,7 @@
   <div class="r"><span>DPR / 倍率</span><span id="d-dpr">—</span></div>
   <div class="r"><span>WebGPU</span><span id="d-gpu">—</span></div>
   <div class="r"><span>GPU</span><span id="d-glr" style="font-size:10px;max-width:150px;text-align:right">—</span></div>
-  <div class="tip">拖拽旋转 · 双指缩放 · 点建筑聚焦 · Esc 退出<br>F 全屏 · P 像素化 · 1/2/3/4 像素尺寸<br>
+  <div class="tip">拖拽旋转 · 双指缩放 · 点建筑聚焦 · Esc 退出<br>F 全屏 · P 像素化 · 2/3/4/6 像素边长<br>
     W 试切 WebGPU（切后像素化暂停，见 15 章说明）<br>这些数字可直接放答辩 PPT：帧率与首帧都是实测值。</div>
 </div>
 
@@ -778,15 +778,22 @@ const paletteVec3 = PALETTE_SRGB.map(h => new THREE.Vector3(
   (h & 255) / 255
 ));
 
-/* 虚拟分辨率档位：大像素边长（设备像素）。0 = 关闭。
-   358×180 视口、渲染倍率 2x → 画布 716×360。
-   ×2 → 358×180 格（等于 1 CSS px / 格，最细）
-   ×3 → 238×120 格
-   ×4 → 179×90 格
-   ×6 → 119×60 格
-   默认 ×2：块只有 1 CSS px，看起来是"细腻的像素感"而不是马赛克。 */
-const PX_LEVELS = [0, 2, 3, 4, 6];
-let pxSize = 2;
+/* ── 虚拟分辨率档位 ──────────────────────────────────────────────
+   pxSize = 一个大像素占多少**设备像素**。
+   视口 390×227、渲染倍率固定 2× → 画布 780×454 设备像素，格数 = floor(780/px)：
+
+     键位   pxSize   网格        每格 CSS px   观感
+      2      2      390×227        1.0        最细，"细腻像素感"
+      3      3      260×151        1.5        ← 本页默认（实机调试视觉最好）
+      4      4      195×113        2.0
+      6      6      130×75         3.0        最粗
+
+   ⚠ 键位直接等于 pxSize，不再用"第 N 档"的序号映射。
+     旧写法是 `PX_LEVELS = [0,2,3,4,6]` + `PX_LEVELS[+k]`，
+     于是"按 2"其实取到 pxSize=3 —— 键位号和像素边长对不上，极易记混。
+     现在按 3 就是 pxSize=3。 */
+const PX_LEVELS = [2, 3, 4, 6];
+let pxSize = 3;
 let pixelOn = true;
 
 /* 全屏后处理：无需 EffectComposer，自己搭一个正交相机 + 全屏四边形 */
@@ -891,7 +898,9 @@ function updatePxLabel(dw, dh){
     $('d-px').className = '';
   } else {
     const scale = dw ? (dw / vGridW) : pxSize;
-    $('d-px').textContent = `${vGridW}×${vGridH} 格 · 放大 ×${scale.toFixed(2)} · ${PAL_N} 色`;
+    // 直接把「键位 / 像素边长 / 网格」并排写出来，免得再对照文档
+    $('d-px').textContent =
+      `键${pxSize} · 块${pxSize}px · ${vGridW}×${vGridH} 格 · ${scale.toFixed(2)}× · ${PAL_N} 色`;
     $('d-px').className = 'ok';
   }
 }
@@ -1034,7 +1043,8 @@ addEventListener('keydown', e => {
   if (k === 'escape' || k === 'v') { goGlobe(); }
   // 像素化：P 开关，1/2/3/4 切档（大像素边长，设备像素）
   if (k === 'p') { setPixel(!pixelOn); }
-  if ('1234'.includes(k)) { setPixel(true, PX_LEVELS[+k]); }
+  // 键位 = 像素边长本身（2/3/4/6），不再错位
+  if ('2346'.includes(k)) { setPixel(true, +k); }
 });
 addEventListener('resize', () => { layoutPixels(); });
 
@@ -1181,9 +1191,15 @@ el.addEventListener('pointermove', e => {
     /* 以建筑为中心环绕：
          横向 → 方位角（绕法线转，建筑始终在画面中央）
          纵向 → 极角（往下拖 = 相机升高 = 更俯视）
+       横向用 **减**：手指右移 → fAz 减小 → 画面内容往左移。
+        （实机调试后按反馈反转的。原先用加号时是"内容跟着手指走"，
+          现在的手感更接近"转动视角"——像转头看，而不是拖拽物体。
+          实测：远处地标的屏幕 x 对 fAz 的斜率是 +370 px/rad，
+          所以 fAz 减小时地标确凿地往左走。）
+       纵向手指下移 → 相机升高（更俯视），与 globe 模式一致。
        极角的夹取在 focusTargets 里做（那里才知道当前半径 r），
        拖过头不会再累积，松手反向立刻响应。 */
-    S.fAz += dx * 0.008;
+    S.fAz -= dx * 0.008;
     S.fPol -= dy * 0.004;
   }
 });
