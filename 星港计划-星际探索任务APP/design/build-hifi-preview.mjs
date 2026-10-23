@@ -20,18 +20,19 @@ const firstId = (s) => (s.match(/(\d+:\d+)/) || [])[1];
 const asId = (s) => { const m = s.match(/ as .*?\((\d+:\d+)\)/); return m ? m[1] : null; };
 
 // 清理旧板与测试实例
-for (const id of ['937:861', '937:1664']) await run(['node', 'delete', id]).catch(() => {});
+for (const id of ['937:1667']) await run(['node', 'delete', id]).catch(() => {});
 
 // 每个组件集选哪个变体（正则匹配变体名）
 const CMAP = [
-  [/^状态栏/, '模板/Bar/Status', /default/],
+  // 状态栏属于手机系统，与项目无关 —— 不套组件
   [/^导航栏/, '模板/Bar/Nav', /text/],
   [/^分段选择器/, '模板/Seg/Bar', /plan/],
   [/筛选芯片|^周几芯片/, '模板/Chip/Filter', /true/],
   [/^计划卡/, '模板/Card/Program', /active/],
+  [/^任务行/, '模板/Card/Task', /idle/],
   [/^设施详情卡/, '模板/Card/Facility', /running/],
   [/^输入框/, '模板/Field/Input', /normal/],
-  [/^(勾选行|任务行|扩建清单行|频率行|时间行|入口|提醒通知|每日总结|随机扰动|概率表|隐私说明|归属行|汇总条)/, '模板/Row/List', /normal/],
+  [/^(勾选行|扩建清单行|频率行|时间行|入口|提醒通知|每日总结|随机扰动|概率表|隐私说明|归属行|汇总条)/, '模板/Row/List', /normal/],
   [/^(主按钮|完成|中止|确认|收下)/, '模板/Btn/Action', /go.*normal|normal/],
   [/^环形进度/, '模板/Block/Ring', /running/],
   [/^滑杆/, '模板/Ctrl/Slider', /normal/],
@@ -71,7 +72,7 @@ for (const line of bt.split('\n')) {
 }
 await run(['style', 'apply', 'SP/Dark/L0', screens.map((s) => s.id).join(','), '--field', 'fill']);
 
-let stat = { l1: 0, l2: 0, l3: 0, inst: 0, texts: 0, fail: 0 };
+let stat = { l1: 0, l2: 0, l3: 0, inst: 0, texts: 0, fail: 0, skipped: 0 };
 for (const sc of screens) {
   let scr; try { scr = JSON.parse(await run(['inspect', sc.id, '--json'])); } catch { }
   const sx = scr?.raw?.x ?? 0, sy = scr?.raw?.y ?? 0;
@@ -104,18 +105,30 @@ for (const sc of screens) {
     stat.texts += texts.length;
   }
   // 实例化 + 清理占位框与其标签
+  // 高度可能变大（如 任务行60 → Card/Task150），故按 y 顺序用游标重排；
+  // 放不下就丢掉该占位（保留后面的元素，例如主按钮）
   const toDelete = [];
-  for (const k of kids) {
+  const FIXED_H = { '模板/Card/Task': 150, '模板/Card/Program': 88, '模板/Card/Facility': 92 };
+  let cursorY = -Infinity;
+  const ordered = kids.slice().sort((a, b) => a.y - b.y);
+  for (const k of ordered) {
     const hit = CMAP.find(([re]) => re.test(k.name));
     if (!hit) continue;
     const cid = variantOf[hit[1]];
     if (!cid) continue;
-    // -x/-y 是【相对父级的局部坐标】，直接用 k.x/k.y（实测：传 300,400 → raw=300,400）
-    const o = await run(['component', 'instantiate', cid, '-x', String(Math.round(k.x)), '-y', String(Math.round(k.y)), '--parent', sc.id]);
+    const instH = FIXED_H[hit[1]] ?? k.h;
+    const posY = Math.max(k.y, cursorY);
+    if (posY + instH > 784) {           // 超出可用区：只删占位，不放实例
+      toDelete.push(k.id);
+      stat.skipped++;
+      continue;
+    }
+    // -x/-y 是【相对父级的局部坐标】，直接用 k.x（实测：传 300,400 → raw=300,400）
+    const o = await run(['component', 'instantiate', cid, '-x', String(Math.round(k.x)), '-y', String(Math.round(posY)), '--parent', sc.id]);
     if (/Created instance/.test(o)) {
       stat.inst++;
+      cursorY = posY + instH + 8;
       toDelete.push(k.id);
-      // 删掉落在这个占位框内的标签文字
       for (const t of texts) {
         if (t.x >= k.x - 2 && t.y >= k.y - 2 && t.x + t.w <= k.x + k.w + 2 && t.y + t.h <= k.y + k.h + 2) toDelete.push(t.id);
       }
@@ -124,7 +137,7 @@ for (const sc of screens) {
   if (toDelete.length) await run(['node', 'delete', ...toDelete]).catch(() => {});
 }
 console.log(`\n上色 L1 ${stat.l1} / L2 ${stat.l2} / L3 ${stat.l3} / 文字 ${stat.texts}`);
-console.log(`组件实例 ${stat.inst} 个，失败 ${stat.fail}`);
+console.log(`组件实例 ${stat.inst} 个，失败 ${stat.fail}，放不下跳过 ${stat.skipped}`);
 const scr = await rpc('tools/call', { name: 'figma_screenshot', arguments: { nodeId: NEW, scale: 0.28 } });
 const t = (scr.result?.content || []).map((c) => c.text ?? '').join('\n');
 console.log('PNG: ' + ((t.match(/"saved"\s*:\s*"([^"]+)"/) || [])[1] || t.slice(0, 150)));
