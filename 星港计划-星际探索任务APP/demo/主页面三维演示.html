@@ -249,14 +249,50 @@ const FOC_R_MIN = 1.05;
 const FOC_PIVOT_R = 1.0;
 const IDLE_DELAY = 2000;      // 停止操作多久恢复自转（ms）
 const IDLE_SPIN  = 0.055;     // 待机自转 rad/s（比原来慢一个量级）
-const TRANSIT_MS = 950;
+const IDLE_RAMP  = 7;         // 待机自转的起停缓动速率（越大越急）
+const TRANSIT_MS = 1350;
+
+/* ── 重叠时间窗 ──────────────────────────────────────────────────
+   过渡不是"一个动作演完再演下一个"，而是几条时间线错开叠在一起，
+   几个动作同时在跑：
+
+     位置 ████████████████████     0.00–1.00   主飞行（吃满整条时间线）
+     距离 ░███████████████░░░░     0.04–0.80   较早完成 → LOD 缩放先收住
+     up   ░████████████░░░░░░░     0.02–0.62   更早完成 → 地平线途中就摆正
+     看点 ░░░█████████████████     0.10–0.98   起步最晚 → 先飞、后瞄
+
+   ⚠ 位置窗口必须吃满 [0,1]：
+     缓动被压进宽度 w 的子窗口，速度会整体乘以 1/w。实测把位置放进
+     [0, 0.86] 时，峰值/平均从 1.724 被抬到 2.005（1.724 ÷ 0.86）——
+     这正是"中段冲一下"的来源之一。所以位置占满，其余三条错开让位。
+   ──────────────────────────────────────────────────────────────── */
+const WIN_POS  = [0.00, 1.00];
+const WIN_DIST = [0.04, 0.80];
+const WIN_UP   = [0.02, 0.62];
+const WIN_LOOK = [0.10, 0.98];
+
+/* 飞行路径的"抬升"系数：中段把半径抬高一点，形成先扬起再降落的弧线。
+   取值很小 —— 抬得越高路径越长、平均速度越快，反而更"冲"。 */
+const FLY_LIFT = 0.05;
+
+/* 过渡缓动：1D 三次贝塞尔（CSS cubic-bezier 那套）。
+   实测速度特征：峰值/平均 = 1.724，起步与收尾接近 0 速。
+   对比 smootherstep 的 1.875 —— "别太冲"这个目标下这是较好的一档。
+   反直觉的一点：两端压得更慢不会更柔，反而更冲
+   （cubic-bezier(.65,0,.35,1) 峰值 2.857，因为两端压死，中段被逼更快）。 */
+const EASE_POS  = cubicBezierEase(0.42, 0.00, 0.58, 1.00);
+const EASE_LOOK = cubicBezierEase(0.50, 0.00, 0.45, 1.00);
 
 const S = {
   mode: 'globe',              // globe | focus | transit
   focusIdx: -1,
   spin: 0,                    // 星球自转角（唯一真相）
   spinVel: 0,                 // 拖动惯性
+  idleRamp: 0,                // 待机自转强度 0→1（缓起缓停，避免硬起/硬停）
   dist: GLOBE.dist,
+  distFrom: GLOBE.dist, distTo: GLOBE.dist,   // 过渡期距离也插值（LOD 不跳变）
+  // 过渡路径在开始时定死（控制点 + 弧长总长），之后不再重算
+  c1: null, c2: null, arcTotal: 1,
   el: GLOBE.el,
   // 聚焦轨道：绕建筑旋转的两个角（相对 home 机位的增量）
   fAz: 0,                     // 方位角增量（绕法线转）
@@ -279,10 +315,13 @@ const _tl = new THREE.Vector3();     // 相机目标看点
 
 const _v1 = new THREE.Vector3(), _v2 = new THREE.Vector3(), _v3 = new THREE.Vector3();
 const _v4 = new THREE.Vector3(), _v5 = new THREE.Vector3();
+const _c1 = new THREE.Vector3(), _c2 = new THREE.Vector3();
+const _endUp = new THREE.Vector3();
+const _sp = new THREE.Vector3(), _sa = new THREE.Vector3(), _sb = new THREE.Vector3();
 
-/* 全局机位：球面轨道 */
-function globeTargets() {
-  const d = S.dist, el = S.el;
+/* 全局机位：球面轨道（dist 可显式给，过渡终点要用目标距离而不是当前距离） */
+function globeTargets(dist = S.dist) {
+  const d = dist, el = S.el;
   _tp.set(0, Math.sin(el) * d, Math.cos(el) * d);
   _tl.set(0, 0, 0);
 }
@@ -305,7 +344,7 @@ function globeTargets() {
    关键性质：fAz = fPol = 0 时数学上等价于原 home 机位，
    所以之前实测校正过的取景（天空 35.9%、建筑 y=68%）原样保留。
    ──────────────────────────────────────────────────────────────── */
-function focusTargets(nw) {
+function focusTargets(nw, dist = S.dist) {
   // ① 建筑局部正交基
   const lat = Math.asin(Math.max(-1, Math.min(1, nw.y)));
   const lon = Math.atan2(nw.x, nw.z);
@@ -325,7 +364,7 @@ function focusTargets(nw) {
   S.ph0 = Math.atan2(_v2.dot(_v4), _v2.dot(_v1));
 
   // ④ 叠加轨道量 + 夹极角
-  const r = r0 * (S.dist / FAC.dist);
+  const r = r0 * (dist / FAC.dist);
   // 相机不钻大气壳：|P + dir·r|² ≥ FOC_R_MIN²
   const cosLim = (FOC_R_MIN * FOC_R_MIN - FOC_PIVOT_R * FOC_PIVOT_R - r * r) / (2 * FOC_PIVOT_R * r);
   const thMax = Math.max(FOC_POL_MIN, Math.acos(Math.max(-1, Math.min(1, cosLim))));
@@ -359,15 +398,33 @@ function worldNormalOf(idx) {
   return _n;
 }
 
+/* ── 过渡路径：在开始时定死，之后不再重算 ────────────────────────
+   一开始我让终点每帧重算（想追踪星球的残余自转），结果相机是在追一个
+   移动靶：S.dist 从 3.6 动画到 1.10，终点跟着往里跑，把弧长重参数化
+   又拧了一次 —— 实测速度峰值/平均从缓动的 1.72 被抬回 2.05。
+   现在终点在过渡开始时按「最终取景距离」算一次就固定，
+   路径与弧长表都只建一次，屏幕速度精确等于缓动曲线的导数。
+   （星球那 0.006 rad 的残余自转不做追踪，落地后由跟手插值自然收敛。） */
+function buildTransitPath() {
+  spiralPoint(_c1, S.from.pos, S.to.pos, 1 / 3);
+  spiralPoint(_c2, S.from.pos, S.to.pos, 2 / 3);
+  S.c1 = _c1.clone();
+  S.c2 = _c2.clone();
+  S.arcTotal = buildArcTable(S.from.pos, S.c1, S.c2, S.to.pos);
+}
+
 /* 切换模式（带过渡） */
 function goGlobe() {
   if (S.mode === 'globe') return;
-  S.from = { pos: camPos.clone(), look: camLook.clone() };
+  S.from = { pos: camPos.clone(), look: camLook.clone(), up: camUp.clone() };
   S.mode = 'transit'; S.next = 'globe'; S.focusIdx = -1;
-  globeTargets();
+  S.distFrom = S.dist; S.distTo = GLOBE.dist;
+  globeTargets(GLOBE.dist);                 // 终点用目标距离算，不受当前 dist 影响
   S.to = { pos: _tp.clone(), look: _tl.clone() };
+  buildTransitPath();
   STAT.t0 = performance.now(); S.dur = TRANSIT_MS;
-  S.dist = GLOBE.dist;
+  /* 不再把 S.dist 立刻设成 GLOBE.dist：一改就跳，
+     建筑的 LOD 补偿尺寸会在点击瞬间"啪"地变一下。交给 WIN_DIST 平滑过渡。 */
   if ($('d-view')) $('d-view').textContent = 'globe';
   if ($('d-focus')) $('d-focus').textContent = '—';
 }
@@ -375,72 +432,206 @@ function goGlobe() {
 function goFocus(idx) {
   const nw = worldNormalOf(idx);
   if (!nw) return;
-  S.from = { pos: camPos.clone(), look: camLook.clone() };
+  S.from = { pos: camPos.clone(), look: camLook.clone(), up: camUp.clone() };
   S.mode = 'transit'; S.next = 'focus'; S.focusIdx = idx;
   S.fAz = 0; S.fPol = 0;                     // 每次聚焦都回到 home 机位
-  focusTargets(nw.clone());
+  S.distFrom = S.dist; S.distTo = FAC.dist;
+  focusTargets(nw.clone(), FAC.dist);        // 终点按最终取景距离，与 dist 动画解耦
   S.to = { pos: _tp.clone(), look: _tl.clone() };
+  buildTransitPath();
   STAT.t0 = performance.now(); S.dur = TRANSIT_MS;
-  S.dist = FAC.dist;
   if ($('d-view')) $('d-view').textContent = 'focus';
   if ($('d-focus')) $('d-focus').textContent = '#' + (idx + 1);
 }
 
-/* ── 缓动与跟手系数 ──────────────────────────────────────────────
-   过渡用 quintic smootherstep：t³(t(6t−15)+10)
-     它的首尾不但一阶导为 0，二阶导也是 0 → 起步和收尾都没有"顿一下"的感觉。
-     原来用的 cubic ease-in-out 首尾一阶导为 0 但二阶导突变，
-     观感上是"猛地起步 → 匀速 → 猛地刹住"，也就是反馈里说的"速度变化太快"。
-     峰值速度（相对平均速度）：cubic ease-in-out = 3.00×，smootherstep = 1.875×。
-     峰值出现在 t=0.5，f'(0.5) 由 +12 突变为 −12（jerk 尖峰）也是"猛"的来源之一；
-     smootherstep 的 f'(0)=f'(1)=0 且全程连续。
+/* ── 缓动 ────────────────────────────────────────────────────────
+   1D 三次贝塞尔缓动：端点固定在 (0,0) 与 (1,1)，控制点 (x1,y1) (x2,y2)。
+   给定 x 求 y 用牛顿迭代（失败则二分兜底）—— 就是 CSS cubic-bezier 的算法。
+
+   演进：cubic ease-in-out（峰值 3.00× 平均、二阶导在中点从 +12 跳到 −12）
+      → quintic smootherstep（1.875×、二阶导连续）
+      → 现在这次：三次贝塞尔（1.724×），曲线里峰值最低的一档。
+
    跟手插值按 dt 归一（原来写死 0.35/帧，帧率一低就跟不上）：
      1 − e^(−rate·dt)，rate=26 在 60fps 下 ≈ 0.35
    ──────────────────────────────────────────────────────────────── */
-const _ease = t => t * t * t * (t * (t * 6 - 15) + 10);
+function cubicBezierEase(x1, y1, x2, y2) {
+  const A = (a, b) => 1 - 3 * b + 3 * a;
+  const B = (a, b) => 3 * b - 6 * a;
+  const C = a => 3 * a;
+  const calc = (t, a, b) => ((A(a, b) * t + B(a, b)) * t + C(a)) * t;
+  const slope = (t, a, b) => 3 * A(a, b) * t * t + 2 * B(a, b) * t + C(a);
+  return x => {
+    if (x <= 0) return 0;
+    if (x >= 1) return 1;
+    let t = x;
+    for (let i = 0; i < 8; i++) {                  // 牛顿迭代
+      const e = calc(t, x1, x2) - x;
+      if (Math.abs(e) < 1e-7) return calc(t, y1, y2);
+      const d = slope(t, x1, x2);
+      if (Math.abs(d) < 1e-7) break;
+      t -= e / d;
+    }
+    let lo = 0, hi = 1;                             // 二分兜底
+    for (let i = 0; i < 30; i++) {
+      const m = (lo + hi) / 2;
+      if (calc(m, x1, x2) < x) lo = m; else hi = m;
+    }
+    return calc((lo + hi) / 2, y1, y2);
+  };
+}
+
+const _ease = EASE_POS;
 const _followK = (rate, dtSec) => 1 - Math.exp(-rate * dtSec);
+/* 时间窗：把 [a,b] 段映射到 0→1，窗外夹住 */
+const _win = (t, a, b) => Math.max(0, Math.min(1, (t - a) / (b - a)));
+
+/* 三次贝塞尔：out = B(t) */
+function bezier3(out, p0, c1, c2, p1, t) {
+  const u = 1 - t, uu = u * u, tt = t * t;
+  return out.set(0, 0, 0)
+    .addScaledVector(p0, uu * u)
+    .addScaledVector(c1, 3 * uu * t)
+    .addScaledVector(c2, 3 * u * tt)
+    .addScaledVector(p1, tt * t);
+}
+
+/* 球面线性插值方向（沿大圆走） */
+function slerpDir(out, a, b, t) {
+  const d = Math.max(-1, Math.min(1, a.dot(b)));
+  const th = Math.acos(d);
+  if (th < 1e-5) return out.copy(b);
+  const s = Math.sin(th);
+  return out.copy(a).multiplyScalar(Math.sin((1 - t) * th) / s)
+    .addScaledVector(b, Math.sin(t * th) / s).normalize();
+}
+
+/* ── 飞行路径形状：贴着球面的螺旋 ────────────────────────────────
+   方向走 slerp（沿大圆绕过去），半径线性插值 + 中段抬升。
+
+   为什么不用"从球心往外鼓"的老办法：
+   从 3.6R 降到 1.1R 时，"远离球心"的方向与航线方向几乎平行
+   （实测夹角 155°，重合 91%），往外鼓等于沿航线推，路径几乎没变形 ——
+   实测偏离只有 2.4% 弦长，而理论上该有 12%。
+   螺旋则是把"绕过去"与"降下去"合成一个连续动作，
+   正好对应"不要对正再过渡"。
+   ──────────────────────────────────────────────────────────────── */
+function spiralPoint(out, p0, p1, t, lift = FLY_LIFT) {
+  const r0 = p0.length() || 1, r1 = p1.length() || 1;
+  _sa.copy(p0).divideScalar(r0);
+  _sb.copy(p1).divideScalar(r1);
+  slerpDir(_sp, _sa, _sb, t);
+  const r = r0 + (r1 - r0) * t + lift * p0.distanceTo(p1) * Math.sin(Math.PI * t);
+  return out.copy(_sp).multiplyScalar(r);
+}
+
+/* ── 弧长重参数化 ────────────────────────────────────────────────
+   贝塞尔按参数 t 采样时速度天然不均匀（中段快、两端慢），
+   会把缓动曲线压出来的速度剖面再拧一次：实测峰值/平均从 1.72 被抬到 2.59,
+   也就是"中段突然冲一下"。
+   做法：建累积弧长表，把"缓动后的弧长比例"反查回参数 t，
+   屏幕速度就精确等于缓动曲线的导数。 */
+const ARC_N = 24;
+const _arcTab = new Float32Array(ARC_N + 1);
+const _arcPt = new THREE.Vector3();
+
+function buildArcTable(p0, c1, c2, p1) {
+  bezier3(_arcPt, p0, c1, c2, p1, 0);
+  let px = _arcPt.x, py = _arcPt.y, pz = _arcPt.z, acc = 0;
+  _arcTab[0] = 0;
+  for (let i = 1; i <= ARC_N; i++) {
+    bezier3(_arcPt, p0, c1, c2, p1, i / ARC_N);
+    acc += Math.hypot(_arcPt.x - px, _arcPt.y - py, _arcPt.z - pz);
+    _arcTab[i] = acc;
+    px = _arcPt.x; py = _arcPt.y; pz = _arcPt.z;
+  }
+  return acc || 1;
+}
+
+function tAtArcLen(e, total) {
+  const s = e * total;
+  let lo = 0, hi = ARC_N;
+  while (lo < hi) { const m = (lo + hi) >> 1; if (_arcTab[m] < s) lo = m + 1; else hi = m; }
+  if (lo === 0) return 0;
+  const a = _arcTab[lo - 1], b = _arcTab[lo];
+  const f = (b - a) > 1e-9 ? (s - a) / (b - a) : 0;
+  return (lo - 1 + f) / ARC_N;
+}
+
 function updateCamera(now, dtSec = 1 / 60) {
-  let k;
   if (S.mode === 'transit') {
-    const t = Math.min(1, (now - STAT.t0) / S.dur);
-    const e = _ease(t);
-    camPos.lerpVectors(S.from.pos, S.to.pos, e);
-    camLook.lerpVectors(S.from.look, S.to.look, e);
-    if (t >= 1) { S.mode = S.next; }
-    k = 0.35;
+    const t = _win(now - STAT.t0, 0, S.dur);
+
+    // ① 距离：最早完成的一条线（LOD 缩放跟着它走，不再跳变）
+    S.dist = S.distFrom + (S.distTo - S.distFrom) * _ease(_win(t, ...WIN_DIST));
+
+    // ② 终点的 up：只有它是活的（星球残余自转约 0.006 rad，可忽略但顺手跟一下）
+    if (S.next === 'focus') {
+      const nw = worldNormalOf(S.focusIdx);
+      _endUp.copy(nw || WORLD_UP);
+    } else {
+      _endUp.copy(WORLD_UP);
+    }
+
+    // ③ 位置：路径在开始时已定死（螺旋控制点 + 弧长表），
+    //    这里只按弧长重参数化 → 屏幕速度 = 缓动曲线导数，中段不冲。
+    const tPos = tAtArcLen(_ease(_win(t, ...WIN_POS)), S.arcTotal);
+    bezier3(camPos, S.from.pos, S.c1, S.c2, S.to.pos, tPos);
+    // 安全网：路径任何一点都不许钻进大气壳
+    const rr = camPos.length();
+    if (rr < FOC_R_MIN) camPos.multiplyScalar(FOC_R_MIN / Math.max(rr, 1e-6));
+
+    // ④ 看点：窗口更靠后 → 落地后镜头还在微调
+    camLook.lerpVectors(S.from.look, S.to.look, EASE_LOOK(_win(t, ...WIN_LOOK)));
+
+    // ⑤ up：提前完成，地平线在飞行途中就摆正
+    camUp.copy(S.from.up).lerp(_endUp, _ease(_win(t, ...WIN_UP)));
+    if (camUp.lengthSq() < 1e-9) camUp.copy(_endUp);
+    camUp.normalize();
+
+    if (t >= 1) S.mode = S.next;
   } else if (S.mode === 'focus') {
     const nw = worldNormalOf(S.focusIdx);
     if (nw) focusTargets(nw.clone());
-    k = _followK(26, dtSec);
+    const k = _followK(26, dtSec);
     camPos.lerp(_tp, k);
     camLook.lerp(_tl, k);
+    if (nw) camUp.lerp(nw, k);
+    if (camUp.lengthSq() < 1e-9) camUp.copy(WORLD_UP);
+    camUp.normalize();
   } else {
     globeTargets();
-    k = _followK(22, dtSec);
+    const k = _followK(22, dtSec);
     camPos.lerp(_tp, k);
     camLook.lerp(_tl, k);
-  }
-  camera.position.copy(camPos);
-  /* up 向量必须按模式给：
-     globe  → 世界 +Y（常规轨道相机）
-     focus  → 该建筑的径向法线。用世界 +Y 当地平线会斜：
-              建筑在 lat 44–64 时径向与 +Y 差 26–46°，
-              截图实测地平线明显歪斜（左下高、右上低）。
-              换成径向后地平线才是水平的。 */
-  if (S.mode === 'focus') {
-    const nw = worldNormalOf(S.focusIdx);
-    if (nw) camUp.lerp(nw, k);
-  } else if (S.mode === 'transit') {
-    camUp.lerp(S.next === 'focus' ? worldNormalOf(S.focusIdx) ?? WORLD_UP : WORLD_UP, k * 0.6);
-  } else {
     camUp.lerp(WORLD_UP, _followK(20, dtSec));
+    if (camUp.lengthSq() < 1e-9) camUp.copy(WORLD_UP);
+    camUp.normalize();
   }
-  camUp.normalize();
+
+  camera.position.copy(camPos);
+
+  /* 防退化：视线与 up 几乎共线时 lookAt 会算出无效矩阵。
+     兜底换一个与视线垂直的 up。 */
+  _v1.subVectors(camLook, camPos);
+  if (_v1.lengthSq() < 1e-12) {
+    camLook.copy(camPos).addScaledVector(WORLD_UP, -1);
+    _v1.set(0, -1, 0);
+  } else {
+    _v1.normalize();
+  }
+  if (Math.abs(_v1.dot(camUp)) > 0.9995) {
+    _v2.set(0, 1, 0);
+    if (Math.abs(_v1.dot(_v2)) > 0.9) _v2.set(0, 0, 1);
+    camUp.crossVectors(_v1, _v2).normalize();
+  }
+
   camera.up.copy(camUp);
   camera.lookAt(camLook);
   camera.near = S.mode === 'focus' || S.mode === 'transit' ? 0.01 : 0.05;
   camera.updateProjectionMatrix();
 }
+
 globeTargets();
 camPos.copy(_tp); camLook.copy(_tl);
 
@@ -744,23 +935,35 @@ function tick(ts) {
 
   if (STAT.n === 0) { STAT.first = now - STAT.t0; $('d-first').textContent = STAT.first.toFixed(0) + ' ms'; }
 
-  // 星球自转：只有 globe 待机且无输入时才转
-  /* 自转与惯性一律按实际 dt 积分，不能每帧加固定量：
-     软件渲染下只有 40–50fps，每帧固定 1/60 会让实际转速比设定值低 20–30%
-     （实测 IDLE_SPIN=0.055 跑出 0.041 rad/s）。
-     step = 本帧时长 / (1/60)，把"每 60fps 帧的量"换算成"本帧该给的量"。 */
+  /* ── 星球自转 ────────────────────────────────────────────────────
+     两个要点：
+
+     ① 按实际 dt 积分，不能每帧加固定量。
+        软件渲染只有 40–50fps，每帧固定 1/60 会让实际转速比设定值低 20–30%
+        （实测 IDLE_SPIN=0.055 只跑出 0.041 rad/s）。
+
+     ② 自转强度走一条 0→1 的斜坡（idleRamp），而不是"到条件就瞬间开/关"。
+        以前 `planet.rotation.y = S.spin` 写在 `if (S.mode === 'globe')` 里面，
+        所以一点建筑进入过渡，星球就**当帧定住**，然后相机才起飞 ——
+        观感正是"先对正、再过渡"。现在改成全程积分：
+        星球带着惯性缓缓减速到停，和相机的贝塞尔飞行**同时进行**。
+        globe 待机时同理，自转也是缓缓加上去的，不会突然开始转。
+     ─────────────────────────────────────────────────────────────── */
   const dtSec = Math.min(0.05, dt / 1000);   // 上限 50ms：切后台回来时防止大跳
   const idle = now - S.lastInput > IDLE_DELAY;
-  if (S.mode === 'globe') {
-    if (!S.dragging) {
-      const step = dtSec * 60;
-      S.spin += S.spinVel * step;
-      S.spinVel *= Math.pow(0.92, step);         // 惯性衰减（按帧率归一）
-      if (Math.abs(S.spinVel) < 0.0005) S.spinVel = 0;
-      if (idle && Math.abs(S.spinVel) < 0.01) S.spin += IDLE_SPIN * dtSec;
-    }
-    planet.rotation.y = S.spin;
+  const wantIdle = (S.mode === 'globe' && !S.dragging && idle
+                    && Math.abs(S.spinVel) < 0.01) ? 1 : 0;
+  S.idleRamp += (wantIdle - S.idleRamp) * _followK(IDLE_RAMP, dtSec);
+  if (S.idleRamp < 1e-4) S.idleRamp = 0;
+  if (!S.dragging) {
+    const step = dtSec * 60;
+    S.spin += S.spinVel * step;
+    S.spinVel *= Math.pow(0.92, step);          // 拖动惯性衰减（按帧率归一）
+    if (Math.abs(S.spinVel) < 0.0005) S.spinVel = 0;
+    S.spin += IDLE_SPIN * S.idleRamp * dtSec;   // 待机自转（带斜坡）
   }
+  planet.rotation.y = S.spin;                   // 三种模式都赋值 → 不再硬停
+
   updateCamera(now, dtSec);
 
   /* 建筑距离补偿缩放（LOD）

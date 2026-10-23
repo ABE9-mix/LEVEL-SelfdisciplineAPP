@@ -8,100 +8,33 @@
 //   08     总览拼图
 //
 // 用法：node demo/export-shots.mjs
-import { writeFileSync, mkdirSync, existsSync, rmSync } from 'node:fs';
-import { spawn } from 'node:child_process';
+import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { connect } from './_cdp.mjs';
 
 const ROOT = 'F:/industryworks/图形界面设计/LEVEL-app/星港计划-星际探索任务APP';
 const OUT = join(ROOT, 'design/三维截图');
 const PAGE = 'file:///F:/industryworks/' + encodeURIComponent('图形界面设计') + '/LEVEL-app/'
   + encodeURIComponent('星港计划-星际探索任务APP') + '/demo/'
   + encodeURIComponent('主页面三维演示.html');
-const PORT = 9413;
-const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-const PROFILE = join(process.env.TEMP, 'pxexport_' + Date.now());
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 mkdirSync(OUT, { recursive: true });
 
-/* ── 启动 Chrome：直接带目标 URL，确保 page target 就是我们的页面 ── */
-const chrome = spawn(CHROME, [
-  '--headless=new',
-  `--remote-debugging-port=${PORT}`,
-  `--user-data-dir=${PROFILE}`,
-  '--disable-extensions',
-  '--no-first-run', '--no-default-browser-check', '--disable-background-networking',
-  '--disable-sync', '--disable-component-update',
-  '--enable-unsafe-swiftshader', '--use-gl=angle', '--use-angle=swiftshader',
-  '--ignore-gpu-blocklist',
-  '--hide-scrollbars', '--force-color-profile=srgb',
-  '--window-size=520,960',
-  PAGE,
-], { stdio: 'ignore' });
-
-/* ── 连 CDP：等出现 url 匹配目标页的 page target，再连 ── */
-async function findTarget() {
-  for (let i = 0; i < 120; i++) {
-    try {
-      const r = await fetch(`http://127.0.0.1:${PORT}/json/list`);
-      if (r.ok) {
-        const l = await r.json();
-        // 只认 page，且 url 是 file: 开头（排除扩展的 background_page / service_worker）
-        const t = l.find(t => t.type === 'page' && /^file:/.test(t.url) && t.webSocketDebuggerUrl);
-        if (t) return t;
-      }
-    } catch { /* 未就绪 */ }
-    await sleep(250);
-  }
-  throw new Error('未找到目标页面 target');
-}
-
-const target = await findTarget();
-console.log('已连上页面');
-
-let ws;
-for (let attempt = 0; attempt < 3; attempt++) {
-  try {
-    ws = new WebSocket(target.webSocketDebuggerUrl);
-    await new Promise((res, rej) => {
-      ws.onopen = res;
-      ws.onerror = () => rej(new Error('ws error'));
-      setTimeout(() => rej(new Error('ws timeout')), 8000);
-    });
-    break;
-  } catch (e) {
-    console.log(`  连接重试 ${attempt + 1}: ${e.message}`);
-    await sleep(700);
-  }
-}
-if (!ws || ws.readyState !== 1) throw new Error('WebSocket 连接失败');
-
-let id = 0; const pend = new Map();
-ws.onmessage = ev => {
-  const m = JSON.parse(ev.data);
-  if (m.id && pend.has(m.id)) {
-    const { res, rej } = pend.get(m.id); pend.delete(m.id);
-    m.error ? rej(new Error(JSON.stringify(m.error))) : res(m.result);
-  }
-};
-const send = (method, params = {}) => {
-  const mid = ++id;
-  ws.send(JSON.stringify({ id: mid, method, params }));
-  return new Promise((res, rej) => pend.set(mid, { res, rej }));
-};
-const js = async e => {
-  const r = await send('Runtime.evaluate', { expression: e, returnByValue: true, awaitPromise: true });
-  if (r.exceptionDetails) throw new Error('页面脚本错误: ' + (r.exceptionDetails.exception?.description || ''));
-  return r.result.value;
-};
-const shot = async (path, opts = {}) => {
-  const r = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false, ...opts });
-  writeFileSync(path, Buffer.from(r.data, 'base64'));
+/* ── 连接（复用式，不杀任何进程）─────────────────────────────────
+   早期版本在这里 spawn 一个 Chrome、脚本结束就 kill 掉；
+   调试时还常用 `Get-Process chrome | Kill` 清场 —— 那会连用户自己的
+   浏览器一起杀掉。现在统一交给 _cdp.mjs：
+     · 固定端口 + 固定 user-data-dir，跨次复用同一个 headless 实例
+     · 不存在才启动，且 detached，不随本脚本退出而终止
+     · 每次跑都用 Page.navigate 回到干净状态
+   ──────────────────────────────────────────────────────────────── */
+const cdp = await connect({ url: PAGE });
+console.log(cdp.info());
+const { send, js } = cdp;
+const shot = (path, opts = {}) => cdp.shot(path, opts).then(() => {
   console.log('  ✓', path.slice(OUT.length + 1));
-};
-
-await send('Runtime.enable');
-await send('Page.enable');
+});
 
 /* ── 设定视口 + 等渲染就绪 ── */
 async function prepare(dpr) {
@@ -210,11 +143,14 @@ for (const dpr of [2, 3]) {
   await send('Emulation.setDefaultBackgroundColorOverride', { color: { r: 0, g: 0, b: 0, a: 1 } });
 }
 
-/* ── 收尾 ── */
+/* ── 收尾 ──
+   只断开 WebSocket；headless 实例保留，下次复用（不再杀进程、不再删 profile）。
+   要彻底清掉它，自己按需处理：
+     Get-CimInstance Win32_Process -Filter "Name='chrome.exe'" |
+       Where-Object { $_.CommandLine -match '--headless' -and $_.CommandLine -match 'xinggang-chrome' } |
+       ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+   —— 注意匹配 user-data-dir，别误杀自己开着的浏览器。 */
 console.log('\n导出完成 →', OUT);
-ws.close();
-try { chrome.kill(); } catch {}
-await sleep(400);
-try { rmSync(PROFILE, { recursive: true, force: true }); } catch {}
+cdp.close();
 process.exit(0);
 
