@@ -137,6 +137,7 @@
   <div class="r"><span>模式</span><span id="d-view">globe</span></div>
   <div class="r"><span>聚焦对象</span><span id="d-focus">—</span></div>
   <div class="r"><span>像素化</span><span id="d-px">—</span></div>
+  <div class="r"><span>星球 y 范围</span><span id="d-globe">—</span></div>
   <div class="r"><span>DPR / 倍率</span><span id="d-dpr">—</span></div>
   <div class="r"><span>WebGPU</span><span id="d-gpu">—</span></div>
   <div class="r"><span>GPU</span><span id="d-glr" style="font-size:10px;max-width:150px;text-align:right">—</span></div>
@@ -228,6 +229,13 @@ const camera = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
      dist 1.20 → 22.3%        dist 1.30 → 14.7%
    取 1.10：天空 35.9%（≈1/3），建筑屏底 y≈68%，屏高约 55px、可点面积约 1900 像素。 */
 const FAC = { dist: 1.10, back: 0.19, pitch: 8 * Math.PI / 180 };
+/* 顶部安全区（逻辑 px）：状态栏 39 + 上边距 8 = 47。
+   三维画布是"无界满幅"的，状态栏/标题浮在它上面 —— 所以全景状态下
+   星球不能顶进这条线，否则会被 UI 压住。见下面 globeTargets 的处理。 */
+const SAFE_TOP = 47;
+/* 大气壳半径（可见边缘按它算，比球体本体 1.0 保守一点） */
+const ATM_R = 1.035;
+
 const GLOBE = {
   // 390×227 视口 aspect=1.72，球投影受"高度"约束：
   //   d=3.0 → 占高 112%（上下裁）  d=3.6 → 占高 92%（完整，接近满高）  d=4.2 → 78%
@@ -293,6 +301,8 @@ const S = {
   distFrom: GLOBE.dist, distTo: GLOBE.dist,   // 过渡期距离也插值（LOD 不跳变）
   // 过渡路径在开始时定死（控制点 + 弧长总长），之后不再重算
   c1: null, c2: null, arcTotal: 1,
+  // 全景星球在屏幕上的纵向范围与视线抬升角（globeTargets 每帧写）
+  globeTopY: 0, globeBotY: 0, globeLift: 0,
   el: GLOBE.el,
   // 聚焦轨道：绕建筑旋转的两个角（相对 home 机位的增量）
   fAz: 0,                     // 方位角增量（绕法线转）
@@ -319,11 +329,57 @@ const _c1 = new THREE.Vector3(), _c2 = new THREE.Vector3();
 const _endUp = new THREE.Vector3();
 const _sp = new THREE.Vector3(), _sa = new THREE.Vector3(), _sb = new THREE.Vector3();
 
-/* 全局机位：球面轨道（dist 可显式给，过渡终点要用目标距离而不是当前距离） */
+/* ── 全局机位：球面轨道 ──────────────────────────────────────────
+   dist 可显式给（过渡终点要用目标距离，而不是当前距离）。
+
+   除了轨道位置，这里还把**视线往上抬一个角 α**，让星球在画面上相应下移，
+   从而避开顶部 SAFE_TOP 那条被 UI 覆盖的带子。
+
+   α 怎么定（两段取大）：
+     ① 顶端约束 —— 把星球（含大气壳）的**上切线**压到安全线以下。
+        球的上切线相对球心方向的夹角就是角半径 angR = asin(ATM_R / d)；
+        视线抬 α 后，上切线落在视轴上方 (angR − α) 处，其屏幕位置
+          y = H/2 · (1 − tan(angR − α) / tan(halfFov))
+        令 y = SAFE_TOP 反解：
+          α₁ = angR − atan( (1 − 2·SAFE_TOP/H) · tan(halfFov) )
+     ② 居中约束 —— 星球比可用区小时，别贴顶，在 [SAFE_TOP, H] 里居中：
+          α₂ = atan( (bandCenter − H/2) / (H/2) · tan(halfFov) )
+
+   结果（默认 dist=3.6）：α = 6.24°，星球顶端正好 y=47、底端 y=266
+   （底部溢出 39px —— 这是"无界画布 + 星球够大"的必然结果，视觉上像
+     星球从下边缘升起，与地平线视角的观感一致）。
+
+   为什么不用"改投影矩阵/镜头位移"：那样会同时改变 FOV 语义，
+   而聚焦视角的取景是实测校正过的，不能被动到。抬视线只影响全景。
+   ──────────────────────────────────────────────────────────────── */
 function globeTargets(dist = S.dist) {
   const d = dist, el = S.el;
   _tp.set(0, Math.sin(el) * d, Math.cos(el) * d);
-  _tl.set(0, 0, 0);
+
+  // 方向：从相机指向球心
+  _v1.copy(_tp).negate().normalize();
+  const tanHalf = Math.tan(camera.fov * Math.PI / 360);
+
+  // ① 顶端约束
+  const angR = Math.asin(Math.min(0.999, ATM_R / d));
+  const kTop = (1 - 2 * SAFE_TOP / H) * tanHalf;
+  const aClear = Math.max(0, angR - Math.atan(kTop));
+  // ② 居中约束
+  const bandCenter = (SAFE_TOP + H) / 2;
+  const aCenter = Math.max(0, Math.atan((bandCenter - H / 2) / (H / 2) * tanHalf));
+
+  const alpha = Math.max(aClear, aCenter);
+  if (alpha > 1e-4) {
+    _v2.crossVectors(_v1, WORLD_UP).normalize();   // 屏幕右
+    _v3.crossVectors(_v2, _v1).normalize();        // 屏幕上
+    _v1.addScaledVector(_v3, Math.tan(alpha)).normalize();
+  }
+  _tl.copy(_tp).addScaledVector(_v1, d);
+
+  // 记录星球的屏幕纵向范围，供调试面板与自动化校验读取
+  S.globeTopY = H / 2 * (1 - Math.tan(angR - alpha) / tanHalf);
+  S.globeBotY = H / 2 * (1 + Math.tan(angR + alpha) / tanHalf);
+  S.globeLift = alpha;
 }
 
 /* ── 聚焦机位：以建筑为球心的第二层轨道相机 ──────────────────────
@@ -1020,6 +1076,16 @@ function refresh() {
   $('d-drop').textContent = STAT.drop;
   $('d-tri').textContent = triCount().toLocaleString();
   $('d-backend').textContent = backend;
+  // 全景星球纵向范围（顶端必须 ≥ SAFE_TOP，否则会被顶部 UI 压住）
+  if (S.mode === 'globe' || S.next === 'globe') {
+    const ok = S.globeTopY >= SAFE_TOP - 0.5;
+    $('d-globe').textContent =
+      `${S.globeTopY.toFixed(0)} – ${S.globeBotY.toFixed(0)} px（抬 ${(S.globeLift * 180 / Math.PI).toFixed(1)}°）`;
+    $('d-globe').className = ok ? 'ok' : 'bad';
+  } else {
+    $('d-globe').textContent = '—（非全景）';
+    $('d-globe').className = '';
+  }
 }
 
 /* 设备信息 */
