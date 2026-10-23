@@ -5,10 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>星港计划 · 主页面三维演示</title>
 <!--
-  课前准备（二选一）：
-  1) 联网演示：直接打开本文件即可（three.js 从 CDN 加载）
-  2) 离线演示：下载 three.module.js 到本目录，把下面 importmap 的 three 改成 "./three.module.js"
-  操作：D 键 = 性能指标面板；F = 全屏切换；点击分段选择器 = 切标签
+  【直接双击本文件即可运行，无需联网、无需起服务】
+
+  依赖：同目录的 three.bundle.js（three.js r180 的经典脚本打包，已内置）
+  若缺该文件，在本目录执行：node build-classic.mjs
+
+  操作：
+    D         性能指标面板（帧率 / 三角面 / 像素化参数）
+    P         像素化开关
+    1 / 2 / 3 / 4   切换像素块大小（2 / 3 / 4 / 6 px）
+    F         全屏
+    W         WebGPU 能力探测
+    点击分段选择器   切换 计划 / 任务 / 基地
 -->
 <style>
   :root{
@@ -140,11 +148,13 @@
   <div class="hint">实时渲染 + 像素化后处理 · P 切换像素化 · 1/2/3/4 改像素尺寸 · D 看指标</div>
 </div>
 
-<script type="importmap">
-{ "imports": { "three": "./three.module.js" } }
-</script>
+<!-- three.js 以经典脚本加载（内联打包，暴露 window.THREE）
+     为什么不用 ES module：file:// 协议下浏览器会以 CORS 为由拒绝加载任何
+     module 脚本（含 <script type="module"> 与 import()），双击打开必失败。
+     经典 <script src> 不受此限，所以本页在 file:// / http:// 下都能跑。 -->
+<script src="three.bundle.js"></script>
 
-<script type="module">
+<script>
 const $ = id => document.getElementById(id);
 const stage = $('stage');
 
@@ -155,12 +165,13 @@ function fit(){
 }
 addEventListener('resize', fit); fit();
 
-/* ── 加载 three.js ── */
-let THREE;
-try { THREE = await import('three'); }
-catch (e) {
-  stage.innerHTML = '<div style="color:#C4614E;font-size:12px;padding:16px">three.js 加载失败：本目录缺少 three.module.js。<br>请把它与 html 放在同一目录。</div>';
-  throw e;
+/* ── 取 three.js（已在 three.bundle.js 里构造好 window.THREE） ── */
+const THREE = window.THREE;
+if (!THREE) {
+  stage.innerHTML = '<div style="color:#C4614E;font-size:12px;padding:16px;line-height:1.7">'
+    + 'three.bundle.js 未加载。<br>请确认它与本 HTML 在**同一目录**，且未被杀软/同步盘拦截。<br>'
+    + '若刚克隆仓库缺此文件，运行：<code>node build-classic.mjs</code></div>';
+  throw new Error('three.bundle.js missing');
 }
 
 /* ── 场景 ── */
@@ -539,23 +550,22 @@ $('seg').addEventListener('click', e => {
 });
 renderBody('plan');
 
-/* 可选：WebGPU 尝试（答辩可讲「已评估并留了切换口」） */
+/* WebGPU 探测（不切换后端）
+   本页是经典脚本版（为让 file:// 双击可用），而 WebGPURenderer 只在
+   three/webgpu 子包里、只能走 ES module 动态 import，故此处只做能力探测。
+   要真跑 WebGPU：见 15 章评估，或改用 module 版页面。 */
 async function tryWebGPU() {
-  if (!navigator.gpu) { alert('本机无 WebGPU'); return; }
-  try {
-    const a = await navigator.gpu.requestAdapter();
-    if (!a) { alert('WebGPU API 存在但适配器不可用 → 正是评估文档里说的降级场景'); return; }
-    const { WebGPURenderer } = await import('three/webgpu');
-    const r = new WebGPURenderer({ antialias: true });
-    await r.init();
-    r.setPixelRatio(SCALE); r.setSize(W, H, false);
-    renderer.domElement.replaceWith(r.domElement);
-    renderer = r; backend = 'WebGPU';
-    $('d-backend').textContent = backend;
-    updatePxLabel();   // 提示：WebGPU 路径下像素化暂停
-  } catch (e) {
-    alert('WebGPU 初始化失败，保持 WebGL2：' + e.message);
+  const hasApi = !!navigator.gpu;
+  let adapterOk = false;
+  if (hasApi) {
+    try { adapterOk = !!(await navigator.gpu.requestAdapter()); } catch { adapterOk = false; }
   }
+  alert(
+    'WebGPU 探测结果：\n\n' +
+    '  navigator.gpu: ' + (hasApi ? '存在' : '不存在') + '\n' +
+    '  适配器可用: ' + (hasApi ? (adapterOk ? '是' : '否（API 有但驱动不支持 → 需降级）') : '—') + '\n\n' +
+    '本页为经典脚本版，渲染后端固定 WebGL2，像素化正常工作。'
+  );
 }
 
 requestAnimationFrame(tick);
